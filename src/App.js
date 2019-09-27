@@ -1,30 +1,52 @@
 import React from 'react';
 import './App.css';
+import ScreenRollAction from "./screens/ScreenRollAction";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      selectedAction: '',
-      values: [],
+      contentTables: [
+        {
+          key: "table_scorched_race",
+          desc: "The race of a member of the Scorched Gang.",
+          field: "Race",
+          contents: [
+            {weight: 7, element: "Dragonborn"},
+            {weight: 7, element: "Tiefling"},
+            {weight: 3, element: "Tabaxi"},
+            {weight: 2, element: "Human"},
+            {weight: 1, element: "Other"},
+          ],
+          totalWeight: 20,
+        },
+        {
+          key: "table_other_race",
+          desc: "Other Race.",
+          field: "Race",
+          contents: [
+            {weight: 1, element: "Halfling"},
+            {weight: 2, element: "Gnome"},
+            {weight: 3, element: "Aasimar"},
+            {weight: 4, element: "Goblin"},
+            {weight: 5, element: "Half-Elf"},
+            {weight: 6, element: "Half Orc"},
+            {weight: 7, element: "Dwarf"},
+            {weight: 8, element: "Tiefling"},
+            {weight: 8, element: "Human"},
+            {weight: 7, element: "Elf"},
+            {weight: 6, element: "Dragonborn"},
+            {weight: 5, element: "Tabaxi"},
+            {weight: 4, element: "Bugbear"},
+            {weight: 3, element: "Hobgoblin"},
+            {weight: 2, element: "Lizardman"},
+            {weight: 1, element: "Orc"},
+          ],
+          totalWeight: 20,
+        },
+      ],
     };
-
-    this.tables = [
-      {
-        key: "table_scorched_race",
-        desc: "The race of a member of the Scorched Gang.",
-        field: "Race",
-        contents: [
-          {weight: 7, element: "Dragonborn"},
-          {weight: 7, element: "Tiefling"},
-          {weight: 3, element: "Tabaxi"},
-          {weight: 2, element: "Human"},
-          {weight: 1, element: "Other"},
-        ],
-        totalWeight: 20,
-      }
-    ];
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +63,7 @@ class App extends React.Component {
   }
 
   performAction() {
-    const table = this.tables[0];
+    const table = this.state.contentTables[0];
 
     const value = this.rollOn(table);
 
@@ -66,23 +88,6 @@ class App extends React.Component {
   }
 
   render() {
-
-    let values = null;
-    if (this.state.values) {
-      values = <div className="row">
-        {
-          this.state.values.map((val) => {
-            return(
-                <div className="col-sm-4 form-group" key={val.field}>
-                  <label htmlFor="value">{val.field}</label>
-                  <span id="value" className="form-control-plaintext">{val.value}</span>
-                </div>
-            )
-          })
-        }
-      </div>
-    }
-
     return (
         <div className="root">
           <main className="container content">
@@ -94,32 +99,7 @@ class App extends React.Component {
               </div>
             </div>
 
-            {/* Roll Dropdown */}
-            <div className="row">
-              <div className="col-sm-4">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <button className="btn btn-primary" onClick={this.performAction}>Roll</button>
-                  </div>
-                  <select name="roll-select" id="roll-select" className="form-control" value={this.state.selectedAction} onChange={this.handleChange}>
-                    <option value="">Please select an action</option>
-                    <optgroup label="Actions">
-                      <option value="action_npc">a new NPC</option>
-                      <option value="action_tavern">a new Tavern</option>
-                    </optgroup>
-                    <optgroup label="Tables">
-                      {this.tables.map((table) => {
-                        return <option value={table.key} key={table.key}>{table.desc}</option>
-                      })}
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Last rolled field Values */}
-            {values}
-
+            <ScreenRollAction contentTables={this.state.contentTables}/>
           </main>
         </div>
     );
