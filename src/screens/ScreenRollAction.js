@@ -10,6 +10,41 @@ class ScreenRollAction extends Component {
             selectedAction: '',
             values: [],
         };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.performAction = this.performAction.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({selectedAction: event.target.value});
+    }
+
+    performAction() {
+        const tables = this.props.contentTables;
+
+        let values = [];
+
+        tables.forEach((table) => {
+            const value = this.rollOn(table);
+            values.push({field: table.field, value: value});
+        });
+
+        this.setState({
+            values: values,
+        })
+    }
+
+    rollOn(table) {
+        const roll = Math.floor(Math.random() * table.totalWeight);
+
+        let counter = 0;
+        for (let i = 0; i < table.contents.length; i++) {
+            const row = table.contents[i];
+            counter += row.weight;
+            if (counter > roll) {
+                return row.element;
+            }
+        }
     }
 
     render() {

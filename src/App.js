@@ -47,44 +47,6 @@ class App extends React.Component {
         },
       ],
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.performAction = this.performAction.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({selectedAction: event.target.value});
-  }
-
-  handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.selectedAction);
-    event.preventDefault();
-  }
-
-  performAction() {
-    const table = this.state.contentTables[0];
-
-    const value = this.rollOn(table);
-
-    this.setState({
-      values: [
-        {field: table.field, value: value}
-      ]
-    })
-  }
-
-  rollOn(table) {
-    const roll = Math.floor(Math.random() * table.totalWeight);
-
-    let counter = 0;
-    for (let i = 0; i < table.contents.length; i++) {
-      const row = table.contents[i];
-      counter += row.weight;
-      if (counter > roll) {
-        return row.element;
-      }
-    }
   }
 
   render() {
