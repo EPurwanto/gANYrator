@@ -8,7 +8,7 @@ class ScreenRollAction extends Component {
 
         this.state = {
             selectedAction: '',
-            values: [],
+            values: {},
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,11 +22,10 @@ class ScreenRollAction extends Component {
     performAction() {
         const tables = this.props.contentTables;
 
-        let values = [];
+        let values = {};
 
         tables.forEach((table) => {
-            const value = this.rollOn(table);
-            values.push({field: table.field, value: value});
+            values[table.field] = this.rollOn(table);
         });
 
         this.setState({
@@ -48,6 +47,7 @@ class ScreenRollAction extends Component {
     }
 
     render() {
+
         return (
             <div className="row">
 
@@ -72,9 +72,11 @@ class ScreenRollAction extends Component {
                     </div>
 
                     {/* Last rolled field Values */}
-                    {this.state.values.map((val) => {
-                        return <ValueDisplay key={val.field} label={val.field} value={val.value}/>
-                    })}
+                    {
+                        Object.entries(this.state.values).map(([key, val]) => {
+                            return <ValueDisplay key={key} label={key} value={val}/>
+                        })
+                    }
                 </div>
 
                 <div className="col-sm-8">

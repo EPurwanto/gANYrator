@@ -24,7 +24,7 @@ class App extends React.Component {
         {
           key: "table_other_race",
           desc: "Other Race.",
-          field: "Race",
+          field: "OtherRace",
           contents: [
             {weight: 1, element: "Halfling"},
             {weight: 2, element: "Gnome"},
