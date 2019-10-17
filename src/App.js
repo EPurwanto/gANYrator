@@ -7,24 +7,34 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      actions: [
+        {
+          key: "action_roll_scorched",
+          desc: "Roll a scorched gang member",
+          contents: [
+            {table: "table_scorched_race"},
+            {table: "table_gender"}
+          ]
+        }
+      ],
       contentTables: [
         {
           key: "table_scorched_race",
           desc: "The race of a member of the Scorched Gang.",
-          field: "Race",
+          defaultField: "Race",
           contents: [
             {weight: 7, element: "Dragonborn"},
             {weight: 7, element: "Tiefling"},
             {weight: 3, element: "Tabaxi"},
             {weight: 2, element: "Human"},
-            {weight: 1, element: "Other"},
+            {weight: 1, element: "Other", action: "action_auto_table_other_race"},
           ],
           totalWeight: 20,
         },
         {
           key: "table_other_race",
           desc: "Other Race.",
-          field: "OtherRace",
+          defaultField: "OtherRace",
           contents: [
             {weight: 1, element: "Halfling"},
             {weight: 2, element: "Gnome"},
@@ -45,7 +55,17 @@ class App extends React.Component {
           ],
           totalWeight: 20,
         },
-      ],
+        {
+          key: "table_gender",
+          desc: "Gender",
+          defaultField: "Gender",
+          contents: [
+            {weight: 1, element: "Male"},
+            {weight: 1, element: "Female"},
+          ],
+          totalWeight: 2,
+        }
+      ]
     };
   }
 
@@ -61,7 +81,7 @@ class App extends React.Component {
               </div>
             </div>
 
-            <ScreenRollAction contentTables={this.state.contentTables}/>
+            <ScreenRollAction contentTables={this.state.contentTables} actions={this.state.actions}/>
           </main>
         </div>
     );

@@ -1,6 +1,19 @@
 import React from 'react';
 
-function Accordian(props) {
+/**
+ *
+ * Properties:
+ * list: Array of objects
+ * > key: String unique id for the entry
+ * > heading: String description for heading
+ * id: String unique id for the Accordion
+ * bodyClass: String CSS class
+ * children: Method pointer taking in an Item from the list and populating the children
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
+function Accordion(props) {
     const parentId = props.id ? props.id : "accordian";
     const bodyClass = props.bodyClass ? "card-body " + props.bodyClass : "card-body";
 
@@ -31,4 +44,4 @@ function Accordian(props) {
     )
 }
 
-export default Accordian;
+export default Accordion;

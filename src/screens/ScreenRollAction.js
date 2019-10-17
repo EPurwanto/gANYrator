@@ -1,36 +1,85 @@
 import React, {Component} from 'react';
-import ContentTableAccordian from "../content_table/ContentTableAccordian";
 import ValueDisplay from "../utility/ValueDisplay";
+import ActionSelect from "../action/ActionSelect";
 
 class ScreenRollAction extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedAction: '',
+            selectedAction: {},
             values: {},
         };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.performAction = this.performAction.bind(this);
+        this.handleActionSelect = this.handleActionSelect.bind(this);
+        this.performSelectedAction = this.performSelectedAction.bind(this);
     }
 
-    handleChange(event) {
-        this.setState({selectedAction: event.target.value});
+    handleActionSelect(action) {
+        this.setState({selectedAction: action});
     }
 
-    performAction() {
+    findAction(actionKey) {
+        const autoActions = [];
+        this.props.contentTables.forEach((table) => {
+            autoActions.push({
+                key:"action_auto_" + table.key,
+                desc: table.desc,
+                contents: [{table:table.key}]
+            })
+        });
+
+        for (const act of autoActions) {
+            if (act.key === actionKey) {
+                return act;
+            }
+        }
+
+        for (const act of this.props.actions) {
+            if (act.key === actionKey) {
+                return act;
+            }
+        }
+    }
+
+    findTable(tableKey) {
         const tables = this.props.contentTables;
 
-        let values = {};
+        for (const table of tables) {
+            if (table.key === tableKey) {
+                return table;
+            }
+        }
+    }
 
-        tables.forEach((table) => {
-            values[table.field] = this.rollOn(table);
-        });
+    performSelectedAction() {
+        const values = this.performAction(this.state.selectedAction);
 
         this.setState({
             values: values,
         })
+    }
+
+    performAction(action) {
+        let values = {};
+
+        action.contents.forEach((action) => {
+            const table = this.findTable(action.table);
+            const row = this.rollOn(table);
+
+            if (action.hasOwnProperty("field")) {
+                values[action.field] = row.element;
+            } else {
+                values[table.defaultField] = row.element;
+            }
+
+            if(row.hasOwnProperty("action")) {
+                const results = this.performAction(this.findAction(row.action));
+                values = {...values, ...results};
+            }
+        });
+
+        return values;
     }
 
     rollOn(table) {
@@ -41,46 +90,56 @@ class ScreenRollAction extends Component {
             const row = table.contents[i];
             counter += row.weight;
             if (counter > roll) {
-                return row.element;
+
+                return row;
             }
         }
     }
 
     render() {
+        const autoActions = [];
+        this.props.contentTables.forEach((table) => {
+            autoActions.push({
+                key:"action_auto_" + table.key,
+                desc: table.desc,
+                contents: [{table:table.key}]
+            })
+        });
+
+        const actionGroups = [
+            {label: "Actions", actions: this.props.actions},
+            {label: "Tables", actions: autoActions}
+        ];
 
         return (
-            <div className="row">
-
+            <div className="mx-auto text-center col-sm-5">
                 {/* Roll Dropdown */}
-                <div className="col-sm-4">
+                <div className="">
                     <div className="input-group">
                         <div className="input-group-prepend">
-                            <button className="btn btn-primary" onClick={this.performAction}>Roll</button>
+                            <button className="btn btn-primary" onClick={this.performSelectedAction}>Roll</button>
                         </div>
-                        <select name="roll-select" id="roll-select" className="form-control" value={this.state.selectedAction} onChange={this.handleChange}>
-                            <option value="">Please select an action</option>
-                            <optgroup label="Actions">
-                                <option value="action_npc">a new NPC</option>
-                                <option value="action_tavern">a new Tavern</option>
-                            </optgroup>
-                            <optgroup label="Tables">
-                                {this.props.contentTables.map((table) => {
-                                    return <option value={table.key} key={table.key}>{table.desc}</option>
-                                })}
-                            </optgroup>
-                        </select>
+                        <ActionSelect
+                            className="form-control"
+                            selected={this.state.selectedAction && this.state.selectedAction.key}
+                            onActionSelect={this.handleActionSelect}
+                            groups={actionGroups}/>
                     </div>
 
                     {/* Last rolled field Values */}
                     {
                         Object.entries(this.state.values).map(([key, val]) => {
-                            return <ValueDisplay key={key} label={key} value={val}/>
+                            return <ValueDisplay key={key} uniqueId={key} label={key} value={val}/>
                         })
                     }
                 </div>
 
-                <div className="col-sm-8">
-                    <ContentTableAccordian contentTables={this.props.contentTables}/>
+                <span className="">
+                    OR
+                </span>
+
+                <div className="input-group">
+                    <button className="btn btn-primary form-control" onClick={this.performAction}>Edit Tables and Actions</button>
                 </div>
             </div>
         );
