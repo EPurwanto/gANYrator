@@ -1,0 +1,28 @@
+{
+  "key": "table_scorched_race",
+  "desc": "The race of a member of a Scorched gang",
+  "defaultField": "Race",
+  "contents": [
+    {
+      "weight": 7,
+      "element": "Dragonborn"
+    },
+    {
+      "weight": 7,
+      "element": "Tiefling"
+    },
+    {
+      "weight": 3,
+      "element": "Tabaxi"
+    },
+    {
+      "weight": 2,
+      "element": "Human"
+    },
+    {
+      "weight": 1,
+      "element": "Other",
+      "action": "action_auto_table_other_race"
+    }
+  ]
+}

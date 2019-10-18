@@ -1,0 +1,71 @@
+{
+  "key": "table_other_race",
+  "desc": "Random Sheutan Race.",
+  "defaultField": "Race",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Halfling"
+    },
+    {
+      "weight": 2,
+      "element": "Gnome"
+    },
+    {
+      "weight": 3,
+      "element": "Aasimar"
+    },
+    {
+      "weight": 4,
+      "element": "Goblin"
+    },
+    {
+      "weight": 5,
+      "element": "Half-Elf"
+    },
+    {
+      "weight": 6,
+      "element": "Half Orc"
+    },
+    {
+      "weight": 7,
+      "element": "Dwarf"
+    },
+    {
+      "weight": 8,
+      "element": "Tiefling"
+    },
+    {
+      "weight": 8,
+      "element": "Human"
+    },
+    {
+      "weight": 7,
+      "element": "Elf"
+    },
+    {
+      "weight": 6,
+      "element": "Dragonborn"
+    },
+    {
+      "weight": 5,
+      "element": "Tabaxi"
+    },
+    {
+      "weight": 4,
+      "element": "Bugbear"
+    },
+    {
+      "weight": 3,
+      "element": "Hobgoblin"
+    },
+    {
+      "weight": 2,
+      "element": "Lizardman"
+    },
+    {
+      "weight": 1,
+      "element": "Orc"
+    }
+  ]
+}

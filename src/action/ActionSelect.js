@@ -8,24 +8,22 @@ import React, {Component} from 'react';
  * -> key: String unique ID for action
  * -> desc: String descriptive text for action
  * selected: String unique id for selected action
- * handleChange: Method Pointer to handle updates to selection
+ * onActionSelect: Method Pointer to handle updates to selection
  */
 class ActionSelect extends Component {
     constructor(props) {
         super(props);
 
-        this.handleChange().bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(event) {
-        if (this.props.handleChange) {
-            this.props.handleChange(this.findAction(event.target.value));
-        }
+        this.props.onActionSelect && this.props.onActionSelect(this.findAction(event.target.value));
     }
 
     findAction(id) {
-        for (let grp in this.props.groups) {
-            for (let action in grp) {
+        for (const grp of this.props.groups) {
+            for (const action of grp.actions) {
                 if (action.key === id) {
                     return action;
                 }
@@ -36,17 +34,19 @@ class ActionSelect extends Component {
 
     render() {
         return (
-            <select name="roll-select" id="roll-select" value={this.props.selected} onChange={this.props.handleChange}>
+            <select name="roll-select" id="roll-select" className={this.props.className} value={this.props.selected} onChange={this.handleChange}>
                 <option value="">Please select an action</option>
-                {this.props.groups.map(group => {
-                    return (
-                        <optgroup label={group.label}>
-                            {group.actions.map((action) => {
-                                return <option value={action.key} key={action.key}>{action.desc}</option>
-                            })}
-                        </optgroup>
-                    )
-                })}
+                {
+                    this.props.groups.map((grp) => {
+                        return (
+                            <optgroup label={grp.label} key={grp.label}>
+                                {grp.actions && grp.actions.map((action) => {
+                                    return <option value={action.key} key={action.key}>{action.desc}</option>
+                                })}
+                            </optgroup>
+                        )
+                    })
+                }
             </select>
         );
     }

@@ -1,0 +1,15 @@
+{
+  "key": "table_gender",
+  "desc": "A character's gender",
+  "defaultField": "Gender",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Male"
+    },
+    {
+      "weight": 1,
+      "element": "Female"
+    }
+  ]
+}
