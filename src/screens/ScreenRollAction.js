@@ -7,7 +7,7 @@ class ScreenRollAction extends Component {
         super(props);
 
         this.state = {
-            selectedAction: {},
+            selectedAction: undefined,
             values: {},
         };
 
@@ -16,30 +16,16 @@ class ScreenRollAction extends Component {
     }
 
     handleActionSelect(action) {
-        this.setState({selectedAction: action});
+        this.setState({selectedAction: this.findAction(action)});
     }
 
     findAction(actionKey) {
-        const autoActions = [];
-        this.props.contentTables.forEach((table) => {
-            autoActions.push({
-                key:"action_auto_" + table.key,
-                desc: table.desc,
-                contents: [{table:table.key}]
-            })
-        });
-
-        for (const act of autoActions) {
-            if (act.key === actionKey) {
-                return act;
-            }
-        }
-
         for (const act of this.props.actions) {
             if (act.key === actionKey) {
                 return act;
             }
         }
+        return undefined;
     }
 
     findTable(tableKey) {
@@ -53,11 +39,13 @@ class ScreenRollAction extends Component {
     }
 
     performSelectedAction() {
-        const values = this.performAction(this.state.selectedAction);
+        if (this.state.selectedAction) {
+            const values = this.performAction(this.state.selectedAction);
 
-        this.setState({
-            values: values,
-        })
+            this.setState({
+                values: values,
+            })
+        }
     }
 
     performAction(action) {
@@ -97,19 +85,14 @@ class ScreenRollAction extends Component {
     }
 
     render() {
-        const autoActions = [];
-        this.props.contentTables.forEach((table) => {
-            autoActions.push({
-                key:"action_auto_" + table.key,
-                desc: table.desc,
-                contents: [{table:table.key}]
-            })
-        });
+        const actionGroups = {};
 
-        const actionGroups = [
-            {label: "Actions", actions: this.props.actions},
-            {label: "Tables", actions: autoActions}
-        ];
+        this.props.actions.forEach(act => {
+           if (!actionGroups.hasOwnProperty(act.group)) {
+               actionGroups[act.group] = [];
+           }
+           actionGroups[act.group].push(act)
+        });
 
         return (
             <div className="mx-auto text-center col-sm-5">
@@ -132,14 +115,6 @@ class ScreenRollAction extends Component {
                             return <ValueDisplay key={key} uniqueId={key} label={key} value={val}/>
                         })
                     }
-                </div>
-
-                <span className="">
-                    OR
-                </span>
-
-                <div className="input-group">
-                    <button className="btn btn-primary form-control" onClick={this.performAction}>Edit Tables and Actions</button>
                 </div>
             </div>
         );

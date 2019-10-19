@@ -1,7 +1,7 @@
 {
   "key": "table_other_race",
   "desc": "Random Sheutan Race.",
-  "defaultField": "Race",
+  "defaultField": "OtherRace",
   "contents": [
     {
       "weight": 1,

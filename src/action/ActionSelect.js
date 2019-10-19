@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 
 /**
  * Properties:
- * groups: Array of objects
- * > label: String to display
- * > actions: Array of Action objects
+ * groups: Object containing property labels -> Action objects
+ * > label: Array of Action objects
  * -> key: String unique ID for action
  * -> desc: String descriptive text for action
  * selected: String unique id for selected action
@@ -18,34 +17,27 @@ class ActionSelect extends Component {
     }
 
     handleChange(event) {
-        this.props.onActionSelect && this.props.onActionSelect(this.findAction(event.target.value));
-    }
-
-    findAction(id) {
-        for (const grp of this.props.groups) {
-            for (const action of grp.actions) {
-                if (action.key === id) {
-                    return action;
-                }
-            }
-        }
-        return null;
+        this.props.onActionSelect && this.props.onActionSelect(event.target.value);
     }
 
     render() {
+        const groups = this.props.groups;
+        const optgroups = [];
+        for(const prop in groups) {
+            if (Object.prototype.hasOwnProperty.call(groups, prop)) {
+                optgroups.push(<optgroup label={prop} key={prop}>
+                    {groups[prop].map((action) => {
+                        return <option value={action.key} key={action.key}>{action.desc}</option>
+                    })}
+                </optgroup>)
+            }
+        }
+
         return (
             <select name="roll-select" id="roll-select" className={this.props.className} value={this.props.selected} onChange={this.handleChange}>
                 <option value="">Please select an action</option>
                 {
-                    this.props.groups.map((grp) => {
-                        return (
-                            <optgroup label={grp.label} key={grp.label}>
-                                {grp.actions && grp.actions.map((action) => {
-                                    return <option value={action.key} key={action.key}>{action.desc}</option>
-                                })}
-                            </optgroup>
-                        )
-                    })
+                    optgroups
                 }
             </select>
         );

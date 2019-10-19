@@ -11,6 +11,7 @@ class App extends React.Component {
                 {
                     key: "action_roll_scorched",
                     desc: "Roll a scorched gang member",
+                    group: "Gang NPC",
                     contents: [
                         {table: "table_scorched_race"},
                         {table: "table_gender"}
@@ -22,27 +23,41 @@ class App extends React.Component {
             screen: "roll"
         };
 
-    this.fetchTableFromJson("./content/TableScorched.json");
-    this.fetchTableFromJson("./content/TableOtherRace.json");
-    this.fetchTableFromJson("./content/TableGender.json");
-  }
+        this.fetchTableFromJson("./content/TableScorched.json");
+        this.fetchTableFromJson("./content/TableOtherRace.json");
+        this.fetchTableFromJson("./content/TableGender.json");
+    }
 
     handleScreenChange(screen) {
         this.setState({screen: screen});
     }
 
-  fetchTableFromJson(url) {
-    fetch(url)
-        .then(response => response.json(), error => console.log(error))
-        .then(result => {
-          result.totalWeight = 0;
-          result.contents.forEach(row => result.totalWeight += row.weight);
-          const tables = this.state.contentTables.concat([result]);
-          this.setState({contentTables: tables});
-        }, error => {
-          console.log(error);
-        })
-  }
+    fetchTableFromJson(url) {
+        fetch(url)
+            .then(response => response.json(), error => console.log(error))
+            .then(result => {
+                // Calculate total weight
+                result.totalWeight = 0;
+                result.contents.forEach(row => result.totalWeight += row.weight);
+
+                // Create Auto Action
+                const actions = this.state.actions.concat([{
+                    key:"action_" + result.key,
+                    desc: result.desc,
+                    group: "Table",
+                    contents: [{table:result.key}]
+                }]);
+                const tables = this.state.contentTables.concat([result]);
+
+                // Update state
+                this.setState({
+                    contentTables: tables,
+                    actions: actions
+                });
+            }, error => {
+                console.log(error);
+            });
+    }
 
     render() {
         let screen = <div/>;
@@ -59,7 +74,7 @@ class App extends React.Component {
                             <h2 className="text-center">Generate Anything.</h2>
                         </div>
                     </div>
-                    <nav className="row p-1">
+                    <nav className="row p-3">
                         <ul className="col-sm nav nav-tabs">
                             <li className="nav-item">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

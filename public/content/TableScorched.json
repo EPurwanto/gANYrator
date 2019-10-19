@@ -20,9 +20,9 @@
       "element": "Human"
     },
     {
-      "weight": 1,
+      "weight": 10,
       "element": "Other",
-      "action": "action_auto_table_other_race"
+      "action": "action_table_other_race"
     }
   ]
 }
