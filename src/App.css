@@ -1,11 +1,11 @@
 .root {
   height: 100vh;
-  background: green;
+  background: lightgreen;
 }
 
 .content {
   min-height: 500px;
-  background: lightgreen;
+  background: white;
 }
 
 /*# sourceMappingURL=App.css.map */
