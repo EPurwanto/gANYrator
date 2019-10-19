@@ -95,28 +95,33 @@ class ScreenRollAction extends Component {
         });
 
         return (
-            <div className="mx-auto text-center col-sm-5">
-                {/* Roll Dropdown */}
-                <div className="">
-                    <div className="input-group">
-                        <div className="input-group-prepend">
-                            <button className="btn btn-primary" onClick={this.performSelectedAction}>Roll</button>
-                        </div>
-                        <ActionSelect
-                            className="form-control"
-                            selected={this.state.selectedAction && this.state.selectedAction.key}
-                            onActionSelect={this.handleActionSelect}
-                            groups={actionGroups}/>
-                    </div>
+            <React.Fragment>
 
+                <div className="row">
                     {/* Last rolled field Values */}
                     {
                         Object.entries(this.state.values).map(([key, val]) => {
-                            return <ValueDisplay key={key} uniqueId={key} label={key} value={val}/>
+                            return <ValueDisplay className="col-sm" key={key} uniqueId={key} label={key} value={val}/>
                         })
                     }
                 </div>
-            </div>
+
+                <div className="mx-auto text-center col-sm-5">
+                    {/* Roll Dropdown */}
+                    <div className="">
+                        <div className="input-group">
+                            <ActionSelect
+                                className="form-control"
+                                selected={this.state.selectedAction && this.state.selectedAction.key}
+                                onActionSelect={this.handleActionSelect}
+                                groups={actionGroups}/>
+                            <div className="input-group-append">
+                                <button className="btn btn-primary" onClick={this.performSelectedAction}>Roll</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
         );
     }
 }

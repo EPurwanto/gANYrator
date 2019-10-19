@@ -1,0 +1,26 @@
+{
+  "actions": [
+    {
+      "key": "action_roll_scorched",
+      "desc": "Roll a scorched gang member",
+      "contents": "./content/ActionRollScorched.json"
+    }
+  ],
+  "tables": [
+    {
+      "key": "table_gender",
+      "desc": "A character's gender",
+      "contents": "./content/TableGender.json"
+    },
+    {
+      "key": "table_other_race",
+      "desc": "Random Sheutan Race.",
+      "contents": "./content/TableOtherRace.json"
+    },
+    {
+      "key": "table_scorched_race",
+      "desc": "The race of a member of a Scorched gang",
+      "contents": "./content/TableScorched.json"
+    }
+  ]
+}

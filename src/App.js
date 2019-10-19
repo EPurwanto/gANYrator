@@ -7,25 +7,18 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            actions: [
-                {
-                    key: "action_roll_scorched",
-                    desc: "Roll a scorched gang member",
-                    group: "Gang NPC",
-                    contents: [
-                        {table: "table_scorched_race"},
-                        {table: "table_gender"}
-                    ]
-                }
-            ],
-
+            actions: [],
             contentTables: [],
             screen: "roll"
         };
+    }
 
+    componentDidMount() {
         this.fetchTableFromJson("./content/TableScorched.json");
         this.fetchTableFromJson("./content/TableOtherRace.json");
         this.fetchTableFromJson("./content/TableGender.json");
+
+        this.fetchActionFromJson("./content/ActionRollScorched.json")
     }
 
     handleScreenChange(screen) {
@@ -52,6 +45,21 @@ class App extends React.Component {
                 // Update state
                 this.setState({
                     contentTables: tables,
+                    actions: actions
+                });
+            }, error => {
+                console.log(error);
+            });
+    }
+
+    fetchActionFromJson(url) {
+        fetch(url)
+            .then(response => response.json(), error => console.log(error))
+            .then(result => {
+                const actions = this.state.actions.concat([result]);
+
+                // Update state
+                this.setState({
                     actions: actions
                 });
             }, error => {

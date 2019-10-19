@@ -11,7 +11,7 @@ import React from 'react';
  */
 function ValueDisplay(props) {
     return (
-        <div className="col-sm-4 form-group" key={props.uniqueId}>
+        <div className={props.className ? props.className + " form-group" : "form-group"} key={props.uniqueId}>
             <label htmlFor="value">{props.label}</label>
             <span id="value" className="form-control-plaintext">{props.value}</span>
         </div>

@@ -22,16 +22,33 @@ class ActionSelect extends Component {
 
     render() {
         const groups = this.props.groups;
+        const props = [];
         const optgroups = [];
         for(const prop in groups) {
             if (Object.prototype.hasOwnProperty.call(groups, prop)) {
-                optgroups.push(<optgroup label={prop} key={prop}>
-                    {groups[prop].map((action) => {
-                        return <option value={action.key} key={action.key}>{action.desc}</option>
-                    })}
-                </optgroup>)
+                props.push(prop);
             }
         }
+
+        props.sort().forEach(prop => {
+            optgroups.push(<optgroup label={prop} key={prop}>
+                {
+                    groups[prop]
+                        .sort((a, b) => {
+                            if (a.desc < b.desc) {
+                                return -1;
+                            }
+                            if (a.desc > b.desc) {
+                                return 1;
+                            }
+                            return 0;
+                        })
+                        .map((action) => {
+                            return <option value={action.key} key={action.key}>{action.desc}</option>;
+                        })
+                }
+            </optgroup>)
+        });
 
         return (
             <select name="roll-select" id="roll-select" className={this.props.className} value={this.props.selected} onChange={this.handleChange}>

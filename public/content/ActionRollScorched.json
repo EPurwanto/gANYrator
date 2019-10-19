@@ -1,0 +1,16 @@
+
+{
+  "key": "action_roll_scorched",
+  "desc": "Roll a scorched gang member",
+  "group": "Gang NPC",
+  "contents": [
+    {
+      "table": "table_scorched_race",
+      "field": "Race"
+    },
+    {
+      "table": "table_gender",
+      "field": "Gender"
+    }
+  ]
+}
