@@ -1,7 +1,7 @@
 {
   "key": "table_scorched_race",
+  "name": "Scorched Race",
   "desc": "The race of a member of a Scorched gang",
-  "defaultField": "Race",
   "contents": [
     {
       "weight": 7,

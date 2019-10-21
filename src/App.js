@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import ScreenRollAction from "./screens/ScreenRollAction";
+import ScreenEditTable from "./screens/ScreenEditTable";
 
 class App extends React.Component {
     constructor(props) {
@@ -69,8 +70,15 @@ class App extends React.Component {
 
     render() {
         let screen = <div/>;
-        if (this.state.screen === "roll") {
-            screen = <ScreenRollAction contentTables={this.state.contentTables} actions={this.state.actions}/>
+        switch (this.state.screen) {
+            case "roll":
+                screen = <ScreenRollAction contentTables={this.state.contentTables} actions={this.state.actions}/>;
+                break;
+            case "tables":
+                screen = <ScreenEditTable contentTables={this.state.contentTables} actions={this.state.actions}/>;
+                break;
+            default:
+                break;
         }
         return (
             <div className="root pt-2">

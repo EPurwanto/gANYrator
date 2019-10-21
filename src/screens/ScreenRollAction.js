@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ValueDisplay from "../utility/ValueDisplay";
 import ActionSelect from "../action/ActionSelect";
+import {findTable, findAction} from "../utility/Utils"
 
 class ScreenRollAction extends Component {
     constructor(props) {
@@ -16,26 +17,7 @@ class ScreenRollAction extends Component {
     }
 
     handleActionSelect(action) {
-        this.setState({selectedAction: this.findAction(action)});
-    }
-
-    findAction(actionKey) {
-        for (const act of this.props.actions) {
-            if (act.key === actionKey) {
-                return act;
-            }
-        }
-        return undefined;
-    }
-
-    findTable(tableKey) {
-        const tables = this.props.contentTables;
-
-        for (const table of tables) {
-            if (table.key === tableKey) {
-                return table;
-            }
-        }
+        this.setState({selectedAction: findAction(action, this.props.actions)});
     }
 
     performSelectedAction() {
@@ -52,17 +34,17 @@ class ScreenRollAction extends Component {
         let values = {};
 
         action.contents.forEach((action) => {
-            const table = this.findTable(action.table);
+            const table = findTable(action.table, this.props.contentTables);
             const row = this.rollOn(table);
 
             if (action.hasOwnProperty("field")) {
                 values[action.field] = row.element;
             } else {
-                values[table.defaultField] = row.element;
+                values[table.name] = row.element;
             }
 
             if(row.hasOwnProperty("action")) {
-                const results = this.performAction(this.findAction(row.action));
+                const results = this.performAction(findAction(row.action, this.props.actions));
                 values = {...values, ...results};
             }
         });
