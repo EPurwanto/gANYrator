@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import ScreenRollAction from "./screens/ScreenRollAction";
 import ScreenEditTable from "./screens/ScreenEditTable";
+import {fetchFromJson} from "./utility/Utils";
 
 class App extends React.Component {
     constructor(props) {
@@ -27,45 +28,37 @@ class App extends React.Component {
     }
 
     fetchTableFromJson(url) {
-        fetch(url)
-            .then(response => response.json(), error => console.log(error))
-            .then(result => {
-                // Calculate total weight
-                result.totalWeight = 0;
-                result.contents.forEach(row => result.totalWeight += row.weight);
+        fetchFromJson(url, (result) => {
+            // Calculate total weight
+            result.totalWeight = 0;
+            result.contents.forEach(row => result.totalWeight += row.weight);
 
-                // Create Auto Action
-                const actions = this.state.actions.concat([{
-                    key:"action_" + result.key,
-                    desc: result.desc,
-                    group: "Table",
-                    contents: [{table:result.key}]
-                }]);
-                const tables = this.state.contentTables.concat([result]);
+            // Create Auto Action
+            const actions = this.state.actions.concat([{
+                key:"action_" + result.key,
+                desc: result.desc,
+                group: "Table",
+                contents: [{table:result.key}]
+            }]);
+            const tables = this.state.contentTables.concat([result]);
 
-                // Update state
-                this.setState({
-                    contentTables: tables,
-                    actions: actions
-                });
-            }, error => {
-                console.log(error);
+            // Update state
+            this.setState({
+                contentTables: tables,
+                actions: actions
             });
+        }, (error) => console.log(error));
     }
 
     fetchActionFromJson(url) {
-        fetch(url)
-            .then(response => response.json(), error => console.log(error))
-            .then(result => {
-                const actions = this.state.actions.concat([result]);
+        fetchFromJson(url, (result) => {
+            const actions = this.state.actions.concat([result]);
 
-                // Update state
-                this.setState({
-                    actions: actions
-                });
-            }, error => {
-                console.log(error);
+            // Update state
+            this.setState({
+                actions: actions
             });
+        }, (error) => console.log(error));
     }
 
     render() {

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import ContentTableCard from "../content_table/ContentTableCard";
-import {findTable} from "../utility/Utils";
 import AddTableOverlay from "../content_table/AddTableOverlay";
 
 class ScreenEditTable extends Component {
@@ -50,7 +49,7 @@ class ScreenEditTable extends Component {
                     </div>
                 </div>
 
-            </div>
+                <AddTableOverlay id="new-table-modal"/>
             </React.Fragment>
         );
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import AccordianCardEntry from "./AccordianCardEntry";
 
 /**
  *
@@ -22,20 +23,13 @@ function Accordion(props) {
             {
                 props.list.map((item) => {
                     return (
-                        <div className="card" key={item.key}>
-                            <div className="card-header">
-                                <h2>
-                                    <button className="btn btn-link collapsed" data-toggle="collapse" data-target={"#" + item.key} aria-expanded="true" aria-controls={item.key}>
-                                        {item.heading}
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id={item.key} className="collapse" aria-labelledby="headingOne" data-parent={"#" + parentId}>
-                                <div className={bodyClass}>
-                                    {props.children(item)}
-                                </div>
-                            </div>
-                        </div>
+                        <AccordianCardEntry
+                            id={item.key}
+                            heading={item.heading}
+                            parent="parentId"
+                        >
+                            {props.children(item)}
+                        </AccordianCardEntry>
                     )
                 })
             }
