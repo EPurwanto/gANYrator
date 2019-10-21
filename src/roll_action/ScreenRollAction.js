@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ValueDisplay from "../utility/ValueDisplay";
-import ActionSelect from "../action/ActionSelect";
+import ActionSelect from "./ActionSelect";
 import {findTable, findAction} from "../utility/Utils"
 
 class ScreenRollAction extends Component {

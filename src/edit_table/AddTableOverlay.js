@@ -19,21 +19,24 @@ const AddTableOverlay = (props) => {
                                 heading="Create a new Table"
                                 parent="create-options"
                             >
-                                <span>Here's some fields</span>
+                                <span>These features are not yet complete</span>
                             </AccordianCardEntry>
                             <AccordianCardEntry
                                 id="upload"
                                 heading="Upload an existing table"
                                 parent="create-options"
                             >
-                                <span>Here's some fields</span>
+                                <span>These features are not yet complete</span>
                             </AccordianCardEntry>
                             <AccordianCardEntry
                                 id="select"
                                 heading="Use a table from our library"
                                 parent="create-options"
                             >
-                                <span>Here's some fields</span>
+                                <span>These features are not yet complete</span>
+                                <button className="btn btn-primary" onClick={props.onLoadTables} data-dismiss="modal">
+                                    Load the existing tables
+                                </button>
                             </AccordianCardEntry>
                         </div>
                     </div>

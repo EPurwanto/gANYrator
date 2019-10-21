@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import ScreenRollAction from "./screens/ScreenRollAction";
-import ScreenEditTable from "./screens/ScreenEditTable";
+import ScreenRollAction from "./roll_action/ScreenRollAction";
+import ScreenEditTable from "./edit_table/ScreenEditTable";
 import {fetchFromJson} from "./utility/Utils";
 
 class App extends React.Component {
@@ -13,41 +13,62 @@ class App extends React.Component {
             contentTables: [],
             screen: "roll"
         };
+
+        this.addTable = this.addTable.bind(this);
     }
 
     componentDidMount() {
-        this.fetchTableFromJson("./content/TableScorched.json");
-        this.fetchTableFromJson("./content/TableOtherRace.json");
-        this.fetchTableFromJson("./content/TableGender.json");
+        const tableStore = localStorage.getItem("tables");
+        if (tableStore) {
+            const tables = JSON.parse(tableStore);
 
-        this.fetchActionFromJson("./content/ActionRollScorched.json")
+            this.setState({contentTables: tables});
+        }
+
+        const actionStore = localStorage.getItem("actions");
+        if (actionStore) {
+            const actions = JSON.parse(actionStore);
+
+            this.setState({actions: actions});
+        } else {
+            this.fetchActionFromJson("./content/ActionRollScorched.json")
+        }
     }
 
     handleScreenChange(screen) {
         this.setState({screen: screen});
     }
 
-    fetchTableFromJson(url) {
-        fetchFromJson(url, (result) => {
-            // Calculate total weight
-            result.totalWeight = 0;
-            result.contents.forEach(row => result.totalWeight += row.weight);
+    validateTable(table) {
+        // Calculate total weight
+        table.totalWeight = 0;
+        table.contents.forEach(row => table.totalWeight += row.weight);
 
-            // Create Auto Action
-            const actions = this.state.actions.concat([{
-                key:"action_" + result.key,
-                desc: result.desc,
-                group: "Table",
-                contents: [{table:result.key}]
-            }]);
-            const tables = this.state.contentTables.concat([result]);
+        return true;
+    }
 
-            // Update state
-            this.setState({
-                contentTables: tables,
-                actions: actions
-            });
-        }, (error) => console.log(error));
+    addTable(table) {
+        if (!this.validateTable(table)) {
+            // todo?
+        }
+
+        // Create Auto Action
+        const actions = this.state.actions.concat([{
+            key:"action_" + table.key,
+            desc: table.desc,
+            group: "Table",
+            contents: [{table:table.key}]
+        }]);
+        const tables = this.state.contentTables.concat([table]);
+
+        // Update state
+        this.setState({
+            contentTables: tables,
+            actions: actions
+        });
+
+        localStorage.setItem("tables", JSON.stringify(tables));
+        localStorage.setItem("actions", JSON.stringify(actions));
     }
 
     fetchActionFromJson(url) {
@@ -65,10 +86,15 @@ class App extends React.Component {
         let screen = <div/>;
         switch (this.state.screen) {
             case "roll":
-                screen = <ScreenRollAction contentTables={this.state.contentTables} actions={this.state.actions}/>;
+                screen = <ScreenRollAction
+                            contentTables={this.state.contentTables}
+                            actions={this.state.actions}/>;
                 break;
             case "tables":
-                screen = <ScreenEditTable contentTables={this.state.contentTables} actions={this.state.actions}/>;
+                screen = <ScreenEditTable
+                            contentTables={this.state.contentTables}
+                            actions={this.state.actions}
+                            onTableAdd={this.addTable}/>;
                 break;
             default:
                 break;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import ContentTableCard from "../content_table/ContentTableCard";
-import AddTableOverlay from "../content_table/AddTableOverlay";
+import ContentTableCard from "./ContentTableCard";
+import AddTableOverlay from "./AddTableOverlay";
+import {fetchFromJson} from "../utility/Utils";
 
 class ScreenEditTable extends Component {
 
@@ -11,10 +12,25 @@ class ScreenEditTable extends Component {
         };
 
         this.handleTableSelect = this.handleTableSelect.bind(this);
+        this.handleLoadTables = this.handleLoadTables.bind(this);
     }
 
     handleTableSelect(table) {
         this.setState({selected: table});
+    }
+
+    handleLoadTables() {
+        this.fetchTableFromJson("./content/TableScorched.json");
+        this.fetchTableFromJson("./content/TableOtherRace.json");
+        this.fetchTableFromJson("./content/TableGender.json");
+    }
+
+    fetchTableFromJson(url) {
+        fetchFromJson(url, (result) => {
+            if (this.props.onTableAdd) {
+                this.props.onTableAdd(result)
+            }
+        }, (error) => console.log(error));
     }
 
     render() {
@@ -26,12 +42,13 @@ class ScreenEditTable extends Component {
                     {
                         tables.map((table, index) => {
                             return (
-                                <div className="col-sm-3 p-2">
+                                <div className="col-sm-3 p-2"
+                                     key={table.key}
+                                >
                                     <ContentTableCard
                                         onClick={this.handleTableSelect}
                                         name={table.name}
                                         desc={table.desc}
-                                        key={table.key}
                                         tableKey={table.key}
                                         className="w-100 h-100 align-items-center"
                                     />
@@ -49,7 +66,7 @@ class ScreenEditTable extends Component {
                     </div>
                 </div>
 
-                <AddTableOverlay id="new-table-modal"/>
+                <AddTableOverlay id="new-table-modal" onLoadTables={this.handleLoadTables}/>
             </React.Fragment>
         );
     }
