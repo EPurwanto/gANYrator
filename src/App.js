@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import ScreenRollAction from "./roll_action/ScreenRollAction";
-import ScreenEditTable from "./edit_table/ScreenEditTable";
+import ScreenRoll from "./roll_action/ScreenRoll";
+import ScreenTables from "./list_table/ScreenTables";
 import {fetchFromJson} from "./utility/Utils";
 
 class App extends React.Component {
@@ -86,12 +86,12 @@ class App extends React.Component {
         let screen = <div/>;
         switch (this.state.screen) {
             case "roll":
-                screen = <ScreenRollAction
+                screen = <ScreenRoll
                             contentTables={this.state.contentTables}
                             actions={this.state.actions}/>;
                 break;
             case "tables":
-                screen = <ScreenEditTable
+                screen = <ScreenTables
                             contentTables={this.state.contentTables}
                             actions={this.state.actions}
                             onTableAdd={this.addTable}/>;

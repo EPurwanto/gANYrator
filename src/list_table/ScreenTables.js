@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import AddTableOverlay from "./AddTableOverlay";
-import {fetchFromJson} from "../utility/Utils";
+import {fetchFromJson, findTable} from "../utility/Utils";
 import ContentTableCardDeck from "./ContentTableCardDeck";
+import ContentTableDisplay from "../utility/ContentTableDisplay";
 
-class ScreenEditTable extends Component {
+class ScreenTables extends Component {
 
     constructor(props, context) {
         super(props, context);
@@ -83,19 +84,23 @@ class ScreenEditTable extends Component {
             handleClick: () => this.handleModalOpen()
         });
 
-        return (
-            <React.Fragment>
-                <ContentTableCardDeck
-                    tables={tables}/>
-                <AddTableOverlay
-                    id="new-table-modal"
-                    show={this.state.modalShow}
-                    onClose={this.handleModalClose}
-                    onTableCreate={this.createTable}
-                    onLoadTables={this.handleLoadTables}/>
-            </React.Fragment>
-        );
+        if (this.state.selected === "") {
+            return (
+                <React.Fragment>
+                    <ContentTableCardDeck
+                        tables={tables}/>
+                    <AddTableOverlay
+                        id="new-table-modal"
+                        show={this.state.modalShow}
+                        onClose={this.handleModalClose}
+                        onTableCreate={this.createTable}
+                        onLoadTables={this.handleLoadTables}/>
+                </React.Fragment>
+            );
+        } else {
+            return <ContentTableDisplay table={findTable(this.state.selected, this.props.contentTables)}/>
+        }
     }
 }
 
-export default ScreenEditTable;
+export default ScreenTables;

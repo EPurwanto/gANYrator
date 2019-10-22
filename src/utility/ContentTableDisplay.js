@@ -11,10 +11,10 @@ function ContentTableDisplay(props) {
             </thead>
             <tbody>
             {
-                props.contentTable.contents.map((row, index) => {
+                props.table.contents.map((row, index) => {
                     return (
                         <tr key={index}>
-                            <td className="text-right">{row.weight * 100 / props.contentTable.totalWeight + "%"}</td>
+                            <td className="text-right">{row.weight}</td>
                             <td>{row.element}</td>
                         </tr>
                     )

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import ValueDisplay from "../utility/ValueDisplay";
+import ValueDisplay from "./ValueDisplay";
 import ActionSelect from "./ActionSelect";
 import {findTable, findAction} from "../utility/Utils"
 import {Button, InputGroup} from "react-bootstrap";
 
-class ScreenRollAction extends Component {
+class ScreenRoll extends Component {
     constructor(props) {
         super(props);
 
@@ -107,4 +107,4 @@ class ScreenRollAction extends Component {
     }
 }
 
-export default ScreenRollAction;
+export default ScreenRoll;
