@@ -8,15 +8,47 @@ class ScreenEditTable extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            selected: ""
+            selected: "",
+            modalShow: false
         };
 
         this.handleTableSelect = this.handleTableSelect.bind(this);
         this.handleLoadTables = this.handleLoadTables.bind(this);
+        this.handleModalClose = this.handleModalClose.bind(this);
+        this.handleModalOpen = this.handleModalOpen.bind(this);
+        this.createTable = this.createTable.bind(this);
     }
 
     handleTableSelect(table) {
         this.setState({selected: table});
+    }
+
+    handleModalClose() {
+        this.setState({modalShow: false});
+    }
+
+    handleModalOpen() {
+        this.setState({modalShow: true})
+    }
+
+    createTable(name, desc) {
+        const key = "table_" + name.replace(/\w/g, "_");
+        const table = {
+            key: key,
+            name: name,
+            desc: desc,
+            contents: [
+                {
+                    weight: 1,
+                    element: "Dummy Data"
+                }
+            ]
+        };
+
+        if (this.props.onTableAdd) {
+            this.props.onTableAdd(table);
+        }
+        this.handleModalClose()
     }
 
     handleLoadTables() {
@@ -57,7 +89,7 @@ class ScreenEditTable extends Component {
                         })
                     }
                     <div className="col-sm-3 p-2">
-                        <button className="card w-100 h-100 align-items-center" data-toggle="modal" data-target="#new-table-modal">
+                        <button className="card w-100 h-100 align-items-center" onClick={this.handleModalOpen}>
                             <div className="card-body">
                                 <h5 className="card-title">+ Add a new Table</h5>
                                 <p className="card-text">Create, upload or select a new table from our library</p>
@@ -66,7 +98,12 @@ class ScreenEditTable extends Component {
                     </div>
                 </div>
 
-                <AddTableOverlay id="new-table-modal" onLoadTables={this.handleLoadTables}/>
+                <AddTableOverlay
+                    id="new-table-modal"
+                    show={this.state.modalShow}
+                    onClose={this.handleModalClose}
+                    onTableCreate={this.createTable}
+                    onLoadTables={this.handleLoadTables}/>
             </React.Fragment>
         );
     }
