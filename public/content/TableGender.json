@@ -1,5 +1,4 @@
 {
-  "key": "table_gender",
   "name": "Gender",
   "desc": "A character's gender",
   "contents": [

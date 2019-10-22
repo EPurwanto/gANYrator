@@ -45,7 +45,7 @@ class ScreenRollAction extends Component {
             }
 
             if(row.hasOwnProperty("action")) {
-                const results = this.performAction(findAction(row.action, this.props.actions));
+                const results = this.performAction(row.action);
                 values = {...values, ...results};
             }
         });

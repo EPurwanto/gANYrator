@@ -4,7 +4,6 @@ import {Card} from "react-bootstrap";
 /**
  * Properties
  * className
- * tableKey
  * name
  * desc
  * onClick

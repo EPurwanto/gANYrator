@@ -7,9 +7,9 @@ export function findAction(actionKey, actions) {
     return undefined;
 }
 
-export function findTable(tableKey, tables) {
+export function findTable(name, tables) {
     for (const table of tables) {
-        if (table.key === tableKey) {
+        if (table.name === name) {
             return table;
         }
     }

@@ -54,10 +54,10 @@ class App extends React.Component {
 
         // Create Auto Action
         const actions = this.state.actions.concat([{
-            key:"action_" + table.key,
-            desc: table.desc,
+            key:"action_" + table.name,
+            desc: table.name,
             group: "Table",
-            contents: [{table:table.key}]
+            contents: [{table:table.name}]
         }]);
         const tables = this.state.contentTables.concat([table]);
 

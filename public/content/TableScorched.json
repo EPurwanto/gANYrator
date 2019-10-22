@@ -1,5 +1,4 @@
 {
-  "key": "table_scorched_race",
   "name": "Scorched Race",
   "desc": "The race of a member of a Scorched gang",
   "contents": [
@@ -22,7 +21,14 @@
     {
       "weight": 10,
       "element": "Other",
-      "action": "action_table_other_race"
+      "action": {
+        "contents": [
+          {
+            "table": "General Sheutan Race",
+            "field": "Other Race"
+          }
+        ]
+      }
     }
   ]
 }

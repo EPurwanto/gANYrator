@@ -1,6 +1,6 @@
 import React from 'react';
 import Accordion from "./Accordion";
-import ContentTableDisplay from "../edit_table/ContentTableDisplay";
+import ContentTableDisplay from "./ContentTableDisplay";
 
 function ContentTableAccordian(props) {
     return (

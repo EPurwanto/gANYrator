@@ -5,11 +5,11 @@
   "group": "Gang NPC",
   "contents": [
     {
-      "table": "table_scorched_race",
+      "table": "Scorched Race",
       "field": "Race"
     },
     {
-      "table": "table_gender",
+      "table": "Gender",
       "field": "Gender"
     }
   ]

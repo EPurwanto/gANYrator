@@ -19,12 +19,11 @@ const ContentTableCardDeck = (props) => {
                 tables.map((table) => {
                     return (
                         <div className="col-sm-3 p-2"
-                             key={table.key}>
+                             key={table.name}>
                             <ContentTableCard
                                 onClick={table.handleClick}
                                 name={table.name}
-                                desc={table.desc}
-                                tableKey={table.key}/>
+                                desc={table.desc}/>
                         </div>
                     )
                 })

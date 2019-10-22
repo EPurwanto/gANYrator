@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ContentTableCard from "./ContentTableCard";
 import AddTableOverlay from "./AddTableOverlay";
 import {fetchFromJson} from "../utility/Utils";
 import ContentTableCardDeck from "./ContentTableCardDeck";
@@ -33,9 +32,12 @@ class ScreenEditTable extends Component {
     }
 
     createTable(name, desc) {
-        const key = "table_" + name.replace(/\w/g, "_");
+        if (this.props.contentTables.some(t => t.name === name)) {
+            console.log("Table already exists")
+            return;
+        }
+
         const table = {
-            key: key,
             name: name,
             desc: desc,
             contents: [
@@ -54,7 +56,7 @@ class ScreenEditTable extends Component {
 
     handleLoadTables() {
         this.fetchTableFromJson("./content/TableScorched.json");
-        this.fetchTableFromJson("./content/TableOtherRace.json");
+        this.fetchTableFromJson("./content/TableGeneralRace.json");
         this.fetchTableFromJson("./content/TableGender.json");
     }
 
@@ -67,13 +69,15 @@ class ScreenEditTable extends Component {
     }
 
     render() {
-        const tables = this.props.contentTables.slice();
-        tables.forEach(t => {
-            t.handleClick = () => this.handleTableSelect(t.key);
+        const tables = this.props.contentTables.map(t => {
+            return {
+                name: t.name,
+                desc: t.desc,
+                handleClick: () => this.handleTableSelect(t.name)
+            }
         });
 
         tables.push({
-            key: "new Table",
             name: "+ Add a new Table",
             desc: "Create, upload or select a new table from our library",
             handleClick: () => this.handleModalOpen()
