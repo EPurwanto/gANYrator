@@ -8,4 +8,30 @@
   background: white;
 }
 
+/* mixin for multiline - from Natalia Onischuk http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/*/
+.card.table-card .card-text {
+  overflow: hidden;
+  position: relative;
+  line-height: 1.5em;
+  max-height: 6em;
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+}
+.card.table-card .card-text:before {
+  content: "...";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.card.table-card .card-text:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 1em;
+  height: 1em;
+  margin-top: 0.2em;
+  background: white;
+}
+
 /*# sourceMappingURL=App.css.map */

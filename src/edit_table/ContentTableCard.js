@@ -1,4 +1,5 @@
 import React from 'react';
+import {Card} from "react-bootstrap";
 
 /**
  * Properties
@@ -12,14 +13,13 @@ import React from 'react';
  * @constructor
  */
 const ContentTableCard = (props) => {
-    const cname = props.className ? props.className + " card" : "card";
     return (
-        <button className={cname} onClick={() => props.onClick(props.tableKey)}>
-            <div className="card-body">
-                <h5 className="card-title">{props.name}</h5>
-                <p className="card-text">{props.desc}</p>
-            </div>
-        </button>
+        <Card as="button" className="table-card text-left w-100 h-100" onClick={props.onClick}>
+            <Card.Body className="">
+                <Card.Title>{props.name}</Card.Title>
+                <Card.Text className="card-text">{props.desc}</Card.Text>
+            </Card.Body>
+        </Card>
     );
 };
 

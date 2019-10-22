@@ -22,13 +22,15 @@ const AddTableOverlay = (props) => {
                                 <Form.Label column={false}>Table Name</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    maxLength="60"
                                     value={name}
                                     onChange={e => setName(e.target.value)}/>
                             </Form.Group>
                             <Form.Group controlId="tableDesc">
                                 <Form.Label column={false}>Table Description</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    as="textarea"
+                                    maxLength="400"
                                     value={desc}
                                     onChange={e => setDesc(e.target.value)}/>
                             </Form.Group>

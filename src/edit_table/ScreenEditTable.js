@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ContentTableCard from "./ContentTableCard";
 import AddTableOverlay from "./AddTableOverlay";
 import {fetchFromJson} from "../utility/Utils";
+import ContentTableCardDeck from "./ContentTableCardDeck";
 
 class ScreenEditTable extends Component {
 
@@ -66,38 +67,22 @@ class ScreenEditTable extends Component {
     }
 
     render() {
-        let tables = this.props.contentTables.slice();
+        const tables = this.props.contentTables.slice();
+        tables.forEach(t => {
+            t.handleClick = () => this.handleTableSelect(t.key);
+        });
+
+        tables.push({
+            key: "new Table",
+            name: "+ Add a new Table",
+            desc: "Create, upload or select a new table from our library",
+            handleClick: () => this.handleModalOpen()
+        });
 
         return (
             <React.Fragment>
-                <div className="row p-2">
-                    {
-                        tables.map((table, index) => {
-                            return (
-                                <div className="col-sm-3 p-2"
-                                     key={table.key}
-                                >
-                                    <ContentTableCard
-                                        onClick={this.handleTableSelect}
-                                        name={table.name}
-                                        desc={table.desc}
-                                        tableKey={table.key}
-                                        className="w-100 h-100 align-items-center"
-                                    />
-                                </div>
-                            )
-                        })
-                    }
-                    <div className="col-sm-3 p-2">
-                        <button className="card w-100 h-100 align-items-center" onClick={this.handleModalOpen}>
-                            <div className="card-body">
-                                <h5 className="card-title">+ Add a new Table</h5>
-                                <p className="card-text">Create, upload or select a new table from our library</p>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
+                <ContentTableCardDeck
+                    tables={tables}/>
                 <AddTableOverlay
                     id="new-table-modal"
                     show={this.state.modalShow}
