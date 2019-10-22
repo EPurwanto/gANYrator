@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ValueDisplay from "../utility/ValueDisplay";
 import ActionSelect from "./ActionSelect";
 import {findTable, findAction} from "../utility/Utils"
+import {Button, InputGroup} from "react-bootstrap";
 
 class ScreenRollAction extends Component {
     constructor(props) {
@@ -90,18 +91,16 @@ class ScreenRollAction extends Component {
 
                 <div className="mx-auto text-center col-sm-5">
                     {/* Roll Dropdown */}
-                    <div className="">
-                        <div className="input-group">
-                            <ActionSelect
-                                className="form-control"
-                                selected={this.state.selectedAction && this.state.selectedAction.key}
-                                onActionSelect={this.handleActionSelect}
-                                groups={actionGroups}/>
-                            <div className="input-group-append">
-                                <button className="btn btn-primary" onClick={this.performSelectedAction}>Roll</button>
-                            </div>
-                        </div>
-                    </div>
+                    <InputGroup>
+                        <ActionSelect
+                            className="form-control form-control-action"
+                            selected={this.state.selectedAction && this.state.selectedAction.key}
+                            onActionSelect={this.handleActionSelect}
+                            groups={actionGroups}/>
+                        <InputGroup.Append>
+                            <Button varient="primary" onClick={this.performSelectedAction}>Roll</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </div>
             </React.Fragment>
         );

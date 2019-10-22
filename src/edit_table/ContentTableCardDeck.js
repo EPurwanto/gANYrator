@@ -1,6 +1,5 @@
 import React from 'react';
 import ContentTableCard from "./ContentTableCard";
-import {CardDeck} from "react-bootstrap";
 
 const ContentTableCardDeck = (props) => {
     const tables = props.tables;
