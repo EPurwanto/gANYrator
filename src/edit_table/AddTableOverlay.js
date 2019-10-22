@@ -1,51 +1,67 @@
-import React from 'react';
+import React, {useState} from 'react';
 import AccordianCardEntry from "../utility/AccordianCardEntry";
+import {Modal, Button, Form} from "react-bootstrap";
 
 const AddTableOverlay = (props) => {
+    const [name, setName] = useState("");
+    const [desc, setDesc] = useState("");
+
     return (
-        <div className="modal" id={props.id} tabIndex="-1" role="dialog">
-            <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">Add a new table</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+        <Modal show={props.show} onHide={props.onClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Add a new table</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div className="accordion" id="create-options">
+                    <AccordianCardEntry
+                        id="create"
+                        heading="Create a new Table"
+                        parent="create-options">
+                        <form onSubmit={() => props.onTableCreate && props.onTableCreate(name, desc)}>
+                            <Form.Group controlId="tableName">
+                                <Form.Label column={false}>Table Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    maxLength="60"
+                                    value={name}
+                                    onChange={e => setName(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group controlId="tableDesc">
+                                <Form.Label column={false}>Table Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    maxLength="400"
+                                    value={desc}
+                                    onChange={e => setDesc(e.target.value)}/>
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Create
+                            </Button>
+                        </form>
+                    </AccordianCardEntry>
+                    <AccordianCardEntry
+                        id="upload"
+                        heading="Upload an existing table"
+                        parent="create-options">
+                        <span>These features are not yet complete</span>
+                    </AccordianCardEntry>
+                    <AccordianCardEntry
+                        id="select"
+                        heading="Use a table from our library"
+                        parent="create-options">
+                        <span>These features are not yet complete</span>
+                        <button className="btn btn-primary" onClick={props.onLoadTables} data-dismiss="modal">
+                            Load the existing tables
                         </button>
-                    </div>
-                    <div className="modal-body">
-                        <div className="accordion" id="create-options">
-                            <AccordianCardEntry
-                                id="create"
-                                heading="Create a new Table"
-                                parent="create-options"
-                            >
-                                <span>These features are not yet complete</span>
-                            </AccordianCardEntry>
-                            <AccordianCardEntry
-                                id="upload"
-                                heading="Upload an existing table"
-                                parent="create-options"
-                            >
-                                <span>These features are not yet complete</span>
-                            </AccordianCardEntry>
-                            <AccordianCardEntry
-                                id="select"
-                                heading="Use a table from our library"
-                                parent="create-options"
-                            >
-                                <span>These features are not yet complete</span>
-                                <button className="btn btn-primary" onClick={props.onLoadTables} data-dismiss="modal">
-                                    Load the existing tables
-                                </button>
-                            </AccordianCardEntry>
-                        </div>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    </div>
+                    </AccordianCardEntry>
                 </div>
-            </div>
-        </div>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={props.onClose}>
+                    Cancel
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 

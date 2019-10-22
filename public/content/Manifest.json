@@ -15,7 +15,7 @@
     {
       "key": "table_other_race",
       "desc": "Random Sheutan Race.",
-      "contents": "./content/TableOtherRace.json"
+      "contents": "./content/TableGeneralRace.json"
     },
     {
       "key": "table_scorched_race",
