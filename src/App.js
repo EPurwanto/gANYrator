@@ -21,7 +21,32 @@ class App extends React.Component {
             screen: "Roll"
         };
 
-        this.addTable = this.addTable.bind(this);
+        this.handleActionListChange = this.handleActionListChange.bind(this);
+        this.handleTableListChange = this.handleTableListChange.bind(this);
+    }
+
+    handleActionListChange(list) {
+        // Update state
+        this.setState({
+            actions: list
+        });
+
+        // update storage
+        localStorage.setItem("actions", JSON.stringify(list));
+    }
+
+    handleTableListChange(list) {
+        // Update state
+        this.setState({
+            contentTables: list
+        });
+
+        // update storage
+        localStorage.setItem("tables", JSON.stringify(list));
+    }
+
+    handleScreenChange(screen) {
+        this.setState({screen: screen});
     }
 
     componentDidMount() {
@@ -38,55 +63,15 @@ class App extends React.Component {
 
             this.setState({actions: actions});
         } else {
-            this.fetchActionFromJson("./content/ActionRollScorched.json")
+            fetchFromJson("./content/ActionRollScorched.json", (result) => {
+                const actions = this.state.actions.concat([result]);
+
+                // Update state
+                this.setState({
+                    actions: actions
+                });
+            }, (error) => console.log(error));
         }
-    }
-
-    handleScreenChange(screen) {
-        this.setState({screen: screen});
-    }
-
-    validateTable(table) {
-        // Calculate total weight
-        table.totalWeight = 0;
-        table.contents.forEach(row => table.totalWeight += row.weight);
-
-        return true;
-    }
-
-    addTable(table) {
-        if (!this.validateTable(table)) {
-            // todo?
-        }
-
-        // Create Auto Action
-        const actions = this.state.actions.concat([{
-            key:"action_" + table.name,
-            desc: table.name,
-            group: "Table",
-            contents: [{table:table.name}]
-        }]);
-        const tables = this.state.contentTables.concat([table]);
-
-        // Update state
-        this.setState({
-            contentTables: tables,
-            actions: actions
-        });
-
-        localStorage.setItem("tables", JSON.stringify(tables));
-        localStorage.setItem("actions", JSON.stringify(actions));
-    }
-
-    fetchActionFromJson(url) {
-        fetchFromJson(url, (result) => {
-            const actions = this.state.actions.concat([result]);
-
-            // Update state
-            this.setState({
-                actions: actions
-            });
-        }, (error) => console.log(error));
     }
 
     render() {
@@ -113,7 +98,8 @@ class App extends React.Component {
                             <ScreenTables
                                 contentTables={this.state.contentTables}
                                 actions={this.state.actions}
-                                onTableAdd={this.addTable}/>
+                                onActionListChange={this.handleActionListChange}
+                                onTableListChange={this.handleTableListChange}/>
                         </Tab>
                         <Tab eventKey="Actions" title="Actions">
                             <div/>

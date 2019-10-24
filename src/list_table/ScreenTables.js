@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ScreenEditTable from "../edit_table/ScreenEditTable";
-import {fetchFromJson} from "../utility/Utils";
+import {createTable, fetchFromJson, findTable, isValidTableName} from "../utility/Utils";
 import AddTableOverlay from "./AddTableOverlay";
 import ContentTableCardDeck from "./ContentTableCardDeck";
 
@@ -13,11 +13,57 @@ class ScreenTables extends Component {
             modalShow: false
         };
 
+        this.handleTableCreate = this.handleTableCreate.bind(this);
+        this.handleTableLoad = this.handleTableLoad.bind(this);
+        this.handleTableSave = this.handleTableSelect.bind(this);
         this.handleTableSelect = this.handleTableSelect.bind(this);
-        this.handleLoadTables = this.handleLoadTables.bind(this);
         this.handleModalClose = this.handleModalClose.bind(this);
         this.handleModalOpen = this.handleModalOpen.bind(this);
-        this.createTable = this.createTable.bind(this);
+    }
+
+    handleTableCreate(name) {
+        if(!isValidTableName(name, this.props.contentTables)) {
+            return "A table with that name already exists";
+        }
+
+        const [table, action] = createTable(name);
+
+        const contentTables = this.props.contentTables.slice();
+        contentTables.unshift(table);
+
+        this.props.onTableListChange(contentTables);
+
+        const actionsList = this.props.actions.slice();
+        actionsList.push(action);
+        this.props.onActionListChange(actionsList);
+
+        this.handleTableSelect(name)
+    }
+
+    handleTableLoad() {
+        this.fetchTableFromJson("./content/TableScorched.json");
+        this.fetchTableFromJson("./content/TableGeneralRace.json");
+        this.fetchTableFromJson("./content/TableGender.json");
+
+        if (this.props.onTableListChange) {
+        }
+    }
+
+    fetchTableFromJson(url) {
+        let table = undefined;
+        fetchFromJson(url, (result) => {
+            const tables = this.props.contentTables.slice();
+            tables.unshift(result);
+            this.props.onTableListChange(tables)
+        }, (error) => console.log(error));
+
+        return table;
+    }
+
+    handleTableSave(table, name, desc, contents) {
+        // todo validate name is unique
+
+        // const tables = this.
     }
 
     handleTableSelect(table) {
@@ -32,44 +78,8 @@ class ScreenTables extends Component {
         this.setState({modalShow: true})
     }
 
-    createTable(name, desc) {
-        if (this.props.contentTables.some(t => t.name === name)) {
-            console.log("Table already exists")
-            return;
-        }
-
-        const table = {
-            name: name,
-            desc: desc,
-            contents: [
-                {
-                    weight: 1,
-                    element: "Dummy Data"
-                }
-            ]
-        };
-
-        if (this.props.onTableAdd) {
-            this.props.onTableAdd(table);
-        }
-        this.handleModalClose()
-    }
-
-    handleLoadTables() {
-        this.fetchTableFromJson("./content/TableScorched.json");
-        this.fetchTableFromJson("./content/TableGeneralRace.json");
-        this.fetchTableFromJson("./content/TableGender.json");
-    }
-
-    fetchTableFromJson(url) {
-        fetchFromJson(url, (result) => {
-            if (this.props.onTableAdd) {
-                this.props.onTableAdd(result)
-            }
-        }, (error) => console.log(error));
-    }
-
     render() {
+        // Copy tables but bind a "handleClick" prop
         const tables = this.props.contentTables.map(t => {
             return {
                 name: t.name,
@@ -78,6 +88,7 @@ class ScreenTables extends Component {
             }
         });
 
+        // Add a dummy entry for adding new tables, bind it to launch the overlay
         tables.push({
             name: "+ Add a new Table",
             desc: "Create, upload or select a new table from our library",
@@ -85,6 +96,7 @@ class ScreenTables extends Component {
         });
 
         if (this.state.selected === "") {
+            // Nothing selected, show table cards
             return (
                 <React.Fragment>
                     <ContentTableCardDeck
@@ -93,12 +105,19 @@ class ScreenTables extends Component {
                         id="new-table-modal"
                         show={this.state.modalShow}
                         onClose={this.handleModalClose}
-                        onTableCreate={this.createTable}
-                        onLoadTables={this.handleLoadTables}/>
+                        onTableCreate={this.handleTableCreate}
+                        onLoadTables={this.handleTableLoad}/>
                 </React.Fragment>
             );
         } else {
-            return <ScreenEditTable/>
+            // Something selected, show table editor
+            return (
+                <ScreenEditTable
+                    table={findTable(this.state.selected, this.props.contentTables)}
+                    onCancel={() => this.handleTableSelect("")}
+                    onSave={this.handleTableSave}
+                />
+            )
         }
     }
 }

@@ -1,18 +1,15 @@
+/**
+ * Search the given list of actions for one matching the given key
+ * @param {String} actionKey the action key as a string
+ * @param actions
+ * @returns {*}
+ */
 export function findAction(actionKey, actions) {
-    for (const act of actions) {
-        if (act.key === actionKey) {
-            return act;
-        }
-    }
-    return undefined;
+    return actions.find(a=> a.key === actionKey);
 }
 
 export function findTable(name, tables) {
-    for (const table of tables) {
-        if (table.name === name) {
-            return table;
-        }
-    }
+    return tables.find(t=> t.name === name);
 }
 
 export function fetchFromJson(url, successCallback, errorCallback) {
@@ -23,4 +20,25 @@ export function fetchFromJson(url, successCallback, errorCallback) {
         }, error => {
             errorCallback(error);
         });
+}
+
+export function isValidTableName(name, tables) {
+    return !tables.some(t => t.name === name);
+}
+
+export function createTable(name) {
+    const table = {
+        name: name,
+        desc: "",
+        totalWeight: 0,
+        contents: []
+    };
+
+    const action = {
+        key:"action_" + table.name,
+        desc: table.name,
+        group: "Table",
+        contents: [{table: table.name}]
+    };
+    return [table, action]
 }
