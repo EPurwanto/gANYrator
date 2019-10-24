@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from "react-bootstrap/Form";
 
 /**
  * Properties:
@@ -11,10 +12,10 @@ import React from 'react';
  */
 function ValueDisplay(props) {
     return (
-        <div className={props.className ? props.className + " form-group" : "form-group"} key={props.uniqueId}>
-            <label htmlFor="value">{props.label}</label>
-            <span id="value" className="form-control-plaintext">{props.value}</span>
-        </div>
+        <Form.Group controlId={props.key}>
+            <Form.Label>{props.label}</Form.Label>
+            <Form.Control plaintext readOnly value={props.value}/>
+        </Form.Group>
     );
 }
 

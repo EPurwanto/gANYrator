@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import ValueDisplay from "./ValueDisplay";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import {findAction, findTable} from "../utility/Utils"
 import ActionSelect from "./ActionSelect";
-import {findTable, findAction} from "../utility/Utils"
-import {Button, InputGroup} from "react-bootstrap";
+import ValueDisplay from "./ValueDisplay";
 
 class ScreenRoll extends Component {
     constructor(props) {
@@ -80,28 +83,38 @@ class ScreenRoll extends Component {
         return (
             <React.Fragment>
 
-                <div className="row">
+                <Row>
                     {/* Last rolled field Values */}
                     {
                         Object.entries(this.state.values).map(([key, val]) => {
-                            return <ValueDisplay className="col-sm" key={key} uniqueId={key} label={key} value={val}/>
+                            return (
+                                <Col
+                                    key={key}
+                                    sm="2">
+                                    <ValueDisplay
+                                        label={key}
+                                        value={val}/>
+                                </Col>
+                            )
                         })
                     }
-                </div>
+                </Row>
 
-                <div className="mx-auto text-center col-sm-5">
-                    {/* Roll Dropdown */}
-                    <InputGroup>
-                        <ActionSelect
-                            className="form-control form-control-action"
-                            selected={this.state.selectedAction && this.state.selectedAction.key}
-                            onActionSelect={this.handleActionSelect}
-                            groups={actionGroups}/>
-                        <InputGroup.Append>
-                            <Button varient="primary" onClick={this.performSelectedAction}>Roll</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
-                </div>
+                <Row>
+                    <Col sm={{span: 6, offset: 3}}>
+                        {/* Roll Dropdown */}
+                        <InputGroup>
+                            <ActionSelect
+                                className="form-control form-control-action"
+                                selected={this.state.selectedAction && this.state.selectedAction.key}
+                                onActionSelect={this.handleActionSelect}
+                                groups={actionGroups}/>
+                            <InputGroup.Append>
+                                <Button varient="primary" onClick={this.performSelectedAction}>Roll</Button>
+                            </InputGroup.Append>
+                        </InputGroup>
+                    </Col>
+                </Row>
             </React.Fragment>
         );
     }

@@ -1,4 +1,6 @@
 import React from 'react';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import ContentTableCard from "./ContentTableCard";
 
 const ContentTableCardDeck = (props) => {
@@ -14,21 +16,21 @@ const ContentTableCardDeck = (props) => {
     }
 
     return (
-        <div className="row p-2">
+        <Row>
             {
                 tables.map((table) => {
                     return (
-                        <div className="col-sm-3 p-2"
+                        <Col sm="3"
                              key={table.name}>
                             <ContentTableCard
                                 onClick={table.handleClick}
                                 name={table.name}
                                 desc={table.desc}/>
-                        </div>
+                        </Col>
                     )
                 })
             }
-        </div>
+        </Row>
     );
 };
 

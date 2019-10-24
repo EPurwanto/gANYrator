@@ -1,5 +1,6 @@
 import React from 'react';
-import {Card} from "react-bootstrap";
+import Button from "react-bootstrap/esm/Button";
+import Card from "react-bootstrap/esm/Card";
 
 /**
  * Properties

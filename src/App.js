@@ -1,7 +1,14 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import React from 'react';
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 import './App.css';
-import ScreenRoll from "./roll_action/ScreenRoll";
 import ScreenTables from "./list_table/ScreenTables";
+import ScreenRoll from "./roll_action/ScreenRoll";
 import {fetchFromJson} from "./utility/Utils";
 
 class App extends React.Component {
@@ -11,7 +18,7 @@ class App extends React.Component {
         this.state = {
             actions: [],
             contentTables: [],
-            screen: "roll"
+            screen: "Roll"
         };
 
         this.addTable = this.addTable.bind(this);
@@ -83,65 +90,36 @@ class App extends React.Component {
     }
 
     render() {
-        let screen = <div/>;
-        switch (this.state.screen) {
-            case "roll":
-                screen = <ScreenRoll
-                            contentTables={this.state.contentTables}
-                            actions={this.state.actions}/>;
-                break;
-            case "tables":
-                screen = <ScreenTables
-                            contentTables={this.state.contentTables}
-                            actions={this.state.actions}
-                            onTableAdd={this.addTable}/>;
-                break;
-            default:
-                break;
-        }
         return (
             <div className="root pt-2">
-                <main className="container content">
-                    {/* Headings */}
-                    <div className="row">
-                        <div className="col-sm">
+                <Container className="content">
+                    <Row>
+                        <Col>
                             <h1 className="display-1 text-center">gANYrator</h1>
                             <h2 className="text-center">Generate Anything.</h2>
-                        </div>
-                    </div>
-                    <nav className="row p-3">
-                        <ul className="col-sm nav nav-tabs">
-                            <li className="nav-item">
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    className={this.state.screen === "roll" ? "nav-link active" : "nav-link"}
-                                    onClick={() => this.handleScreenChange("roll")}
-                                    href="#">
-                                    Roll
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    className={this.state.screen === "tables" ? "nav-link active" : "nav-link"}
-                                    onClick={() => this.handleScreenChange("tables")}
-                                    href="#">
-                                    Tables
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    className={this.state.screen === "actions" ? "nav-link active" : "nav-link"}
-                                    onClick={() => this.handleScreenChange("actions")}
-                                    href="#">
-                                    Actions
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    {screen}
-                </main>
+                        </Col>
+                    </Row>
+                    <Tabs
+                        className="mb-3"
+                        activeKey={this.state.screen}
+                        onSelect={k => this.handleScreenChange(k)}
+                        unmountOnExit={true}>
+                        <Tab eventKey="Roll" title="Roll">
+                            <ScreenRoll
+                                contentTables={this.state.contentTables}
+                                actions={this.state.actions}/>
+                        </Tab>
+                        <Tab eventKey="Tables" title="Tables">
+                            <ScreenTables
+                                contentTables={this.state.contentTables}
+                                actions={this.state.actions}
+                                onTableAdd={this.addTable}/>
+                        </Tab>
+                        <Tab eventKey="Actions" title="Actions">
+                            <div/>
+                        </Tab>
+                    </Tabs>
+                </Container>
             </div>
         );
     }

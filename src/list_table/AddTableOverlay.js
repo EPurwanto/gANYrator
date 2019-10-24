@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import AccordianCardEntry from "../utility/AccordianCardEntry";
+import AccordianCardEntry from "../utility/AccordionCardEntry";
 import {Modal, Button, Form} from "react-bootstrap";
+import Accordion from "react-bootstrap/Accordion";
 
 const AddTableOverlay = (props) => {
     const [name, setName] = useState("");
@@ -12,11 +13,10 @@ const AddTableOverlay = (props) => {
                 <Modal.Title>Add a new table</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="accordion" id="create-options">
+                <Accordion>
                     <AccordianCardEntry
-                        id="create"
-                        heading="Create a new Table"
-                        parent="create-options">
+                        eventKey="create"
+                        heading="Create a new Table">
                         <form onSubmit={() => props.onTableCreate && props.onTableCreate(name, desc)}>
                             <Form.Group controlId="tableName">
                                 <Form.Label column={false}>Table Name</Form.Label>
@@ -40,21 +40,19 @@ const AddTableOverlay = (props) => {
                         </form>
                     </AccordianCardEntry>
                     <AccordianCardEntry
-                        id="upload"
-                        heading="Upload an existing table"
-                        parent="create-options">
+                        eventKey="upload"
+                        heading="Upload an existing table">
                         <span>These features are not yet complete</span>
                     </AccordianCardEntry>
                     <AccordianCardEntry
-                        id="select"
-                        heading="Use a table from our library"
-                        parent="create-options">
+                        eventKey="select"
+                        heading="Use a table from our library">
                         <span>These features are not yet complete</span>
                         <button className="btn btn-primary" onClick={props.onLoadTables} data-dismiss="modal">
                             Load the existing tables
                         </button>
                     </AccordianCardEntry>
-                </div>
+                </Accordion>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={props.onClose}>

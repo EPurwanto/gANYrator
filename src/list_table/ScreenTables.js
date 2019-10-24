@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
+import ScreenEditTable from "../edit_table/ScreenEditTable";
+import {fetchFromJson} from "../utility/Utils";
 import AddTableOverlay from "./AddTableOverlay";
-import {fetchFromJson, findTable} from "../utility/Utils";
 import ContentTableCardDeck from "./ContentTableCardDeck";
-import ContentTableDisplay from "../utility/ContentTableDisplay";
 
 class ScreenTables extends Component {
 
@@ -98,7 +98,7 @@ class ScreenTables extends Component {
                 </React.Fragment>
             );
         } else {
-            return <ContentTableDisplay table={findTable(this.state.selected, this.props.contentTables)}/>
+            return <ScreenEditTable/>
         }
     }
 }

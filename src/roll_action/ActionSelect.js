@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FormControl from "react-bootstrap/FormControl";
 
 /**
  * Properties:
@@ -51,12 +52,12 @@ class ActionSelect extends Component {
         });
 
         return (
-            <select name="roll-select" id="roll-select" className={this.props.className} value={this.props.selected} onChange={this.handleChange}>
+            <FormControl as="select" value={this.props.selected} onChange={this.handleChange}>
                 <option value="">Please select an action</option>
                 {
                     optgroups
                 }
-            </select>
+            </FormControl>
         );
     }
 }
