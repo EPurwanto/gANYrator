@@ -30,7 +30,9 @@ const ActionEditingTable = (props) => {
                                 <tr key={ind}>
                                     <td>
                                         <TableSelect
-                                            tables={props.contentTables}/>
+                                            tables={props.contentTables}
+                                            includeEmpty={true}
+                                            onChange={(e) => {props.onRowChange(ind, e.target.value)}}/>
                                     </td>
                                     <td>
                                         <span className="text-muted">
@@ -45,10 +47,12 @@ const ActionEditingTable = (props) => {
                                 <td>
                                     <TableSelect
                                         tables={props.contentTables}
+                                        onChange={(e) => {props.onRowChange(ind, e.target.value, row.field)}}
                                         value={row.table}/>
                                 </td>
                                 <td>
                                     <Form.Control
+                                        onChange={(e) => {props.onRowChange(ind, row.table, e.target.value)}}
                                         value={row.field}
                                         placeholder={row.table}/>
                                 </td>

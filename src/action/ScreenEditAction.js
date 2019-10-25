@@ -21,6 +21,7 @@ class ScreenEditAction extends Component {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this)
+        this.handleRowChange = this.handleRowChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
@@ -58,7 +59,7 @@ class ScreenEditAction extends Component {
         this.setState({group: e.target.value})
     }
 
-    handleRowChange(index, table, field) {
+    handleRowChange(index, table = "", field = "") {
         const contents = this.state.contents.slice();
         const row = contents[index];
         if (row.placeholder) {
@@ -150,7 +151,8 @@ class ScreenEditAction extends Component {
                 </Row>
                 <ActionEditingTable
                     contentTables={this.props.contentTables}
-                    items={this.state.contents}/>
+                    items={this.state.contents}
+                    onRowChange={this.handleRowChange}/>
             </form>
         );
     }

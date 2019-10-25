@@ -15,8 +15,10 @@ function TableSelect(props) {
     return (
         <Form.Control
             as="select"
-            value={props.value}>
-            <option value="">Select a table</option>
+            value={props.value}
+            onChange={props.onChange}>
+
+            {props.includeEmpty ? <option value="">Select a table</option> : ""}
             {
                 props.tables.map(t => {
                     return (

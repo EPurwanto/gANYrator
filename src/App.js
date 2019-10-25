@@ -32,6 +32,7 @@ class App extends React.Component {
             if (group === 0) {
                 return a.name.localeCompare(b.name)
             }
+            return group;
         });
 
         // Update state
@@ -62,6 +63,9 @@ class App extends React.Component {
             case "clearSession":
                 localStorage.clear();
                 this.setState({contentTables:[], actions:[]});
+                break;
+            default:
+                break;
         }
     }
 
