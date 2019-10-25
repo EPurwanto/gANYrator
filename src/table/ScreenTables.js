@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ScreenEditTable from "../edit_table/ScreenEditTable";
+import ScreenEditTable from "./ScreenEditTable";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
 import {createTable, findTable, isValidTableName} from "../utility/TableUtils";
 import {createTableAction, fetchFromJson} from "../utility/Utils";

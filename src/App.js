@@ -9,8 +9,8 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ScreenActions from "./action/ScreenActions";
 import './App.css';
-import ScreenTables from "./list_table/ScreenTables";
-import ScreenRoll from "./roll_action/ScreenRoll";
+import ScreenTables from "./table/ScreenTables";
+import ScreenRoll from "./roll/ScreenRoll";
 
 class App extends React.Component {
     constructor(props) {
