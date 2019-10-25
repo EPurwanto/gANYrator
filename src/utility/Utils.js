@@ -1,11 +1,11 @@
 /**
  * Search the given list of actions for one matching the given key
- * @param {String} actionKey the action key as a string
+ * @param {String} actionName the action key as a string
  * @param actions
  * @returns {*}
  */
-export function findAction(actionKey, actions) {
-    return actions.find(a=> a.key === actionKey);
+export function findAction(actionName, actions) {
+    return actions.find(a=> a.name === actionName);
 }
 
 export function findTable(name, tables) {
@@ -68,8 +68,8 @@ function getTotalWeight(contents) {
 
 export function createTableAction(table) {
     return {
-        key:"action_" + table.name,
-        desc: table.name,
+        name: table.name,
+        desc: table.desc,
         group: "Table",
         contents: [{table: table.name}]
     };

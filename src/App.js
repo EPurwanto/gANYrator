@@ -30,7 +30,7 @@ class App extends React.Component {
         list.sort((a, b) => {
             const group = a.group.localeCompare(b.group);
             if (group === 0) {
-                return a.key.localeCompare(b.key)
+                return a.name.localeCompare(b.name)
             }
         });
 

@@ -32,7 +32,7 @@ class ActionSelect extends Component {
                     {
                         grp.list
                             .map((action) => {
-                                return <option value={action.key} key={action.key}>{action.desc}</option>;
+                                return <option value={action.name} key={action.name}>{action.name}</option>;
                             })
                     }
                 </optgroup>)

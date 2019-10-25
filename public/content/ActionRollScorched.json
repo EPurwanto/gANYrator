@@ -1,6 +1,6 @@
 
 {
-  "key": "action_roll_scorched",
+  "name": "Scorched Gang Member",
   "desc": "Roll a scorched gang member",
   "group": "Gang NPC",
   "contents": [
