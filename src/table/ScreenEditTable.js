@@ -13,7 +13,7 @@ class ScreenEditTable extends Component {
             name: "",
             desc: "",
             contents: [],
-            showToast: false
+            saved: false
         };
 
 
@@ -37,8 +37,7 @@ class ScreenEditTable extends Component {
             this.setState({
                 name: this.props.table.name,
                 desc: this.props.table.desc,
-                contents: contents,
-                saved: false
+                contents: contents
             });
         }
     }

@@ -41,11 +41,33 @@ export function groupActions(actions) {
     return groups;
 }
 
-export function createTableAction(table) {
+export function isValidActionName(name, actions) {
+    return !actions.some(a => {return a.name === name});
+}
+
+export function nextValidActionName(actions) {
+    let name = "New Action";
+    if (isValidActionName(name, actions)) {
+        return name;
+    }
+
+    let i = 1;
+    while (!isValidActionName(name + " (" + i + ")", actions)) {
+        i++;
+    }
+
+    return name + " (" + i + ")";
+}
+
+export function createAction(name="", desc="", group="Ungrouped", contents=[]) {
     return {
-        name: table.name,
-        desc: table.desc,
-        group: "Table",
-        contents: [{table: table.name}]
-    };
+        name: name,
+        desc: desc,
+        group: group,
+        contents: contents
+    }
+}
+
+export function createTableAction(table) {
+    return createAction(table.name, table.desc, "Table", [{table: table.name}]);
 }

@@ -12,7 +12,7 @@ import Card from "react-bootstrap/esm/Card";
  */
 const ResponsiveCard = (props) => {
     return (
-        <Card as="button" className="responsive-card text-left w-100 h-100" onClick={props.onClick}>
+        <Card as={props.onClick ? "button" : "div"} className="responsive-card text-left w-100 h-100" onClick={props.onClick}>
             <Card.Body>
                 <Card.Title>{props.name}</Card.Title>
                 <Card.Subtitle>{props.sub}</Card.Subtitle>
