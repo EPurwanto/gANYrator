@@ -1,5 +1,5 @@
 .root {
-  height: 100vh;
+  min-height: 100vh;
   background: lightgreen;
 }
 
@@ -32,6 +32,12 @@
   height: 1em;
   margin-top: 0.2em;
   background: white;
+}
+
+.config-button {
+  position: absolute;
+  right: 1em;
+  top: 1em;
 }
 
 /*# sourceMappingURL=App.css.map */

@@ -1,8 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import React from 'react';
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
+import Dropdown from "react-bootstrap/esm/Dropdown";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -49,6 +51,14 @@ class App extends React.Component {
         this.setState({screen: screen});
     }
 
+    handleConfigAction(action) {
+        switch (action) {
+            case "clearSession":
+                localStorage.clear();
+                this.setState({contentTables:[], actions:[]})
+        }
+    }
+
     componentDidMount() {
         const tableStore = localStorage.getItem("tables");
         if (tableStore) {
@@ -76,8 +86,16 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="root pt-2">
-                <Container className="content">
+            <div className="root py-2">
+                <Dropdown className="config-button" alignRight onSelect={key => this.handleConfigAction(key)}>
+                    <Dropdown.Toggle variant="primary" id="config">
+                        <i className="fas fa-cogs"/>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item eventKey="clearSession">Clear Session</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Container className="content pb-1">
                     <Row>
                         <Col>
                             <h1 className="display-1 text-center">gANYrator</h1>

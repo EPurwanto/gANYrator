@@ -1,5 +1,5 @@
 .root {
-  height: 100vh;
+  min-height: 100vh;
   background: lightgreen;
 }
 
@@ -34,9 +34,12 @@
   }
 }
 
-.block-with-text {
-}
-
 .card.table-card .card-text {
   @include multiLineEllipsis($lineHeight: 1.5em, $lineCount: 4, $bgColor: white);
+}
+
+.config-button {
+  position: absolute;
+  right: 1em;
+  top: 1em;
 }
