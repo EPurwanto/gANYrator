@@ -48,7 +48,12 @@ class ScreenRoll extends Component {
             }
 
             if(row.hasOwnProperty("action")) {
-                const results = this.performAction(row.action);
+                action = row.action;
+                if (typeof action === "string") {
+                    action = findAction(action, this.props.actions);
+                }
+
+                const results = this.performAction(action);
                 values = {...values, ...results};
             }
         });
@@ -57,6 +62,10 @@ class ScreenRoll extends Component {
     }
 
     rollOn(table) {
+        if (table.totalWeight === 0) {
+            return;
+        }
+
         const roll = Math.floor(Math.random() * table.totalWeight);
 
         let counter = 0;
