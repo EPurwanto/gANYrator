@@ -8,10 +8,6 @@ export function findAction(actionName, actions) {
     return actions.find(a=> a.name === actionName);
 }
 
-export function findTable(name, tables) {
-    return tables.find(t=> t.name === name);
-}
-
 export function fetchFromJson(url, successCallback, errorCallback) {
     fetch(url)
         .then(response => response.json(), error => errorCallback(error))
@@ -20,10 +16,6 @@ export function fetchFromJson(url, successCallback, errorCallback) {
         }, error => {
             errorCallback(error);
         });
-}
-
-export function isValidTableName(name, tables) {
-    return !tables.some(t => t.name === name);
 }
 
 export function groupActions(actions) {
@@ -47,23 +39,6 @@ export function groupActions(actions) {
     }
 
     return groups;
-}
-
-export function createTable(name="New", desc="", contents=[]) {
-    return {
-        name: name,
-        desc: desc,
-        totalWeight: getTotalWeight(contents),
-        contents: contents
-    };
-}
-
-function getTotalWeight(contents) {
-    let w = 0;
-    contents.forEach(r => {
-        w += r.weight;
-    });
-    return w;
 }
 
 export function createTableAction(table) {

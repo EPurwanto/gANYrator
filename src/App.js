@@ -7,11 +7,10 @@ import Dropdown from "react-bootstrap/esm/Dropdown";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import './App.css';
 import ScreenActions from "./action/ScreenActions";
+import './App.css';
 import ScreenTables from "./list_table/ScreenTables";
 import ScreenRoll from "./roll_action/ScreenRoll";
-import {fetchFromJson} from "./utility/Utils";
 
 class App extends React.Component {
     constructor(props) {

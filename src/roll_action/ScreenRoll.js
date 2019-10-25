@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import {findAction, findTable} from "../utility/Utils"
+import {findTable} from "../utility/TableUtils";
+import {findAction} from "../utility/Utils"
 import ActionSelect from "./ActionSelect";
 import ValueDisplay from "./ValueDisplay";
 
