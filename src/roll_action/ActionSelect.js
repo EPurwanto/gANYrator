@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FormControl from "react-bootstrap/FormControl";
+import {groupActions} from "../utility/Utils";
 
 /**
  * Properties:
@@ -22,33 +23,19 @@ class ActionSelect extends Component {
     }
 
     render() {
-        const groups = this.props.groups;
-        const props = [];
+        const groups = groupActions(this.props.actions);
         const optgroups = [];
-        for(const prop in groups) {
-            if (Object.prototype.hasOwnProperty.call(groups, prop)) {
-                props.push(prop);
-            }
-        }
 
-        props.sort().forEach(prop => {
-            optgroups.push(<optgroup label={prop} key={prop}>
-                {
-                    groups[prop]
-                        .sort((a, b) => {
-                            if (a.desc < b.desc) {
-                                return -1;
-                            }
-                            if (a.desc > b.desc) {
-                                return 1;
-                            }
-                            return 0;
-                        })
-                        .map((action) => {
-                            return <option value={action.key} key={action.key}>{action.desc}</option>;
-                        })
-                }
-            </optgroup>)
+        groups.forEach(grp => {
+            optgroups.push(
+                <optgroup label={grp.name} key={grp.name}>
+                    {
+                        grp.list
+                            .map((action) => {
+                                return <option value={action.key} key={action.key}>{action.desc}</option>;
+                            })
+                    }
+                </optgroup>)
         });
 
         return (

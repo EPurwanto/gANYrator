@@ -26,6 +26,29 @@ export function isValidTableName(name, tables) {
     return !tables.some(t => t.name === name);
 }
 
+export function groupActions(actions) {
+    const actionMap = {};
+
+    actions.forEach(act => {
+        if (!actionMap.hasOwnProperty(act.group)) {
+            actionMap[act.group] = [];
+        }
+        actionMap[act.group].push(act);
+    });
+
+    const groups = [];
+    for(const prop in actionMap) {
+        if (Object.prototype.hasOwnProperty.call(actionMap, prop)) {
+            groups.push({
+                name: prop,
+                list: actionMap[prop]
+            });
+        }
+    }
+
+    return groups;
+}
+
 export function createTable(name) {
     const table = {
         name: name,

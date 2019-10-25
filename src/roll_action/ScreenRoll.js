@@ -80,15 +80,6 @@ class ScreenRoll extends Component {
     }
 
     render() {
-        const actionGroups = {};
-
-        this.props.actions.forEach(act => {
-           if (!actionGroups.hasOwnProperty(act.group)) {
-               actionGroups[act.group] = [];
-           }
-           actionGroups[act.group].push(act)
-        });
-
         return (
             <React.Fragment>
 
@@ -117,7 +108,7 @@ class ScreenRoll extends Component {
                                 className="form-control form-control-action"
                                 selected={this.state.selectedAction && this.state.selectedAction.key}
                                 onActionSelect={this.handleActionSelect}
-                                groups={actionGroups}/>
+                                actions={this.props.actions}/>
                             <InputGroup.Append>
                                 <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
                             </InputGroup.Append>
