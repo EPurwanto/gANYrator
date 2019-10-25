@@ -54,7 +54,7 @@ class App extends React.Component {
         switch (action) {
             case "clearSession":
                 localStorage.clear();
-                this.setState({contentTables:[], actions:[]})
+                this.setState({contentTables:[], actions:[]});
         }
     }
 

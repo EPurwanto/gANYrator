@@ -34,7 +34,7 @@
   }
 }
 
-.card.table-card .card-text {
+.card.responsive-card .card-text {
   @include multiLineEllipsis($lineHeight: 1.5em, $lineCount: 4, $bgColor: white);
 }
 

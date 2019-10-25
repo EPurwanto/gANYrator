@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ScreenEditTable from "../edit_table/ScreenEditTable";
 import {createTable, fetchFromJson, findTable, isValidTableName} from "../utility/Utils";
 import AddTableOverlay from "./AddTableOverlay";
-import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
+import ContentTableCardDeck from "./ResponsiveCardDeck";
 
 class ScreenTables extends Component {
 
@@ -108,8 +108,7 @@ class ScreenTables extends Component {
             return (
                 <React.Fragment>
                     <ContentTableCardDeck
-                        items={tables}
-                        rowSize="4"/>
+                        tables={tables}/>
                     <AddTableOverlay
                         id="new-table-modal"
                         show={this.state.modalShow}
