@@ -113,7 +113,7 @@ class ScreenTables extends Component {
             return {
                 name: t.name,
                 desc: t.desc,
-                handleClick: () => this.handleTableSelect(t.name)
+                onClick: () => this.handleTableSelect(t.name)
             }
         });
 
@@ -121,7 +121,7 @@ class ScreenTables extends Component {
         tables.push({
             name: "+ Add a new Table",
             desc: "Create, upload or select a new table from our library",
-            handleClick: () => this.handleModalOpen()
+            onClick: () => this.handleModalOpen()
         });
 
         if (this.state.selected === "") {

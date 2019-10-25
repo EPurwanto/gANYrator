@@ -17,8 +17,9 @@ const ResponsiveCardDeck = (props) => {
                             <Col sm="3"
                                  key={item.name}>
                                 <ResponsiveCard
-                                    onClick={item.handleClick}
+                                    onClick={item.onClick}
                                     name={item.name}
+                                    sub={item.sub}
                                     desc={item.desc}/>
                             </Col>
                         )

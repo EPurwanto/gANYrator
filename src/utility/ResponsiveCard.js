@@ -15,6 +15,7 @@ const ResponsiveCard = (props) => {
         <Card as="button" className="responsive-card text-left w-100 h-100" onClick={props.onClick}>
             <Card.Body>
                 <Card.Title>{props.name}</Card.Title>
+                <Card.Subtitle>{props.sub}</Card.Subtitle>
                 <Card.Text>{props.desc}</Card.Text>
             </Card.Body>
         </Card>

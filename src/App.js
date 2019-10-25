@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import './App.css';
+import ScreenActions from "./action/ScreenActions";
 import ScreenTables from "./list_table/ScreenTables";
 import ScreenRoll from "./roll_action/ScreenRoll";
 import {fetchFromJson} from "./utility/Utils";
@@ -117,7 +118,11 @@ class App extends React.Component {
                                 onTableListChange={this.handleTableListChange}/>
                         </Tab>
                         <Tab eventKey="Actions" title="Actions">
-                            <div/>
+                            <ScreenActions
+                                contentTables={this.state.contentTables}
+                                actions={this.state.actions}
+                                onActionListChange={this.handleActionListChange}
+                                onTableListChange={this.handleTableListChange}/>
                         </Tab>
                     </Tabs>
                 </Container>
