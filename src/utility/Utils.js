@@ -34,11 +34,15 @@ export function createTable(name) {
         contents: []
     };
 
-    const action = {
+    const action = createTableAction(table);
+    return [table, action]
+}
+
+export function createTableAction(table) {
+    return {
         key:"action_" + table.name,
         desc: table.name,
         group: "Table",
         contents: [{table: table.name}]
     };
-    return [table, action]
 }

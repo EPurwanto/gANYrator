@@ -27,6 +27,13 @@ class App extends React.Component {
     }
 
     handleActionListChange(list) {
+        list.sort((a, b) => {
+            const group = a.group.localeCompare(b.group);
+            if (group === 0) {
+                return a.key.localeCompare(b.key)
+            }
+        });
+
         // Update state
         this.setState({
             actions: list

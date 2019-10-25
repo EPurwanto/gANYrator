@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ScreenEditTable from "../edit_table/ScreenEditTable";
-import {createTable, fetchFromJson, findTable, isValidTableName} from "../utility/Utils";
+import {createTable, createTableAction, fetchFromJson, findTable, isValidTableName} from "../utility/Utils";
 import AddTableOverlay from "./AddTableOverlay";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
 
@@ -47,14 +47,16 @@ class ScreenTables extends Component {
     }
 
     fetchTableFromJson(url) {
-        let table = undefined;
         fetchFromJson(url, (result) => {
             const tables = this.props.contentTables.slice();
             tables.unshift(result);
-            this.props.onTableListChange(tables)
-        }, (error) => console.log(error));
+            this.props.onTableListChange(tables);
 
-        return table;
+            const action = createTableAction(result);
+            const actionsList = this.props.actions.slice();
+            actionsList.push(action);
+            this.props.onActionListChange(actionsList);
+        }, (error) => console.log(error));
     }
 
     handleTableSave(table, name, desc, contents) {
