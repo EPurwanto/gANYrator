@@ -31,7 +31,9 @@ class AddTableOverlay extends Component {
         this.props.onClose();
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
+
         const message = this.props.onTableCreate(this.state.name);
         if (message) {
             this.setState({message: message});

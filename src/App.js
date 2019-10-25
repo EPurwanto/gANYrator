@@ -78,15 +78,6 @@ class App extends React.Component {
             const actions = JSON.parse(actionStore);
 
             this.setState({actions: actions});
-        } else {
-            fetchFromJson("./content/ActionRollScorched.json", (result) => {
-                const actions = this.state.actions.concat([result]);
-
-                // Update state
-                this.setState({
-                    actions: actions
-                });
-            }, (error) => console.log(error));
         }
     }
 

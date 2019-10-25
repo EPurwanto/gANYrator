@@ -41,6 +41,10 @@ class ScreenRoll extends Component {
             const table = findTable(action.table, this.props.contentTables);
             const row = this.rollOn(table);
 
+            if (!row) {
+                return;
+            }
+
             if (action.hasOwnProperty("field")) {
                 values[action.field] = row.element;
             } else {
@@ -62,7 +66,7 @@ class ScreenRoll extends Component {
     }
 
     rollOn(table) {
-        if (table.totalWeight === 0) {
+        if (!table.totalWeight) {
             return;
         }
 

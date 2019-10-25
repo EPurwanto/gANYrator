@@ -21,23 +21,53 @@ class ScreenTables extends Component {
         this.handleModalOpen = this.handleModalOpen.bind(this);
     }
 
+    updateTableList(tAdd, tRemove) {
+        const tables = this.props.contentTables.slice();
+
+        // Remove existing copy if present
+        if (tRemove) {
+            const index = tables.indexOf(tRemove);
+            if (index >= 0) {
+                tables.splice(index, 1);
+            }
+        }
+
+        // Add new copy if present
+        if (tAdd) {
+            tables.unshift(tAdd);
+        }
+
+        this.props.onTableListChange(tables);
+    }
+
+    updateActionList(aAdd, aRemove) {
+        const actions = this.props.actions.slice();
+
+        // Remove existing copy if present
+        if (aRemove) {
+            const index = actions.indexOf(aRemove);
+            if (index >= 0) {
+                actions.splice(index, 1);
+            }
+        }
+
+        // Add new copy if present
+        if (aAdd) {
+            actions.unshift(aAdd);
+        }
+
+        this.props.onActionListChange(actions);
+    }
+
     handleTableCreate(name) {
         if (!isValidTableName(name, this.props.contentTables)) {
             return "A table with that name already exists";
         }
 
-        const [table, action] = createTable(name);
+        const tab = createTable(name);
 
-        const contentTables = this.props.contentTables.slice();
-        contentTables.unshift(table);
-
-        this.props.onTableListChange(contentTables);
-
-        const actionsList = this.props.actions.slice();
-        actionsList.push(action);
-        this.props.onActionListChange(actionsList);
-
-        this.handleTableSelect(name)
+        this.updateTableList(tab);
+        this.updateActionList(createTableAction(tab))
     }
 
     handleTableLoad() {
@@ -48,32 +78,21 @@ class ScreenTables extends Component {
 
     fetchTableFromJson(url) {
         fetchFromJson(url, (result) => {
-            const tables = this.props.contentTables.slice();
-            tables.unshift(result);
-            this.props.onTableListChange(tables);
+            const tab = createTable(result.name, result.desc, result.contents);
 
-            const action = createTableAction(result);
-            const actionsList = this.props.actions.slice();
-            actionsList.push(action);
-            this.props.onActionListChange(actionsList);
+            this.updateTableList(tab);
+            this.updateActionList(createTableAction(tab))
         }, (error) => console.log(error));
     }
 
-    handleTableSave(table, name, desc, contents) {
-        if (table.name !== name && !isValidTableName(name, this.props.contentTables)) {
+    handleTableSave(oldTable, name, desc, contents) {
+        if (oldTable.name !== name && !isValidTableName(name, this.props.contentTables)) {
             return "A table with that name already exists";
         }
 
-        const tables = this.props.contentTables.slice();
-        const index = tables.indexOf(table);
-        tables.splice(index, 1);
-        tables.unshift({
-            name: name,
-            desc: desc,
-            contents: contents
-        });
+        const tab = createTable(name, desc, contents);
 
-        this.props.onTableListChange(tables);
+        this.updateTableList(tab, oldTable);
     }
 
     handleTableSelect(table) {

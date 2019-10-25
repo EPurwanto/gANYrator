@@ -49,16 +49,21 @@ export function groupActions(actions) {
     return groups;
 }
 
-export function createTable(name) {
-    const table = {
+export function createTable(name="New", desc="", contents=[]) {
+    return {
         name: name,
-        desc: "",
-        totalWeight: 0,
-        contents: []
+        desc: desc,
+        totalWeight: getTotalWeight(contents),
+        contents: contents
     };
+}
 
-    const action = createTableAction(table);
-    return [table, action]
+function getTotalWeight(contents) {
+    let w = 0;
+    contents.forEach(r => {
+        w += r.weight;
+    });
+    return w;
 }
 
 export function createTableAction(table) {
