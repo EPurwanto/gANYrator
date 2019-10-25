@@ -119,7 +119,7 @@ class ScreenRoll extends Component {
                                 onActionSelect={this.handleActionSelect}
                                 groups={actionGroups}/>
                             <InputGroup.Append>
-                                <Button varient="primary" onClick={this.performSelectedAction}>Roll</Button>
+                                <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
                             </InputGroup.Append>
                         </InputGroup>
                     </Col>

@@ -9,8 +9,23 @@ class ScreenEditTable extends Component {
     constructor(props, context) {
         super(props, context);
 
+        this.state = {
+            name: "",
+            desc: "",
+            contents: [],
+            showToast: false
+        };
+
+
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleDescChange = this.handleDescChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+    }
+
+    componentDidMount() {
         if (this.props.table) {
-            const contents = JSON.parse(JSON.stringify(props.table.contents));
+            const contents = JSON.parse(JSON.stringify(this.props.table.contents));
 
             // Push a placeholder for adding new rows
             contents.push({
@@ -19,22 +34,13 @@ class ScreenEditTable extends Component {
                 placeholder: true
             });
 
-            this.state = {
+            this.setState({
                 name: this.props.table.name,
                 desc: this.props.table.desc,
-                contents: contents
-            }
-        } else {
-            this.state = {
-                name: "",
-                desc: "",
-                contents: []
-            }
+                contents: contents,
+                saved: false
+            });
         }
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleDescChange = this.handleDescChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
     }
 
     handleNameChange(e) {
@@ -57,24 +63,33 @@ class ScreenEditTable extends Component {
             });
         }
 
-        if (act) {  // No action
-            contents[index] = {
-                weight: freq,
-                element: elem,
-                action: act
-            };
-        } else {    // No action
-            contents[index] = {
-                weight: freq,
-                element: elem
-            };
+
+        contents[index] = {
+            weight: freq,
+            element: elem
+        };
+
+        if (act) {  // don't add action prop if not present
+            contents[index].action = act;
         }
 
         this.setState({contents: contents});
     }
 
-    handleSubmit() {
-        this.props.onTableSave && this.props.onTableSave(this.props.table, this.state.name, this.state.desc, this.contents);
+    handleSubmit(e) {
+        e.preventDefault();
+        if (this.props.onSave) {
+            // Cut off the placeholder row
+            const contents = this.state.contents.slice(0, -1);
+            const message = this.props.onSave(this.props.table, this.state.name, this.state.desc, contents);
+
+            if (message) {
+                // todo handle error message
+            } else {
+                this.setState({saved: true});
+                setTimeout(() => this.setState({saved: false}), 1000)
+            }
+        }
     }
 
     handleReset() {
@@ -82,6 +97,11 @@ class ScreenEditTable extends Component {
     }
 
     render() {
+        let saveButton = <Button variant="primary" size="sm" block className="mb-1" type="submit">Save <i className="fa fa-save"/></Button>;
+        if (this.state.saved) {
+            saveButton = <Button variant="success" size="sm" block className="mb-1" type="submit">Saved <i className="fa fa-check"/></Button>;
+        }
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <Row>
@@ -96,11 +116,9 @@ class ScreenEditTable extends Component {
                         </Form.Group>
                     </Col>
                     <Col sm="2">
-                        <Button variant="primary" size="sm" block className="mb-1" type="submit">
-                            Save
-                        </Button>
-                        <Button variant="danger" size="sm" block type="reset">
-                            Cancel
+                        {saveButton}
+                        <Button variant="danger" size="sm" block type="reset" onClick={this.handleReset}>
+                            Cancel <i className="fa fa-times"/>
                         </Button>
                     </Col>
                 </Row>
@@ -134,7 +152,7 @@ class ScreenEditTable extends Component {
                                             <Form.Control
                                                 type="number"
                                                 placeholder="1"
-                                                onChange={(e) => this.handleRowChange(ind, e.target.value, row.element, row.action)}
+                                                onChange={(e) => this.handleRowChange(ind, e.target.value, "")}
                                             />
                                         </td>
                                         <td>

@@ -15,14 +15,14 @@ class ScreenTables extends Component {
 
         this.handleTableCreate = this.handleTableCreate.bind(this);
         this.handleTableLoad = this.handleTableLoad.bind(this);
-        this.handleTableSave = this.handleTableSelect.bind(this);
+        this.handleTableSave = this.handleTableSave.bind(this);
         this.handleTableSelect = this.handleTableSelect.bind(this);
         this.handleModalClose = this.handleModalClose.bind(this);
         this.handleModalOpen = this.handleModalOpen.bind(this);
     }
 
     handleTableCreate(name) {
-        if(!isValidTableName(name, this.props.contentTables)) {
+        if (!isValidTableName(name, this.props.contentTables)) {
             return "A table with that name already exists";
         }
 
@@ -44,9 +44,6 @@ class ScreenTables extends Component {
         this.fetchTableFromJson("./content/TableScorched.json");
         this.fetchTableFromJson("./content/TableGeneralRace.json");
         this.fetchTableFromJson("./content/TableGender.json");
-
-        if (this.props.onTableListChange) {
-        }
     }
 
     fetchTableFromJson(url) {
@@ -61,9 +58,20 @@ class ScreenTables extends Component {
     }
 
     handleTableSave(table, name, desc, contents) {
-        // todo validate name is unique
+        if (table.name !== name && !isValidTableName(name, this.props.contentTables)) {
+            return "A table with that name already exists";
+        }
 
-        // const tables = this.
+        const tables = this.props.contentTables.slice();
+        const index = tables.indexOf(table);
+        tables.splice(index, 1);
+        tables.unshift({
+            name: name,
+            desc: desc,
+            contents: contents
+        });
+
+        this.props.onTableListChange(tables);
     }
 
     handleTableSelect(table) {
