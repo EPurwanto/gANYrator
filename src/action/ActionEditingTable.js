@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Table from "react-bootstrap/esm/Table";
-import TableSelect from "./TableSelect";
+import TableSelect from "../utility/TableSelect";
 
 /**
  * Properties

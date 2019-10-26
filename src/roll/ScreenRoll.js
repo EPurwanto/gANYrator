@@ -5,7 +5,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import {findTable} from "../utility/TableUtils";
 import {findAction} from "../utility/ActionUtils"
-import ActionSelect from "./ActionSelect";
+import ActionSelect from "../utility/ActionSelect";
 import ValueDisplay from "./ValueDisplay";
 
 class ScreenRoll extends Component {
