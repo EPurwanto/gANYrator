@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {createTableAction} from "../utility/ActionUtils";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
-import {createTable, findTable, isValidTableName} from "../utility/TableUtils";
+import {createTable, findTable, isValidTableName, nextValidTableName} from "../utility/TableUtils";
 import {fetchFromJson} from "../utility/Utils";
-import AddTableOverlay from "./AddTableOverlay";
 import ScreenEditTable from "./ScreenEditTable";
 
 class ScreenTables extends Component {
@@ -11,8 +10,7 @@ class ScreenTables extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            selected: "",
-            modalShow: false
+            selected: ""
         };
 
         this.handleTableCreate = this.handleTableCreate.bind(this);
@@ -61,15 +59,12 @@ class ScreenTables extends Component {
         this.props.onActionListChange(actions);
     }
 
-    handleTableCreate(name) {
-        if (!isValidTableName(name, this.props.contentTables)) {
-            return "A table with that name already exists";
-        }
-
-        const tab = createTable(name);
+    handleTableCreate() {
+        const tab = createTable(nextValidTableName(this.props.contentTables));
 
         this.updateTableList(tab);
-        this.updateActionList(createTableAction(tab))
+        this.updateActionList(createTableAction(tab));
+        this.handleTableSelect(tab.name);
     }
 
     handleTableLoad() {
@@ -122,8 +117,8 @@ class ScreenTables extends Component {
         // Add a dummy entry for adding new tables, bind it to launch the overlay
         tables.push({
             name: "+ Add a new Table",
-            desc: "Create, upload or select a new table from our library",
-            onClick: () => this.handleModalOpen()
+            desc: "Create a new table",
+            onClick: this.handleTableCreate
         });
 
         if (this.state.selected === "") {
@@ -133,12 +128,6 @@ class ScreenTables extends Component {
                     <ContentTableCardDeck
                         items={tables}
                         rowSize="4"/>
-                    <AddTableOverlay
-                        id="new-table-modal"
-                        show={this.state.modalShow}
-                        onClose={this.handleModalClose}
-                        onTableCreate={this.handleTableCreate}
-                        onLoadTables={this.handleTableLoad}/>
                 </React.Fragment>
             );
         } else {
