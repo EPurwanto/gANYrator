@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
-import {createAction, findAction, nextValidActionName} from "../utility/Utils";
+import {createAction, findAction, isValidActionName, nextValidActionName} from "../utility/Utils";
 import ScreenEditAction from "./ScreenEditAction";
 
 class ScreenActions extends Component {
@@ -44,8 +44,14 @@ class ScreenActions extends Component {
         this.handleSelect(action.name);
     }
 
-    handleSave() {
+    handleSave(oldAction, name, desc, group, contents) {
+        if (oldAction.name !== name && !isValidActionName(name, this.props.actions)) {
+            return "An action with that name already exists";
+        }
 
+        const act = createAction(name, desc, group, contents);
+
+        this.updateActionList(act, oldAction);
     }
 
     render() {

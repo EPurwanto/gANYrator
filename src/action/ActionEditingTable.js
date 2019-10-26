@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Table from "react-bootstrap/esm/Table";
 import TableSelect from "./TableSelect";
@@ -20,6 +21,7 @@ const ActionEditingTable = (props) => {
                 <tr>
                     <th>Table</th>
                     <th>Field</th>
+                    <th className="button-column"/>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,7 +29,7 @@ const ActionEditingTable = (props) => {
                     props.items.map((row, ind) => {
                         if (row.placeholder) {
                             return (
-                                <tr key={ind}>
+                                <tr key={row.key}>
                                     <td>
                                         <TableSelect
                                             tables={props.contentTables}
@@ -39,11 +41,12 @@ const ActionEditingTable = (props) => {
                                             Field Name
                                         </span>
                                     </td>
+                                    <td/>
                                 </tr>
                             );
                         }
                         return (
-                            <tr key={ind}>
+                            <tr key={row.key}>
                                 <td>
                                     <TableSelect
                                         tables={props.contentTables}
@@ -55,6 +58,9 @@ const ActionEditingTable = (props) => {
                                         onChange={(e) => {props.onRowChange(ind, row.table, e.target.value)}}
                                         value={row.field}
                                         placeholder={row.table}/>
+                                </td>
+                                <td>
+                                    <Button variant="danger" onClick={() => {props.onRowDelete(ind)}}><i className="fa fa-trash"/></Button>
                                 </td>
                             </tr>
                         );

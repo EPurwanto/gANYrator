@@ -22,6 +22,7 @@ class ScreenEditAction extends Component {
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this)
         this.handleRowChange = this.handleRowChange.bind(this);
+        this.handleRowDelete = this.handleRowDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
@@ -33,10 +34,12 @@ class ScreenEditAction extends Component {
 
             // Push a placeholder for adding new rows
             contents.push({
-                weight: undefined,
-                element: "",
+                table: "",
+                field: "",
                 placeholder: true
             });
+
+            contents.forEach(r => {r.key = Math.random()});
 
             this.setState({
                 name: act.name,
@@ -67,6 +70,7 @@ class ScreenEditAction extends Component {
             contents.push({
                 weight: undefined,
                 element: "",
+                key: Math.random(),
                 placeholder: true
             });
         }
@@ -74,9 +78,16 @@ class ScreenEditAction extends Component {
 
         contents[index] = {
             table: table,
-            field: field
+            field: field,
+            key: row.key
         };
 
+        this.setState({contents: contents});
+    }
+
+    handleRowDelete(index) {
+        const contents = this.state.contents.slice();
+        contents.splice(index, 1);
         this.setState({contents: contents});
     }
 
@@ -85,6 +96,10 @@ class ScreenEditAction extends Component {
         if (this.props.onSave) {
             // Cut off the placeholder row
             const contents = this.state.contents.slice(0, -1);
+
+            // strip out row keys
+            contents.forEach(r => {delete r.key});
+
             const message = this.props.onSave(this.props.action, this.state.name, this.state.desc, this.state.group, contents);
 
             if (message) {
@@ -120,10 +135,21 @@ class ScreenEditAction extends Component {
                         </Form.Group>
                     </Col>
                     <Col sm="2">
-                        {saveButton}
                         <Button variant="danger" size="sm" block type="reset" onClick={this.handleReset}>
-                            Cancel <i className="fa fa-times"/>
+                            Back <i className="fa fa-arrow-left"/>
                         </Button>
+                        {saveButton}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form.Group controlId="actionGroup">
+                            <Form.Label column={false}>Action Group</Form.Label>
+                            <Form.Control
+                                maxLength="60"
+                                value={this.state.group}
+                                onChange={this.handleGroupChange}/>
+                        </Form.Group>
                     </Col>
                 </Row>
                 <Row>
@@ -138,21 +164,11 @@ class ScreenEditAction extends Component {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        <Form.Group controlId="actionGroup">
-                            <Form.Label column={false}>Action Group</Form.Label>
-                            <Form.Control
-                                maxLength="60"
-                                value={this.state.group}
-                                onChange={this.handleGroupChange}/>
-                        </Form.Group>
-                    </Col>
-                </Row>
                 <ActionEditingTable
                     contentTables={this.props.contentTables}
                     items={this.state.contents}
-                    onRowChange={this.handleRowChange}/>
+                    onRowChange={this.handleRowChange}
+                    onRowDelete={this.handleRowDelete}/>
             </form>
         );
     }

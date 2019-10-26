@@ -38,27 +38,27 @@ class ScreenRoll extends Component {
     performAction(action) {
         let values = {};
 
-        action.contents.forEach((action) => {
-            const table = findTable(action.table, this.props.contentTables);
+        action.contents.forEach((act) => {
+            const table = findTable(act.table, this.props.contentTables);
             const row = this.rollOn(table);
 
             if (!row) {
                 return;
             }
 
-            if (action.hasOwnProperty("field")) {
-                values[action.field] = row.element;
+            if (act.hasOwnProperty("field") && act.field) {
+                values[act.field] = row.element;
             } else {
                 values[table.name] = row.element;
             }
 
             if(row.hasOwnProperty("action")) {
-                action = row.action;
-                if (typeof action === "string") {
-                    action = findAction(action, this.props.actions);
+                let childAct = row.action;
+                if (typeof childAct === "string") {
+                    childAct = findAction(childAct, this.props.actions);
                 }
 
-                const results = this.performAction(action);
+                const results = this.performAction(childAct);
                 values = {...values, ...results};
             }
         });

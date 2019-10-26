@@ -115,10 +115,10 @@ class ScreenEditTable extends Component {
                         </Form.Group>
                     </Col>
                     <Col sm="2">
-                        {saveButton}
                         <Button variant="danger" size="sm" block type="reset" onClick={this.handleReset}>
-                            Cancel <i className="fa fa-times"/>
+                            Back <i className="fa fa-arrow-left"/>
                         </Button>
+                        {saveButton}
                     </Col>
                 </Row>
                 <Row>
