@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import FormControl from "react-bootstrap/FormControl";
-import {groupActions} from "../utility/Utils";
+import {groupActions} from "../utility/ActionUtils";
 
 /**
  * Properties:

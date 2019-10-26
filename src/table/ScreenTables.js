@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import ScreenEditTable from "./ScreenEditTable";
+import {createTableAction} from "../utility/ActionUtils";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
 import {createTable, findTable, isValidTableName} from "../utility/TableUtils";
-import {createTableAction, fetchFromJson} from "../utility/Utils";
+import {fetchFromJson} from "../utility/Utils";
 import AddTableOverlay from "./AddTableOverlay";
+import ScreenEditTable from "./ScreenEditTable";
 
 class ScreenTables extends Component {
 

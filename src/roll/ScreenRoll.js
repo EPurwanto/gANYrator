@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import {findTable} from "../utility/TableUtils";
-import {findAction} from "../utility/Utils"
+import {findAction} from "../utility/ActionUtils"
 import ActionSelect from "./ActionSelect";
 import ValueDisplay from "./ValueDisplay";
 

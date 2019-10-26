@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
-import {createAction, findAction, isValidActionName, nextValidActionName} from "../utility/Utils";
+import {createAction, findAction, isValidActionName, nextValidActionName} from "../utility/ActionUtils";
 import ScreenEditAction from "./ScreenEditAction";
 
 class ScreenActions extends Component {
