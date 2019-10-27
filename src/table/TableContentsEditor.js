@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
+import ContentsListManager from "../utility/ContentListManager";
 import ContentsEditor from "../utility/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
 
@@ -14,7 +15,7 @@ import ActionEditOverlay from "./ActionEditOverlay";
  * @returns {*}
  * @constructor
  */
-const TableContentsEditor = (props) => {
+const BareTableContentsEditor = (props) => {
     const {actions, contentTables, onRowChange, ...other} = props;
 
     const[selected, setSelected] = useState();
@@ -88,12 +89,31 @@ const TableContentsEditor = (props) => {
     );
 };
 
-TableContentsEditor.propTypes = {
+BareTableContentsEditor.propTypes = {
     items: PropTypes.array.isRequired,
     actions: PropTypes.array.isRequired,
     contentTables: PropTypes.array.isRequired,
     onRowDelete: PropTypes.func.isRequired
 };
 
+const getNewItem = (weight = 1, element = "", act) => {
+    const item =  {
+        weight: weight,
+        element: element,
+    };
 
-export default TableContentsEditor;
+    if (act) {
+        item.action = act;
+    }
+    return item;
+};
+
+const TableContentsEditor = ContentsListManager(BareTableContentsEditor, getNewItem);
+
+TableContentsEditor.propTypes = {
+    items: PropTypes.array,
+    onListUpdate: PropTypes.func,
+    onCancel: PropTypes.func
+};
+
+export {TableContentsEditor as default, BareTableContentsEditor};

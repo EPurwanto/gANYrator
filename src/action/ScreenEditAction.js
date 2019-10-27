@@ -9,11 +9,13 @@ class ScreenEditAction extends Component {
     constructor(props, context) {
         super(props, context);
 
+        let act = this.props.action;
+
         this.state = {
-            name: "",
-            desc: "",
-            group: "",
-            contents: [],
+            name: act.name,
+            desc: act.desc,
+            group: act.group,
+            contents: act.contents,
             saved: false
         };
 
@@ -21,34 +23,9 @@ class ScreenEditAction extends Component {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this);
-        this.handleRowChange = this.handleRowChange.bind(this);
-        this.handleRowDelete = this.handleRowDelete.bind(this);
+        this.handleContentsUpdate = this.handleContentsUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
-    }
-
-    componentDidMount() {
-        if (this.props.action) {
-            let act = this.props.action;
-            const contents = JSON.parse(JSON.stringify(act.contents));
-
-            // Push a placeholder for adding new rows
-            contents.push({
-                table: "",
-                field: "",
-                placeholder: true
-            });
-
-            // push a random float as temporary key value, highly unlikely to clash
-            contents.forEach(r => {r.key = Math.random()});
-
-            this.setState({
-                name: act.name,
-                desc: act.desc,
-                group: act.group,
-                contents: contents
-            });
-        }
     }
 
     handleNameChange(e) {
@@ -63,37 +40,8 @@ class ScreenEditAction extends Component {
         this.setState({group: e.target.value})
     }
 
-    handleRowChange(key, table = "", field = "") {
-        const contents = this.state.contents.slice();
-        const index = contents.findIndex(r => {return r.key === key});
-
-        const row = contents[index];
-        if (row.placeholder) {
-            // push a new placeholder row
-            contents.push({
-                weight: undefined,
-                element: "",
-                key: Math.random(),
-                placeholder: true
-            });
-        }
-
-
-        contents[index] = {
-            table: table,
-            field: field,
-            key: row.key
-        };
-
-        this.setState({contents: contents});
-    }
-
-    handleRowDelete(key) {
-        const contents = this.state.contents.slice();
-        const index = contents.findIndex(r => {return r.key === key});
-
-        contents.splice(index, 1);
-        this.setState({contents: contents});
+    handleContentsUpdate(list) {
+        this.setState({contents: list});
     }
 
     handleSubmit(e) {
@@ -172,8 +120,8 @@ class ScreenEditAction extends Component {
                 <ActionContentsEditor
                     contentTables={this.props.contentTables}
                     items={this.state.contents}
-                    onRowChange={this.handleRowChange}
-                    onRowDelete={this.handleRowDelete}/>
+                    onListUpdate={this.handleContentsUpdate}
+                    />
             </form>
         );
     }

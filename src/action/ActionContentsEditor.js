@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Form from "react-bootstrap/esm/Form";
+import ContentsListManager from "../utility/ContentListManager";
 import ContentsEditor from "../utility/ContentsEditor";
 import TableSelect from "../utility/TableSelect";
 
@@ -13,7 +14,7 @@ import TableSelect from "../utility/TableSelect";
  * @returns {*}
  * @constructor
  */
-const ActionContentsEditor = (props) => {
+const BareActionContentsEditor = (props) => {
     const {contentTables, onRowChange, ...other} = props;
     return (
         <ContentsEditor
@@ -59,11 +60,25 @@ const ActionContentsEditor = (props) => {
     );
 };
 
-ActionContentsEditor.propTypes = {
+BareActionContentsEditor.propTypes = {
     items: PropTypes.array.isRequired,
     contentTables: PropTypes.array.isRequired,
     onRowDelete: PropTypes.func.isRequired,
     onRowChange: PropTypes.func.isRequired
 };
 
-export default ActionContentsEditor;
+const getNewItem = (table = "", field = "") => {
+    return {
+        table: table,
+        field: field,
+    }
+};
+
+const ActionContentsEditor = ContentsListManager(BareActionContentsEditor, getNewItem);
+
+ActionContentsEditor.propTypes = {
+    items: PropTypes.array,
+    onListUpdate: PropTypes.func
+};
+
+export {ActionContentsEditor as default, BareActionContentsEditor};
