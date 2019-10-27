@@ -1,10 +1,11 @@
 import React from 'react'
 
 const AppContext = React.createContext({
-    contentTables: [],
     actions: [],
-    updateTables: () => {},
-    updateActions: () => {},
+    updateActions: (add, remove) => {},
+
+    contentTables: [],
+    updateTables: (add, remove) => {}
 });
 
 export default AppContext;

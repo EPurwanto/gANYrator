@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import AppContext from "../AppContext";
+import {
+    createAction,
+    findAction,
+    isValidActionName,
+    nextValidActionName,
+    updateActionRefs
+} from "../utility/ActionUtils";
 import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
-import {createAction, findAction, isValidActionName, nextValidActionName} from "../utility/ActionUtils";
 import ScreenEditAction from "./ScreenEditAction";
 
 class ScreenActions extends Component {
@@ -16,33 +22,15 @@ class ScreenActions extends Component {
         this.handleCreate = this.handleCreate.bind(this);
     }
 
-    updateActionList(aAdd, aRemove) {
-        const list = this.context.actions.slice();
-
-        // Remove existing copy if present
-        if (aRemove) {
-            const index = list.indexOf(aRemove);
-            if (index >= 0) {
-                list.splice(index, 1);
-            }
-        }
-
-        // Add new copy if present
-        if (aAdd) {
-            list.unshift(aAdd);
-        }
-
-        this.props.onActionListChange(list);
-    }
-
     handleSelect(name) {
         this.setState({selected: name});
     }
 
     handleCreate() {
-        const action = createAction(nextValidActionName(this.context.actions));
-        this.updateActionList(action);
-        this.handleSelect(action.name);
+        const act = createAction(nextValidActionName(this.context.actions));
+
+        this.context.updateActions(act);
+        this.handleSelect(act.name);
     }
 
     handleSave(oldAction, name, desc, group, contents) {
@@ -52,7 +40,14 @@ class ScreenActions extends Component {
 
         const act = createAction(name, desc, group, contents);
 
-        this.updateActionList(act, oldAction);
+        const [oldActs, newActs, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction, act);
+        if (oldActs.length > 0 || newActs.length > 0 ) {
+            this.context.updateActions(newActs, oldActs);
+        }
+
+        if (oldTabs.length > 0 || newTabs.length > 0 ) {
+            this.context.updateTables(newTabs, oldTabs);
+        }
     }
 
     render() {

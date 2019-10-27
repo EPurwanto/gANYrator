@@ -12,6 +12,7 @@ import './App.css';
 import AppContext from './AppContext'
 import ScreenRoll from "./roll/ScreenRoll";
 import ScreenTables from "./table/ScreenTables";
+import {handleUpdate} from "./utility/Utils";
 
 class App extends React.Component {
     constructor(props) {
@@ -23,11 +24,13 @@ class App extends React.Component {
             screen: "Roll"
         };
 
-        this.handleActionListChange = this.handleActionListChange.bind(this);
-        this.handleTableListChange = this.handleTableListChange.bind(this);
+        this.handleActionsUpdate = this.handleActionsUpdate.bind(this);
+        this.handleTablesUpdate = this.handleTablesUpdate.bind(this);
     }
 
-    handleActionListChange(list) {
+    handleActionsUpdate(add, remove) {
+        const list = handleUpdate(this.state.actions.slice(), add, remove);
+
         list.sort((a, b) => {
             const group = a.group.localeCompare(b.group);
             if (group === 0) {
@@ -45,7 +48,9 @@ class App extends React.Component {
         localStorage.setItem("actions", JSON.stringify(list));
     }
 
-    handleTableListChange(list) {
+    handleTablesUpdate(add, remove) {
+        const list = handleUpdate(this.state.contentTables.slice(), add, remove);
+
         // Update state
         this.setState({
             contentTables: list
@@ -106,8 +111,15 @@ class App extends React.Component {
                     </Row>
                     <AppContext.Provider value={
                         {
+                            actions: this.state.actions,
+                            addActions: this.handleActionsAdd,
+                            removeActions: this.handleActionsRemove,
+                            updateActions: this.handleActionsUpdate,
+
                             contentTables: this.state.contentTables,
-                            actions: this.state.actions
+                            addTables: this.handleTablesAdd,
+                            removeTables: this.handleTablesRemove,
+                            updateTables: this.handleTablesUpdate
                         }
                     }>
                         <Tabs
@@ -120,13 +132,13 @@ class App extends React.Component {
                             </Tab>
                             <Tab eventKey="Tables" title="Tables">
                                 <ScreenTables
-                                    onActionListChange={this.handleActionListChange}
-                                    onTableListChange={this.handleTableListChange}/>
+                                    onActionListChange={this.handleActionsUpdate}
+                                    onTableListChange={this.handleTablesUpdate}/>
                             </Tab>
                             <Tab eventKey="Actions" title="Actions">
                                 <ScreenActions
-                                    onActionListChange={this.handleActionListChange}
-                                    onTableListChange={this.handleTableListChange}/>
+                                    onActionListChange={this.handleActionsUpdate}
+                                    onTableListChange={this.handleTablesUpdate}/>
                             </Tab>
                         </Tabs>
                     </AppContext.Provider>

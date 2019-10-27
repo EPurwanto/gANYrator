@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import AppContext from "../AppContext";
 import {createTableAction} from "../utility/ActionUtils";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
-import {createTable, findTable, isValidTableName, nextValidTableName} from "../utility/TableUtils";
-import {fetchFromJson} from "../utility/Utils";
+import {createTable, findTable, isValidTableName, nextValidTableName, updateTableRefs} from "../utility/TableUtils";
 import ScreenEditTable from "./ScreenEditTable";
 
 class ScreenTables extends Component {
@@ -15,72 +14,20 @@ class ScreenTables extends Component {
         };
 
         this.handleTableCreate = this.handleTableCreate.bind(this);
-        this.handleTableLoad = this.handleTableLoad.bind(this);
         this.handleTableSave = this.handleTableSave.bind(this);
         this.handleTableSelect = this.handleTableSelect.bind(this);
         this.handleModalClose = this.handleModalClose.bind(this);
         this.handleModalOpen = this.handleModalOpen.bind(this);
     }
 
-    updateTableList(tAdd, tRemove) {
-        const tables = this.context.contentTables.slice();
-
-        // Remove existing copy if present
-        if (tRemove) {
-            const index = tables.indexOf(tRemove);
-            if (index >= 0) {
-                tables.splice(index, 1);
-            }
-        }
-
-        // Add new copy if present
-        if (tAdd) {
-            tables.unshift(tAdd);
-        }
-
-        this.props.onTableListChange(tables);
-    }
-
-    updateActionList(aAdd, aRemove) {
-        const list = this.context.actions.slice();
-
-        // Remove existing copy if present
-        if (aRemove) {
-            const index = list.indexOf(aRemove);
-            if (index >= 0) {
-                list.splice(index, 1);
-            }
-        }
-
-        // Add new copy if present
-        if (aAdd) {
-            list.unshift(aAdd);
-        }
-
-        this.props.onActionListChange(list);
-    }
-
     handleTableCreate() {
         const tab = createTable(nextValidTableName(this.context.contentTables));
+        const tabAct = createTableAction(tab);
 
-        this.updateTableList(tab);
-        this.updateActionList(createTableAction(tab));
+        this.context.updateTables(tab);
+        this.context.updateActions(tabAct);
+
         this.handleTableSelect(tab.name);
-    }
-
-    handleTableLoad() {
-        this.fetchTableFromJson("./content/TableScorched.json");
-        this.fetchTableFromJson("./content/TableGeneralRace.json");
-        this.fetchTableFromJson("./content/TableGender.json");
-    }
-
-    fetchTableFromJson(url) {
-        fetchFromJson(url, (result) => {
-            const tab = createTable(result.name, result.desc, result.contents);
-
-            this.updateTableList(tab);
-            this.updateActionList(createTableAction(tab))
-        }, (error) => console.log(error));
     }
 
     handleTableSave(oldTable, name, desc, contents) {
@@ -90,7 +37,15 @@ class ScreenTables extends Component {
 
         const tab = createTable(name, desc, contents);
 
-        this.updateTableList(tab, oldTable);
+        const [oldActs, newActs, oldTabs, newTabs] = updateTableRefs(this.context.actions, this.context.contentTables, oldTable, tab);
+
+        if (oldActs.length > 0 || newActs.length > 0 ) {
+            this.context.updateActions(newActs, oldActs);
+        }
+
+        if (oldTabs.length > 0 || newTabs.length > 0 ) {
+            this.context.updateTables(newTabs, oldTabs);
+        }
     }
 
     handleTableSelect(table) {

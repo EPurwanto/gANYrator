@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+import {clone} from "./Utils";
 
 function ContentListManager(WrappedComponent, getNewItem) {
     return class extends Component {
@@ -9,7 +10,7 @@ function ContentListManager(WrappedComponent, getNewItem) {
             const {items, ...other} = props;
             this.otherProps = {...other};
 
-            const list = JSON.parse(JSON.stringify(items));
+            const list = clone(items);
             list.forEach((r) => {r.key = this.findUniqueKey(list)});
             list.push(this.getPlaceholder(list));
 
@@ -30,15 +31,16 @@ function ContentListManager(WrappedComponent, getNewItem) {
         }
 
         findUniqueKey(list) {
-            let key = Math.random();
-            while (list.some((r) => {return r.key === key})) {
+            let key = 0;
+            do {
                 key = Math.random();
-            }
+            } while (list.some((r) => {return r.key === key}));
+
             return key;
         }
 
         cleanList(list) {
-            let cleaned = JSON.parse(JSON.stringify(list));
+            let cleaned = clone(list);
             // Cut off the placeholder row
             cleaned = cleaned.slice(0, -1);
 

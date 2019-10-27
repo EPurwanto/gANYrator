@@ -1,3 +1,6 @@
+import {cloneAction, createTableAction} from "./ActionUtils";
+import {clone} from "./Utils";
+
 export function findTable(name, tables) {
     return tables.find(t=> t.name === name);
 }
@@ -35,4 +38,68 @@ function getTotalWeight(contents) {
         w += r.weight;
     });
     return w;
+}
+
+export function updateTableRefs(actions, tables, oldTab, newTab) {
+    const oldActs = [];
+    const newActs = [];
+
+    const oldTabs = [oldTab];
+    const newTabs = [newTab];
+
+    actions.forEach((act) => {
+
+        if (act.name === oldTab.name && act.group === "Table") {
+            // Update action for the table
+            oldActs.push(act);
+            newActs.push(createTableAction(newTab))
+            // creating from scratch means we never have to do the below branch as well
+
+        } else if (act.contents.some((row) => {return row.table === oldTab.name})) {
+            // Update references in actions
+            oldActs.push(act);
+
+            // clone and update contents
+            const copy = clone(act);
+            copy.contents.forEach((row) => {
+                if (row.table === oldTab.name) {
+                    row.table = newTab.name;
+                }
+            });
+            newActs.push(copy);
+        }
+    });
+
+    tables.forEach((tab) => {
+        if (tab.contents && tab.contents.some(                                              // This IS ALL
+            (tabRow) => {                                                                   // One FUCKING
+                return typeof tabRow.action === "object" && tabRow.action.contents.some(    // AWFUL
+                    (actRow) => {                                                           // IF condition
+                        return actRow.table === oldTab.name;                                // To check if
+                    }                                                                       // The table has
+                )                                                                           // An Action referencing
+            }                                                                               // The changed table
+        )) {
+            // If Above, clone and update
+            oldTabs.push(tab);
+
+            const copy = clone(tab);
+            copy.contents.forEach(                             // Iterate across table rows
+                (tabRow) => {
+                    if (typeof tabRow.action === "object") {    // Find those with object actions
+                        tabRow.action.contents.forEach(                // --- Iterate across action rows
+                            (actRow) => {
+                                if (actRow.table === oldTab.name) {
+                                    actRow.table = newTab.name;     // Update action row in cloned table data.
+                                }
+                            }
+                        )
+                    }
+                }
+            );
+            newTabs.push(copy);
+        }
+    });
+
+    return [oldActs, newActs, oldTabs, newTabs]
 }

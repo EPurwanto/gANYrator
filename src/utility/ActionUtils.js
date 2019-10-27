@@ -1,3 +1,4 @@
+import {clone} from "./Utils";
 
 export function findAction(actionName, actions) {
     return actions.find(a=> a.name === actionName);
@@ -44,6 +45,7 @@ export function nextValidActionName(actions) {
     return name + " (" + i + ")";
 }
 
+
 export function createAction(name="", desc="", group="Ungrouped", contents=[]) {
     return {
         name: name,
@@ -55,4 +57,32 @@ export function createAction(name="", desc="", group="Ungrouped", contents=[]) {
 
 export function createTableAction(table) {
     return createAction(table.name, table.desc, "Table", [{table: table.name}]);
+}
+
+export function updateActionRefs(tables, oldAct, newAct) {
+    const oldActs = [oldAct];
+    const newActs = [newAct];
+
+    const oldTabs = [];
+    const newTabs = [];
+
+    tables.forEach((tab) => {
+        if (tab.contents && tab.contents.some(
+            (row) => {
+                return row.action === oldAct.name;
+            }
+        )) {
+            oldTabs.push(tab);
+            const copy = clone(tab);
+
+            copy.contents.forEach((row) => {
+                if (row.action === oldAct.name) {
+                    row.action = newAct.name;
+                }
+            });
+            newTabs.push(copy);
+        }
+    });
+
+    return [oldActs, newActs, oldTabs, newTabs]
 }

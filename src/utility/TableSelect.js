@@ -37,6 +37,4 @@ function TableSelect(props) {
     )
 }
 
-TableSelect.contextType = AppContext;
-
 export default TableSelect;
