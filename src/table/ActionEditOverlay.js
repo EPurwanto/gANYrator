@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Accordion from "react-bootstrap/esm/Accordion";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
+import ActionContentsEditor from "../action/ActionContentsEditor";
 import AccordionCardEntry from "../utility/AccordionCardEntry";
 import ActionSelect from "../utility/ActionSelect";
 
@@ -11,27 +12,24 @@ class ActionEditOverlay extends Component {
     constructor(props) {
         super(props);
 
+        const state = {
+            actStr: "",
+            actObj: undefined
+        };
+
         const action = this.props.action;
         const type = this.getActionType(action);
         if (type === "string") {
-            this.state = {
-                actStr: action,
-                actObj: undefined
-            };
+            state.actStr = action;
         } else if (type === "object") {
-            this.state = {
-                actStr: "",
-                actObj: action
-            };
-        } else {
-            this.state = {
-                actStr: "",
-                actObj: undefined
-            };
+            state.actObj = action;
         }
+
+        this.state = state;
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleStrChange = this.handleStrChange.bind(this);
+        this.handleContentsUpdate = this.handleContentsUpdate.bind(this);
     }
 
     getActionType(act) {
@@ -48,6 +46,12 @@ class ActionEditOverlay extends Component {
 
     handleStrChange(str) {
         this.setState({actStr: str})
+    }
+
+    handleContentsUpdate(list) {
+        this.setState({actObj: {
+            contents: list
+        }});
     }
 
     render() {
@@ -79,10 +83,10 @@ class ActionEditOverlay extends Component {
                             heading="Custom Action"
                             onClick={this.handleTypeChange}>
                             <span>The following results will be rolled whenever this result is rolled</span>
-                            <ActionSelect
-                                actions={this.props.allActions}
-                                selected={this.state.actStr}
-                                onChange={this.handleStrChange}/>
+                            <ActionContentsEditor
+                                contentTables={this.props.contentTables}
+                                items={this.state.actObj ? this.state.actObj.contents : []}
+                                onListUpdate={this.handleContentsUpdate}/>
                         </AccordionCardEntry>
                     </Accordion>
                 </Modal.Body>

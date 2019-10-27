@@ -120,8 +120,7 @@ class ScreenEditAction extends Component {
                 <ActionContentsEditor
                     contentTables={this.props.contentTables}
                     items={this.state.contents}
-                    onListUpdate={this.handleContentsUpdate}
-                    />
+                    onListUpdate={this.handleContentsUpdate}/>
             </form>
         );
     }

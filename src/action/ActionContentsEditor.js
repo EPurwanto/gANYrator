@@ -29,13 +29,13 @@ const BareActionContentsEditor = (props) => {
                     <td>
                         <TableSelect
                             tables={contentTables}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}
-                            value={row.table}/>
+                            value={row.table}
+                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
                     </td>
                     <td>
                         <Form.Control
-                            onChange={(e) => {onRowChange(row.key, row.table, e.target.value)}}
                             value={row.field}
+                            onChange={(e) => {onRowChange(row.key, row.table, e.target.value)}}
                             placeholder={row.table}/>
                     </td>
                 </React.Fragment>
@@ -46,7 +46,8 @@ const BareActionContentsEditor = (props) => {
                         <TableSelect
                             tables={props.contentTables}
                             includeEmpty={true}
-                            onChange={(e) => {onRowChange(row.key, e.target.value)}}/>
+                            value={row.table}
+                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
                     </td>
                     <td>
                         <span className="text-muted">

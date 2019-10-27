@@ -1,93 +1,114 @@
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import ContentsListManager from "../utility/ContentListManager";
 import ContentsEditor from "../utility/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
 
-/**
- * Properties
- * name
- * desc
- * onClick
- * @param props
- * @returns {*}
- * @constructor
- */
-const BareTableContentsEditor = (props) => {
-    const {actions, contentTables, onRowChange, ...other} = props;
+function safeNumber(val) {
+    const i = parseInt(val, 10);
+    if (isNaN(i)) {
+        return "";
+    }
+    return i;
+}
 
-    const[selected, setSelected] = useState();
+class BareTableContentsEditor extends Component {
+    constructor(props) {
+        super(props);
 
-    let overlay = "";
-    if (selected) {
-        overlay = <ActionEditOverlay
-                    action={selected.action}
-                    allActions={actions}
-                    contentTables={contentTables}
-                    onSave={(act) => {onRowChange(selected.key, selected.value, selected.element, act)}}
-                    onClose={() => setSelected(undefined)}
-        />
+        this.state  = {
+            selected: undefined
+        }
     }
 
-    return (
-        <React.Fragment>
-            <ContentsEditor
-                headings={
-                    <React.Fragment>
-                        <th>Frequency</th>
-                        <th>Value</th>
-                    </React.Fragment>
-                }
-                content={row => { return (
-                    <React.Fragment>
-                        <td>
-                            <Form.Control
-                                type="number"
-                                value={row.weight}
-                                onChange={(e) => onRowChange(row.key, e.target.value, row.element, row.action)}
-                                min="1"
-                                required/>
-                        </td>
-                        <td>
-                            <Form.Control
-                                value={row.element}
-                                onChange={(e) => onRowChange(row.key, row.weight, e.target.value, row.action)}
-                                required/>
-                        </td>
-                    </React.Fragment>
-                )}}
-                placeholder={row => { return (
-                    <React.Fragment>
-                        <td>
-                            <Form.Control
-                                type="number"
-                                placeholder="1"
-                                onChange={(e) => onRowChange(row.key, e.target.value, "")}
-                            />
-                        </td>
-                        <td>
-                            <Form.Control
-                                placeholder="Add a new row"
-                                onChange={(e) => onRowChange(row.key, 1, e.target.value)}/>
-                        </td>
-                    </React.Fragment>
-                )}}
-                buttons={row => { return (
-                    <Button
-                        variant={row.action ? "success": "primary"}
-                        className="action-button"
-                        onClick={() => {setSelected(row)}}>
-                        {row.action ? "yes": "no"}
-                    </Button>
-                )}}
-                {...other}
-            />
-            {overlay}
-        </React.Fragment>
-    );
-};
+    handleSelect(row) {
+        this.setState({selected: row})
+    }
+
+    render() {
+        const {actions, contentTables, onRowChange, ...other} = this.props;
+
+        let overlay = "";
+        if (this.state.selected) {
+            overlay = <ActionEditOverlay
+                action={this.state.selected.action}
+                allActions={actions}
+                contentTables={contentTables}
+                onSave={(act) => {
+                    onRowChange(this.state.selected.key, this.state.selected.weight, this.state.selected.element, act)
+                }}
+                onClose={() => this.handleSelect(undefined)}/>
+        }
+
+        return (
+            <React.Fragment>
+                <ContentsEditor
+                    headings={
+                        <React.Fragment>
+                            <th>Frequency</th>
+                            <th>Value</th>
+                        </React.Fragment>
+                    }
+                    content={row => {
+                        return (
+                            <React.Fragment>
+                                <td>
+                                    <Form.Control
+                                        type="number"
+                                        value={row.weight}
+                                        onChange={(e) => onRowChange(row.key, safeNumber(e.target.value), row.element, row.action)}
+                                        min="1"
+                                        required/>
+                                </td>
+                                <td>
+                                    <Form.Control
+                                        value={row.element}
+                                        onChange={(e) => onRowChange(row.key, row.weight, e.target.value, row.action)}
+                                        required/>
+                                </td>
+                            </React.Fragment>
+                        )
+                    }}
+                    placeholder={row => {
+                        return (
+                            <React.Fragment>
+                                <td>
+                                    <Form.Control
+                                        type="number"
+                                        value={row.weight}
+                                        onChange={(e) => onRowChange(row.key, safeNumber(e.target.value), row.element, row.action)}
+                                        min="1"/>
+                                </td>
+                                <td>
+                                    <Form.Control
+                                        placeholder="Add a new row"
+                                        value={row.element}
+                                        onChange={(e) => onRowChange(row.key, 1, e.target.value)}/>
+                                </td>
+                            </React.Fragment>
+                        )
+                    }}
+                    buttons={row => {
+                        return (
+                            <Button
+                                variant={row.action ? "success" : "primary"}
+                                className="action-button"
+                                onClick={() => {
+                                    this.handleSelect(row)
+                                }}>
+                                {row.action ? "yes" : "no"}
+                            </Button>
+                        )
+                    }}
+                    {...other}
+                />
+                {overlay}
+            </React.Fragment>
+        );
+    }
+}
 
 BareTableContentsEditor.propTypes = {
     items: PropTypes.array.isRequired,
@@ -96,7 +117,7 @@ BareTableContentsEditor.propTypes = {
     onRowDelete: PropTypes.func.isRequired
 };
 
-const getNewItem = (weight = 1, element = "", act) => {
+const getNewItem = (weight = "", element = "", act) => {
     const item =  {
         weight: weight,
         element: element,

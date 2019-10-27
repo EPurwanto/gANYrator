@@ -44,6 +44,7 @@ function ContentListManager(WrappedComponent, getNewItem) {
 
             // remove key props
             cleaned.forEach((r) => {delete r.key});
+            return cleaned;
         }
 
         handleRowDelete(key) {

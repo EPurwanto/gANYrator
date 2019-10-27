@@ -10,14 +10,16 @@ class ScreenEditTable extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.setState({
+        this.state = {
             name: props.table.name,
             desc: props.table.desc,
-            contents: props.table.contents
-        });
+            contents: props.table.contents,
+            saved: false
+        };
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
+        this.handleContentsUpdate = this.handleContentsUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
