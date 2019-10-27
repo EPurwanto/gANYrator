@@ -1,19 +1,19 @@
 import React from 'react';
 import AccordionCollapse from "react-bootstrap/AccordionCollapse";
 import AccordionToggle from "react-bootstrap/AccordionToggle";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
 const AccordionCardEntry = (props) => {
     return (
         <Card>
-            <Card.Header>
-                <AccordionToggle as={Button} variant="link" eventKey={props.eventKey}>
-                    {
-                        props.heading
-                    }
-                </AccordionToggle>
-            </Card.Header>
+            <AccordionToggle
+                as={Card.Header}
+                eventKey={props.eventKey}
+                onClick={props.onClick}>
+                {
+                    props.heading
+                }
+            </AccordionToggle>
             <AccordionCollapse eventKey={props.eventKey}>
                 <Card.Body>
                     {

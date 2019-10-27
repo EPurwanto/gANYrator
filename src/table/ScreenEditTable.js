@@ -89,14 +89,6 @@ class ScreenEditTable extends Component {
         this.setState({contents: contents});
     }
 
-    getRowType(row) {
-        const type = row && typeof row.action;
-        if (type === "string" || type === "object") {
-            return type;
-        }
-        return "none"
-    }
-
     handleRowSelect(row) {
         this.setState({selectedRow: row, selectedRowType: this.getRowType(row)});
     }
