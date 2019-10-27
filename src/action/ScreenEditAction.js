@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
-import ActionEditingTable from "./ActionEditingTable";
+import ActionContentsEditor from "./ActionContentsEditor";
 
 class ScreenEditAction extends Component {
     constructor(props, context) {
@@ -62,8 +62,10 @@ class ScreenEditAction extends Component {
         this.setState({group: e.target.value})
     }
 
-    handleRowChange(index, table = "", field = "") {
+    handleRowChange(key, table = "", field = "") {
         const contents = this.state.contents.slice();
+        const index = contents.findIndex(r => {return r.key === key});
+
         const row = contents[index];
         if (row.placeholder) {
             // push a new placeholder row
@@ -164,7 +166,7 @@ class ScreenEditAction extends Component {
                         </Form.Group>
                     </Col>
                 </Row>
-                <ActionEditingTable
+                <ActionContentsEditor
                     contentTables={this.props.contentTables}
                     items={this.state.contents}
                     onRowChange={this.handleRowChange}
