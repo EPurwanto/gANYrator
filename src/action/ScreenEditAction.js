@@ -47,13 +47,7 @@ class ScreenEditAction extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (this.props.onSave) {
-            // Cut off the placeholder row
-            const contents = this.state.contents.slice(0, -1);
-
-            // strip out row keys
-            contents.forEach(r => {delete r.key});
-
-            const message = this.props.onSave(this.props.action, this.state.name, this.state.desc, this.state.group, contents);
+            const message = this.props.onSave(this.props.action, this.state.name, this.state.desc, this.state.group, this.state.contents);
 
             if (message) {
                 // todo handle error message
