@@ -19,7 +19,7 @@ class ActionSelect extends Component {
     }
 
     handleChange(event) {
-        this.props.onActionSelect && this.props.onActionSelect(event.target.value);
+        this.props.onChange && this.props.onChange(event.target.value);
     }
 
     render() {

@@ -112,7 +112,7 @@ class ScreenRoll extends Component {
                             <ActionSelect
                                 className="form-control form-control-action"
                                 selected={this.state.selectedAction && this.state.selectedAction.name}
-                                onActionSelect={this.handleActionSelect}
+                                onChange={this.handleActionSelect}
                                 actions={this.props.actions}/>
                             <InputGroup.Append>
                                 <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
