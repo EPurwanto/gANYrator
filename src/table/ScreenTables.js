@@ -135,6 +135,8 @@ class ScreenTables extends Component {
             return (
                 <ScreenEditTable
                     table={findTable(this.state.selected, this.props.contentTables)}
+                    actions={this.props.actions}
+                    contentTables={this.props.contentTables}
                     onCancel={() => this.handleTableSelect("")}
                     onSave={this.handleTableSave}
                 />

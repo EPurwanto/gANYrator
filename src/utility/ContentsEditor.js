@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Table from "react-bootstrap/esm/Table";
 

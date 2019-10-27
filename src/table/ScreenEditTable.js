@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
-import Table from "react-bootstrap/esm/Table";
+import TableContentsEditor from "./TableContentsEditor";
 
 class ScreenEditTable extends Component {
     constructor(props, context) {
@@ -19,8 +19,11 @@ class ScreenEditTable extends Component {
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
+        this.handleRowChange = this.handleRowChange.bind(this);
+        this.handleRowDelete = this.handleRowDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        this.handleRowTypeChange = this.handleRowTypeChange.bind(this);
     }
 
     componentDidMount() {
@@ -33,6 +36,9 @@ class ScreenEditTable extends Component {
                 element: "",
                 placeholder: true
             });
+
+            // push a random float as temporary key value, highly unlikely to clash
+            contents.forEach(r => {r.key = Math.random()});
 
             this.setState({
                 name: this.props.table.name,
@@ -73,6 +79,30 @@ class ScreenEditTable extends Component {
         }
 
         this.setState({contents: contents});
+    }
+
+    handleRowDelete(key) {
+        const contents = this.state.contents.slice();
+        const index = contents.findIndex(r => {return r.key === key});
+
+        contents.splice(index, 1);
+        this.setState({contents: contents});
+    }
+
+    getRowType(row) {
+        const type = row && typeof row.action;
+        if (type === "string" || type === "object") {
+            return type;
+        }
+        return "none"
+    }
+
+    handleRowSelect(row) {
+        this.setState({selectedRow: row, selectedRowType: this.getRowType(row)});
+    }
+
+    handleRowTypeChange(type) {
+        this.setState({selectedRowType: type});
     }
 
     handleSubmit(e) {
@@ -133,59 +163,13 @@ class ScreenEditTable extends Component {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Table striped size="sm">
-                    <thead>
-                    <tr>
-                        <th>Frequency</th>
-                        <th className="w-75">Value</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.contents.map((row, ind) => {
-                            if (row.placeholder) {
-                                return (
-                                    <tr key={ind}>
-                                        <td>
-                                            <Form.Control
-                                                type="number"
-                                                placeholder="1"
-                                                onChange={(e) => this.handleRowChange(ind, e.target.value, "")}
-                                            />
-                                        </td>
-                                        <td>
-                                            <Form.Control
-                                                placeholder="Add a new row"
-                                                onChange={(e) => this.handleRowChange(ind, 1, e.target.value)}/>
-                                        </td>
-                                        <td/>
-                                    </tr>
-                                );
-                            }
-                            return (
-                                <tr key={ind}>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={row.weight}
-                                            onChange={(e) => this.handleRowChange(ind, e.target.value, row.element, row.action)}
-                                            min="1"
-                                            required/>
-                                    </td>
-                                    <td>
-                                        <Form.Control
-                                            value={row.element}
-                                            onChange={(e) => this.handleRowChange(ind, row.weight, e.target.value, row.action)}
-                                            required/>
-                                    </td>
-                                    <td><Button block variant={row.action ? "success": "primary"}>{row.action ? "yes": "no"}</Button></td>
-                                </tr>
-                            );
-                        })
-                    }
-                    </tbody>
-                </Table>
+                <TableContentsEditor
+                    items={this.state.contents}
+                    actions={this.props.actions}
+                    contentTables={this.props.contentTables}
+                    onRowChange={this.handleRowChange}
+                    onRowDelete={this.handleRowDelete}
+                    />
             </form>
         );
     }

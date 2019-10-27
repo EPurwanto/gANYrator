@@ -20,7 +20,7 @@ class ScreenEditAction extends Component {
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
-        this.handleGroupChange = this.handleGroupChange.bind(this)
+        this.handleGroupChange = this.handleGroupChange.bind(this);
         this.handleRowChange = this.handleRowChange.bind(this);
         this.handleRowDelete = this.handleRowDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,6 +39,7 @@ class ScreenEditAction extends Component {
                 placeholder: true
             });
 
+            // push a random float as temporary key value, highly unlikely to clash
             contents.forEach(r => {r.key = Math.random()});
 
             this.setState({
@@ -87,8 +88,10 @@ class ScreenEditAction extends Component {
         this.setState({contents: contents});
     }
 
-    handleRowDelete(index) {
+    handleRowDelete(key) {
         const contents = this.state.contents.slice();
+        const index = contents.findIndex(r => {return r.key === key});
+
         contents.splice(index, 1);
         this.setState({contents: contents});
     }

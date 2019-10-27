@@ -40,8 +40,9 @@
   top: 1em;
 }
 
-th.button-column {
-  width: 1px;
+.action-button {
+  min-width: 60px;
+  margin-right: 0.5em;
 }
 
 /*# sourceMappingURL=App.css.map */

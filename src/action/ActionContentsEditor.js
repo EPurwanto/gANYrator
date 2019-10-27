@@ -1,7 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import Table from "react-bootstrap/esm/Table";
 import ContentsEditor from "../utility/ContentsEditor";
 import TableSelect from "../utility/TableSelect";
 
@@ -58,6 +57,13 @@ const ActionContentsEditor = (props) => {
             {...other}
         />
     );
+};
+
+ActionContentsEditor.propTypes = {
+    items: PropTypes.array.isRequired,
+    contentTables: PropTypes.array.isRequired,
+    onRowDelete: PropTypes.func.isRequired,
+    onRowChange: PropTypes.func.isRequired
 };
 
 export default ActionContentsEditor;
