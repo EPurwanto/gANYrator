@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
@@ -94,10 +94,7 @@ class ScreenEditTable extends Component {
                 </Row>
                 <TableContentsEditor
                     items={this.state.contents}
-                    actions={this.props.actions}
-                    contentTables={this.props.contentTables}
-                    onListUpdate={this.handleContentsUpdate}
-                    />
+                    onListUpdate={this.handleContentsUpdate}/>
             </form>
         );
     }

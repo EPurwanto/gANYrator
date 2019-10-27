@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FormControl from "react-bootstrap/FormControl";
+import AppContext from "../AppContext";
 import {groupActions} from "./ActionUtils";
 
 /**
@@ -23,7 +24,7 @@ class ActionSelect extends Component {
     }
 
     render() {
-        const groups = groupActions(this.props.actions);
+        const groups = groupActions(this.context.actions);
         const optgroups = [];
 
         groups.forEach(grp => {
@@ -48,5 +49,7 @@ class ActionSelect extends Component {
         );
     }
 }
+
+ActionSelect.contextType = AppContext;
 
 export default ActionSelect;

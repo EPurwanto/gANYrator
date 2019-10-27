@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import AppContext from "../AppContext";
 import {createTableAction} from "../utility/ActionUtils";
 import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
 import {createTable, findTable, isValidTableName, nextValidTableName} from "../utility/TableUtils";
@@ -22,7 +23,7 @@ class ScreenTables extends Component {
     }
 
     updateTableList(tAdd, tRemove) {
-        const tables = this.props.contentTables.slice();
+        const tables = this.context.contentTables.slice();
 
         // Remove existing copy if present
         if (tRemove) {
@@ -41,26 +42,26 @@ class ScreenTables extends Component {
     }
 
     updateActionList(aAdd, aRemove) {
-        const actions = this.props.actions.slice();
+        const list = this.context.actions.slice();
 
         // Remove existing copy if present
         if (aRemove) {
-            const index = actions.indexOf(aRemove);
+            const index = list.indexOf(aRemove);
             if (index >= 0) {
-                actions.splice(index, 1);
+                list.splice(index, 1);
             }
         }
 
         // Add new copy if present
         if (aAdd) {
-            actions.unshift(aAdd);
+            list.unshift(aAdd);
         }
 
-        this.props.onActionListChange(actions);
+        this.props.onActionListChange(list);
     }
 
     handleTableCreate() {
-        const tab = createTable(nextValidTableName(this.props.contentTables));
+        const tab = createTable(nextValidTableName(this.context.contentTables));
 
         this.updateTableList(tab);
         this.updateActionList(createTableAction(tab));
@@ -83,7 +84,7 @@ class ScreenTables extends Component {
     }
 
     handleTableSave(oldTable, name, desc, contents) {
-        if (oldTable.name !== name && !isValidTableName(name, this.props.contentTables)) {
+        if (oldTable.name !== name && !isValidTableName(name, this.context.contentTables)) {
             return "A table with that name already exists";
         }
 
@@ -106,7 +107,7 @@ class ScreenTables extends Component {
 
     render() {
         // Copy tables but bind a "handleClick" prop
-        const tables = this.props.contentTables.map(t => {
+        const tables = this.context.contentTables.map(t => {
             return {
                 name: t.name,
                 desc: t.desc,
@@ -134,9 +135,7 @@ class ScreenTables extends Component {
             // Something selected, show table editor
             return (
                 <ScreenEditTable
-                    table={findTable(this.state.selected, this.props.contentTables)}
-                    actions={this.props.actions}
-                    contentTables={this.props.contentTables}
+                    table={findTable(this.state.selected, this.context.contentTables)}
                     onCancel={() => this.handleTableSelect("")}
                     onSave={this.handleTableSave}
                 />
@@ -144,5 +143,7 @@ class ScreenTables extends Component {
         }
     }
 }
+
+ScreenTables.contextType = AppContext;
 
 export default ScreenTables;

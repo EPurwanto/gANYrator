@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import AppContext from "../AppContext";
 import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
 import {createAction, findAction, isValidActionName, nextValidActionName} from "../utility/ActionUtils";
 import ScreenEditAction from "./ScreenEditAction";
@@ -16,22 +17,22 @@ class ScreenActions extends Component {
     }
 
     updateActionList(aAdd, aRemove) {
-        const actions = this.props.actions.slice();
+        const list = this.context.actions.slice();
 
         // Remove existing copy if present
         if (aRemove) {
-            const index = actions.indexOf(aRemove);
+            const index = list.indexOf(aRemove);
             if (index >= 0) {
-                actions.splice(index, 1);
+                list.splice(index, 1);
             }
         }
 
         // Add new copy if present
         if (aAdd) {
-            actions.unshift(aAdd);
+            list.unshift(aAdd);
         }
 
-        this.props.onActionListChange(actions);
+        this.props.onActionListChange(list);
     }
 
     handleSelect(name) {
@@ -39,13 +40,13 @@ class ScreenActions extends Component {
     }
 
     handleCreate() {
-        const action = createAction(nextValidActionName(this.props.actions));
+        const action = createAction(nextValidActionName(this.context.actions));
         this.updateActionList(action);
         this.handleSelect(action.name);
     }
 
     handleSave(oldAction, name, desc, group, contents) {
-        if (oldAction.name !== name && !isValidActionName(name, this.props.actions)) {
+        if (oldAction.name !== name && !isValidActionName(name, this.context.actions)) {
             return "An action with that name already exists";
         }
 
@@ -58,7 +59,7 @@ class ScreenActions extends Component {
         if (this.state.selected === "") {
             const acts = [];
 
-            this.props.actions.forEach(a => {
+            this.context.actions.forEach(a => {
                 if (a.group !== "Table") {
                     acts.push({
                         name: a.name,
@@ -85,13 +86,14 @@ class ScreenActions extends Component {
 
             return (
                 <ScreenEditAction
-                    contentTables={this.props.contentTables}
-                    action={findAction(this.state.selected, this.props.actions)}
+                    action={findAction(this.state.selected, this.context.actions)}
                     onSave={this.handleSave}
                     onCancel={() => {this.handleSelect("")}}/>
             )
         }
     }
 }
+
+ScreenActions.contextType = AppContext;
 
 export default ScreenActions;

@@ -4,6 +4,7 @@ import Accordion from "react-bootstrap/esm/Accordion";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import ActionContentsEditor from "../action/ActionContentsEditor";
+import AppContext from "../AppContext";
 import AccordionCardEntry from "../utility/AccordionCardEntry";
 import ActionSelect from "../utility/ActionSelect";
 
@@ -74,7 +75,6 @@ class ActionEditOverlay extends Component {
                             onClick={this.handleTypeChange}>
                             <span>The selected action will occur whenever this result is rolled</span>
                             <ActionSelect
-                                actions={this.props.allActions}
                                 selected={this.state.actStr}
                                 onChange={this.handleStrChange}/>
                         </AccordionCardEntry>
@@ -84,7 +84,6 @@ class ActionEditOverlay extends Component {
                             onClick={this.handleTypeChange}>
                             <span>The following results will be rolled whenever this result is rolled</span>
                             <ActionContentsEditor
-                                contentTables={this.props.contentTables}
                                 items={this.state.actObj ? this.state.actObj.contents : []}
                                 onListUpdate={this.handleContentsUpdate}/>
                         </AccordionCardEntry>
@@ -117,8 +116,6 @@ ActionEditOverlay.propTypes = {
         PropTypes.string,
         PropTypes.object
     ]),
-    allActions: PropTypes.array,
-    contentTables: PropTypes.array,
     show: PropTypes.bool,
     onSave: PropTypes.func,
     onClose: PropTypes.func,
@@ -127,5 +124,7 @@ ActionEditOverlay.propTypes = {
 ActionEditOverlay.defaultProps = {
     show: true
 };
+
+ActionEditOverlay.contextType = AppContext;
 
 export default ActionEditOverlay;

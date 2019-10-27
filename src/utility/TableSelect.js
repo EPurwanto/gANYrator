@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from "react-bootstrap/esm/Form";
+import AppContext from "../AppContext";
 
 /**
  * Properties
@@ -13,21 +14,29 @@ import Form from "react-bootstrap/esm/Form";
 function TableSelect(props) {
 
     return (
-        <Form.Control
-            as="select"
-            value={props.value}
-            onChange={props.onChange}>
-
-            {props.includeEmpty ? <option value="">Select a table</option> : ""}
+        <AppContext.Consumer>
             {
-                props.tables.map(t => {
-                    return (
-                        <option key={t.name} value={t.name}>{t.name}</option>
-                    )
-                })
+                context => { return (
+                    <Form.Control
+                        as="select"
+                        value={props.value}
+                        onChange={props.onChange}>
+
+                        {props.includeEmpty ? <option value="">Select a table</option> : ""}
+                        {
+                            context.contentTables.map(t => {
+                                return (
+                                    <option key={t.name} value={t.name}>{t.name}</option>
+                                )
+                            })
+                        }
+                    </Form.Control>
+                )}
             }
-        </Form.Control>
+        </AppContext.Consumer>
     )
 }
+
+TableSelect.contextType = AppContext;
 
 export default TableSelect;

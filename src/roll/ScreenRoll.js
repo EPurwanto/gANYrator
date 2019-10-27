@@ -3,9 +3,10 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import {findTable} from "../utility/TableUtils";
-import {findAction} from "../utility/ActionUtils"
+import AppContext from "../AppContext";
 import ActionSelect from "../utility/ActionSelect";
+import {findAction} from "../utility/ActionUtils"
+import {findTable} from "../utility/TableUtils";
 import ValueDisplay from "./ValueDisplay";
 
 class ScreenRoll extends Component {
@@ -22,7 +23,7 @@ class ScreenRoll extends Component {
     }
 
     handleActionSelect(action) {
-        this.setState({selectedAction: findAction(action, this.props.actions)});
+        this.setState({selectedAction: findAction(action, this.context.actions)});
     }
 
     performSelectedAction() {
@@ -39,7 +40,7 @@ class ScreenRoll extends Component {
         let values = {};
 
         action.contents.forEach((act) => {
-            const table = findTable(act.table, this.props.contentTables);
+            const table = findTable(act.table, this.context.contentTables);
             const row = this.rollOn(table);
 
             if (!row) {
@@ -55,7 +56,7 @@ class ScreenRoll extends Component {
             if(row.hasOwnProperty("action")) {
                 let childAct = row.action;
                 if (typeof childAct === "string") {
-                    childAct = findAction(childAct, this.props.actions);
+                    childAct = findAction(childAct, this.context.actions);
                 }
 
                 const results = this.performAction(childAct);
@@ -112,8 +113,7 @@ class ScreenRoll extends Component {
                             <ActionSelect
                                 className="form-control form-control-action"
                                 selected={this.state.selectedAction && this.state.selectedAction.name}
-                                onChange={this.handleActionSelect}
-                                actions={this.props.actions}/>
+                                onChange={this.handleActionSelect}/>
                             <InputGroup.Append>
                                 <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
                             </InputGroup.Append>
@@ -124,5 +124,7 @@ class ScreenRoll extends Component {
         );
     }
 }
+
+ScreenRoll.contextType = AppContext;
 
 export default ScreenRoll;

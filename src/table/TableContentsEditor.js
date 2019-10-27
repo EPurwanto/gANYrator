@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
+import AppContext from "../AppContext";
 import ContentsListManager from "../utility/ContentListManager";
 import ContentsEditor from "../utility/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
@@ -28,14 +29,12 @@ class BareTableContentsEditor extends Component {
     }
 
     render() {
-        const {actions, contentTables, onRowChange, ...other} = this.props;
+        const {onRowChange, ...other} = this.props;
 
         let overlay = "";
         if (this.state.selected) {
             overlay = <ActionEditOverlay
                 action={this.state.selected.action}
-                allActions={actions}
-                contentTables={contentTables}
                 onSave={(act) => {
                     onRowChange(this.state.selected.key, this.state.selected.weight, this.state.selected.element, act)
                 }}
@@ -112,10 +111,10 @@ class BareTableContentsEditor extends Component {
 
 BareTableContentsEditor.propTypes = {
     items: PropTypes.array.isRequired,
-    actions: PropTypes.array.isRequired,
-    contentTables: PropTypes.array.isRequired,
     onRowDelete: PropTypes.func.isRequired
 };
+
+BareTableContentsEditor.contextType = AppContext;
 
 const getNewItem = (weight = "", element = "", act) => {
     const item =  {

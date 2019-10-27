@@ -9,8 +9,9 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ScreenActions from "./action/ScreenActions";
 import './App.css';
-import ScreenTables from "./table/ScreenTables";
+import AppContext from './AppContext'
 import ScreenRoll from "./roll/ScreenRoll";
+import ScreenTables from "./table/ScreenTables";
 
 class App extends React.Component {
     constructor(props) {
@@ -62,7 +63,7 @@ class App extends React.Component {
         switch (action) {
             case "clearSession":
                 localStorage.clear();
-                this.setState({contentTables:[], actions:[]});
+                this.setState({contentTables:[], actions:[], screen: "Roll"});
                 break;
             default:
                 break;
@@ -103,31 +104,32 @@ class App extends React.Component {
                             <h2 className="text-center">Generate Anything.</h2>
                         </Col>
                     </Row>
-                    <Tabs
-                        className="mb-3"
-                        activeKey={this.state.screen}
-                        onSelect={k => this.handleScreenChange(k)}
-                        unmountOnExit={true}>
-                        <Tab eventKey="Roll" title="Roll">
-                            <ScreenRoll
-                                contentTables={this.state.contentTables}
-                                actions={this.state.actions}/>
-                        </Tab>
-                        <Tab eventKey="Tables" title="Tables">
-                            <ScreenTables
-                                contentTables={this.state.contentTables}
-                                actions={this.state.actions}
-                                onActionListChange={this.handleActionListChange}
-                                onTableListChange={this.handleTableListChange}/>
-                        </Tab>
-                        <Tab eventKey="Actions" title="Actions">
-                            <ScreenActions
-                                contentTables={this.state.contentTables}
-                                actions={this.state.actions}
-                                onActionListChange={this.handleActionListChange}
-                                onTableListChange={this.handleTableListChange}/>
-                        </Tab>
-                    </Tabs>
+                    <AppContext.Provider value={
+                        {
+                            contentTables: this.state.contentTables,
+                            actions: this.state.actions
+                        }
+                    }>
+                        <Tabs
+                            className="mb-3"
+                            activeKey={this.state.screen}
+                            onSelect={k => this.handleScreenChange(k)}
+                            unmountOnExit={true}>
+                            <Tab eventKey="Roll" title="Roll">
+                                <ScreenRoll/>
+                            </Tab>
+                            <Tab eventKey="Tables" title="Tables">
+                                <ScreenTables
+                                    onActionListChange={this.handleActionListChange}
+                                    onTableListChange={this.handleTableListChange}/>
+                            </Tab>
+                            <Tab eventKey="Actions" title="Actions">
+                                <ScreenActions
+                                    onActionListChange={this.handleActionListChange}
+                                    onTableListChange={this.handleTableListChange}/>
+                            </Tab>
+                        </Tabs>
+                    </AppContext.Provider>
                 </Container>
             </div>
         );

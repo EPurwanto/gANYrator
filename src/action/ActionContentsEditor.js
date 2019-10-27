@@ -15,7 +15,7 @@ import TableSelect from "../utility/TableSelect";
  * @constructor
  */
 const BareActionContentsEditor = (props) => {
-    const {contentTables, onRowChange, ...other} = props;
+    const {onRowChange, ...other} = props;
     return (
         <ContentsEditor
             headings={
@@ -28,7 +28,6 @@ const BareActionContentsEditor = (props) => {
                 <React.Fragment>
                     <td>
                         <TableSelect
-                            tables={contentTables}
                             value={row.table}
                             onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
                     </td>
@@ -44,7 +43,6 @@ const BareActionContentsEditor = (props) => {
                 <React.Fragment>
                     <td>
                         <TableSelect
-                            tables={props.contentTables}
                             includeEmpty={true}
                             value={row.table}
                             onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
@@ -63,7 +61,6 @@ const BareActionContentsEditor = (props) => {
 
 BareActionContentsEditor.propTypes = {
     items: PropTypes.array.isRequired,
-    contentTables: PropTypes.array.isRequired,
     onRowDelete: PropTypes.func.isRequired,
     onRowChange: PropTypes.func.isRequired
 };
