@@ -1,4 +1,4 @@
-import {cloneAction, createTableAction} from "./ActionUtils";
+import {createTableAction} from "./ActionUtils";
 import {clone} from "./Utils";
 
 export function findTable(name, tables) {

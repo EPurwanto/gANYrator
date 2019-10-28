@@ -3,24 +3,22 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ResponsiveCard from "./ResponsiveCard";
 
+
+const wide = 4;
 const ResponsiveCardDeck = (props) => {
     const items = props.items.slice();
     const rows = [];
 
-    for (let i=0 ; i < items.length ; i += 4) {
-        const r = items.slice(i, i + 4);
+    for (let i=0 ; i < items.length ; i += wide) {
+        const r = items.slice(i, i + wide);
         rows.push(
             <Row className="my-3" key={i}>
                 {
                     r.map(item => {
                         return (
-                            <Col sm="3"
+                            <Col sm={12/wide}
                                  key={item.name}>
-                                <ResponsiveCard
-                                    onClick={item.onClick}
-                                    name={item.name}
-                                    sub={item.sub}
-                                    desc={item.desc}/>
+                                <ResponsiveCard {...item}/>
                             </Col>
                         )
                     })

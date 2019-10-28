@@ -61,7 +61,11 @@ export function createTableAction(table) {
 
 export function updateActionRefs(tables, oldAct, newAct) {
     const oldActs = [oldAct];
-    const newActs = [newAct];
+    const newActs = [];
+
+    if (newAct) {
+        newActs.push(newAct);
+    }
 
     const oldTabs = [];
     const newTabs = [];
@@ -75,11 +79,17 @@ export function updateActionRefs(tables, oldAct, newAct) {
             oldTabs.push(tab);
             const copy = clone(tab);
 
-            copy.contents.forEach((row) => {
-                if (row.action === oldAct.name) {
-                    row.action = newAct.name;
-                }
-            });
+            if (newAct) {
+                // update affected rows
+                copy.contents.forEach((row) => {
+                    if (row.action === oldAct.name) {
+                        row.action = newAct.name;
+                    }
+                });
+            } else {
+                // Delete affected rows by filtering them out
+                copy.contents = copy.contents.filter((row) => {return row.action !== oldAct.name})
+            }
             newTabs.push(copy);
         }
     });

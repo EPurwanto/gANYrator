@@ -8,6 +8,7 @@ import {
     updateActionRefs
 } from "../utility/ActionUtils";
 import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
+import {clone} from "../utility/Utils";
 import ScreenEditAction from "./ScreenEditAction";
 
 class ScreenActions extends Component {
@@ -18,8 +19,10 @@ class ScreenActions extends Component {
             selected: ""
         };
 
-        this.handleSave = this.handleSave.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
+        this.handleClone = this.handleClone.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleSelect(name) {
@@ -31,6 +34,16 @@ class ScreenActions extends Component {
 
         this.context.updateActions(act);
         this.handleSelect(act.name);
+    }
+
+    handleClone(oldAction) {
+        const copy = clone(oldAction);
+
+        copy.name = nextValidActionName(this.context.actions);
+        copy.desc = "Clone of " + oldAction.name + "\n" + oldAction.desc;
+
+        this.context.updateActions(copy);
+        this.handleSelect(copy.name);
     }
 
     handleSave(oldAction, name, desc, group, contents) {
@@ -50,6 +63,17 @@ class ScreenActions extends Component {
         }
     }
 
+    handleDelete(oldAction) {
+        const [oldActs, newActs, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction);
+        if (oldActs.length > 0 || newActs.length > 0 ) {
+            this.context.updateActions(newActs, oldActs);
+        }
+
+        if (oldTabs.length > 0 || newTabs.length > 0 ) {
+            this.context.updateTables(newTabs, oldTabs);
+        }
+    }
+
     render() {
         if (this.state.selected === "") {
             const acts = [];
@@ -60,7 +84,21 @@ class ScreenActions extends Component {
                         name: a.name,
                         sub: a.group,
                         desc: a.desc,
-                        onClick: () => this.handleSelect(a.name)
+                        onClick: () => this.handleSelect(a.name),
+                        links: [
+                            {
+                                name: "Clone",
+                                icon: "copy",
+                                variant: "primary",
+                                onClick: () => {this.handleClone(a)}
+                            },
+                            {
+                                name: "Delete",
+                                icon: "trash",
+                                variant: "danger",
+                                onClick: () => {this.handleDelete(a)}
+                            }
+                        ]
                     });
                 }
             });
