@@ -79,17 +79,16 @@ export function updateActionRefs(tables, oldAct, newAct) {
             oldTabs.push(tab);
             const copy = clone(tab);
 
-            if (newAct) {
-                // update affected rows
-                copy.contents.forEach((row) => {
-                    if (row.action === oldAct.name) {
+            // update affected rows
+            copy.contents.forEach((row) => {
+                if (row.action === oldAct.name) {
+                    if (newAct) {
                         row.action = newAct.name;
+                    } else {
+                        delete row.action;
                     }
-                });
-            } else {
-                // Delete affected rows by filtering them out
-                copy.contents = copy.contents.filter((row) => {return row.action !== oldAct.name})
-            }
+                }
+            });
             newTabs.push(copy);
         }
     });

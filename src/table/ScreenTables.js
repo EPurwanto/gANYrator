@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import AppContext from "../AppContext";
-import {createTableAction} from "../utility/ActionUtils";
+import ConfirmPopup from "../structure/ConfirmPopup";
 import ContentTableCardDeck from "../structure/ResponsiveCardDeck";
+import {createTableAction} from "../utility/ActionUtils";
 import {createTable, findTable, isValidTableName, nextValidTableName, updateTableRefs} from "../utility/TableUtils";
+import {clone} from "../utility/Utils";
 import ScreenEditTable from "./ScreenEditTable";
 
 class ScreenTables extends Component {
@@ -15,9 +17,12 @@ class ScreenTables extends Component {
 
         this.handleTableCreate = this.handleTableCreate.bind(this);
         this.handleTableSave = this.handleTableSave.bind(this);
-        this.handleTableSelect = this.handleTableSelect.bind(this);
         this.handleModalClose = this.handleModalClose.bind(this);
         this.handleModalOpen = this.handleModalOpen.bind(this);
+    }
+
+    handleTableSelect(table) {
+        this.setState({selected: table});
     }
 
     handleTableCreate() {
@@ -28,6 +33,16 @@ class ScreenTables extends Component {
         this.context.updateActions(tabAct);
 
         this.handleTableSelect(tab.name);
+    }
+
+    handleTableClone(oldTab) {
+        const copy = clone(oldTab);
+
+        copy.name = nextValidTableName(this.context.actions);
+        copy.desc = "Clone of " + oldTab.name + "\n" + oldTab.desc;
+
+        this.context.updateTables(copy);
+        this.handleTableSelect(copy.name);
     }
 
     handleTableSave(oldTable, name, desc, contents) {
@@ -48,8 +63,19 @@ class ScreenTables extends Component {
         }
     }
 
-    handleTableSelect(table) {
-        this.setState({selected: table});
+    handleTableDelete(oldTab) {
+        const [oldActs, newActs, oldTabs, newTabs] = updateTableRefs(this.context.actions, this.context.contentTables, oldTab);
+        if (oldActs.length > 0 || newActs.length > 0 ) {
+            this.context.updateActions(newActs, oldActs);
+        }
+
+        if (oldTabs.length > 0 || newTabs.length > 0 ) {
+            this.context.updateTables(newTabs, oldTabs);
+        }
+    }
+
+    useConfirm(props) {
+        this.setState({confirmPop: props});
     }
 
     handleModalClose() {
@@ -66,7 +92,26 @@ class ScreenTables extends Component {
             return {
                 name: t.name,
                 desc: t.desc,
-                onClick: () => this.handleTableSelect(t.name)
+                onClick: () => this.handleTableSelect(t.name),
+                links: [
+                {
+                    name: "Clone",
+                    icon: "copy",
+                    variant: "primary",
+                    onClick: () => {this.handleTableClone(t)}
+                },
+                {
+                    name: "Delete",
+                    icon: "trash",
+                    variant: "danger",
+                    onClick: () => {this.useConfirm({
+                        heading: "Delete " + t.name,
+                        children: <p>Are you sure you would like to delete {t.name}?</p>,
+                        onConfirm: () => {this.handleTableDelete(t)},
+                        onClose: () => {this.useConfirm()}
+                    })}
+                }
+            ]
             }
         });
 
@@ -77,10 +122,16 @@ class ScreenTables extends Component {
             onClick: this.handleTableCreate
         });
 
+        let confirm = "";
+        if (this.state.confirmPop) {
+            confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+        }
+
         if (this.state.selected === "") {
             // Nothing selected, show table cards
             return (
                 <React.Fragment>
+                    {confirm}
                     <ContentTableCardDeck
                         items={tables}
                         rowSize="4"/>

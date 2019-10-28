@@ -45,14 +45,22 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
     const newActs = [];
 
     const oldTabs = [oldTab];
-    const newTabs = [newTab];
+    const newTabs = [];
+
+    if (newTab) {
+        newTabs.push(newTab);
+    }
 
     actions.forEach((act) => {
 
         if (act.name === oldTab.name && act.group === "Table") {
             // Update action for the table
             oldActs.push(act);
-            newActs.push(createTableAction(newTab))
+
+            if (newTab) {
+                // Create a new one if new table was created
+                newActs.push(createTableAction(newTab))
+            }
             // creating from scratch means we never have to do the below branch as well
 
         } else if (act.contents.some((row) => {return row.table === oldTab.name})) {
@@ -61,11 +69,18 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
 
             // clone and update contents
             const copy = clone(act);
-            copy.contents.forEach((row) => {
-                if (row.table === oldTab.name) {
-                    row.table = newTab.name;
-                }
-            });
+
+            if (newTab) {
+                // Update to new name
+                copy.contents.forEach((row) => {
+                    if (row.table === oldTab.name) {
+                        row.table = newTab.name;
+                    }
+                });
+            } else {
+                // Filter out dead references
+                copy.contents = copy.contents.filter((row) => {return row.table !== oldTab.name})
+            }
             newActs.push(copy);
         }
     });
@@ -87,13 +102,25 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
             copy.contents.forEach(                             // Iterate across table rows
                 (tabRow) => {
                     if (typeof tabRow.action === "object") {    // Find those with object actions
-                        tabRow.action.contents.forEach(                // --- Iterate across action rows
-                            (actRow) => {
-                                if (actRow.table === oldTab.name) {
-                                    actRow.table = newTab.name;     // Update action row in cloned table data.
+
+
+                        if (newTab) {
+                            // Update to new name
+                            tabRow.action.contents.forEach(                // --- Iterate across action rows
+                                (actRow) => {
+                                    if (actRow.table === oldTab.name) {
+                                        actRow.table = newTab.name;     // Update action row in cloned table data.
+                                    }
                                 }
+                            )
+                        } else {
+                            // Filter out dead references
+                            tabRow.action.contents = tabRow.action.contents.filter((row) => {return row.table !== oldTab.name})
+                            if (tabRow.action.contents.length === 0) {
+                                delete tabRow.action;
                             }
-                        )
+                        }
+
                     }
                 }
             );
