@@ -5,7 +5,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import ActionContentsEditor from "../action/ActionContentsEditor";
 import AppContext from "../AppContext";
-import AccordionCardEntry from "../utility/AccordionCardEntry";
+import AccordionCardEntry from "../structure/AccordionCardEntry";
 import ActionSelect from "../utility/ActionSelect";
 
 

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {clone} from "./Utils";
+import {clone} from "../utility/Utils";
 
 function ContentListManager(WrappedComponent, getNewItem) {
     return class extends Component {

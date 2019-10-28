@@ -7,7 +7,7 @@ import {
     nextValidActionName,
     updateActionRefs
 } from "../utility/ActionUtils";
-import ResponsiveCardDeck from "../utility/ResponsiveCardDeck";
+import ResponsiveCardDeck from "../structure/ResponsiveCardDeck";
 import {clone} from "../utility/Utils";
 import ScreenEditAction from "./ScreenEditAction";
 

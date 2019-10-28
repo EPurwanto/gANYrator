@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AppContext from "../AppContext";
 import {createTableAction} from "../utility/ActionUtils";
-import ContentTableCardDeck from "../utility/ResponsiveCardDeck";
+import ContentTableCardDeck from "../structure/ResponsiveCardDeck";
 import {createTable, findTable, isValidTableName, nextValidTableName, updateTableRefs} from "../utility/TableUtils";
 import ScreenEditTable from "./ScreenEditTable";
 

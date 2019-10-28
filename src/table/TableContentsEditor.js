@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import AppContext from "../AppContext";
-import ContentsListManager from "../utility/ContentListManager";
-import ContentsEditor from "../utility/ContentsEditor";
+import ContentsListManager from "../structure/ContentListManager";
+import ContentsEditor from "../structure/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
 
 function safeNumber(val) {
