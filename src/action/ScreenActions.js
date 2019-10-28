@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AppContext from "../AppContext";
+import ConfirmPopup from "../structure/ConfirmPopup";
 import {
     createAction,
     findAction,
@@ -16,7 +17,8 @@ class ScreenActions extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            selected: ""
+            selected: "",
+            confirmPop: undefined
         };
 
         this.handleCreate = this.handleCreate.bind(this);
@@ -74,6 +76,10 @@ class ScreenActions extends Component {
         }
     }
 
+    useConfirm(props) {
+        this.setState({confirmPop: props});
+    }
+
     render() {
         if (this.state.selected === "") {
             const acts = [];
@@ -96,7 +102,12 @@ class ScreenActions extends Component {
                                 name: "Delete",
                                 icon: "trash",
                                 variant: "danger",
-                                onClick: () => {this.handleDelete(a)}
+                                onClick: () => {this.useConfirm({
+                                    heading: "Delete " + a.name,
+                                    children: <p>Are you sure you would like to delete {a.name}?</p>,
+                                    onConfirm: () => {this.handleDelete(a)},
+                                    onClose: () => {this.useConfirm()}
+                                })}
                             }
                         ]
                     });
@@ -109,8 +120,14 @@ class ScreenActions extends Component {
                 onClick: this.handleCreate
             });
 
+            let confirm = "";
+            if (this.state.confirmPop) {
+                confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+            }
+
             return (
                 <React.Fragment>
+                    {confirm}
                     <ResponsiveCardDeck
                         items={acts}/>
                 </React.Fragment>
