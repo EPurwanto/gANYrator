@@ -102,8 +102,6 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
             copy.contents.forEach(                             // Iterate across table rows
                 (tabRow) => {
                     if (typeof tabRow.action === "object") {    // Find those with object actions
-
-
                         if (newTab) {
                             // Update to new name
                             tabRow.action.contents.forEach(                // --- Iterate across action rows

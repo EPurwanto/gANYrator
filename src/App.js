@@ -11,6 +11,7 @@ import ScreenActions from "./action/ScreenActions";
 import './App.css';
 import AppContext from './AppContext'
 import ScreenRoll from "./roll/ScreenRoll";
+import ConfirmPopup from "./structure/ConfirmPopup";
 import ScreenTables from "./table/ScreenTables";
 import {handleUpdate} from "./utility/Utils";
 
@@ -21,7 +22,8 @@ class App extends React.Component {
         this.state = {
             actions: [],
             contentTables: [],
-            screen: "Roll"
+            screen: "Roll",
+            confirmPop: undefined
         };
 
         this.handleActionsUpdate = this.handleActionsUpdate.bind(this);
@@ -67,8 +69,18 @@ class App extends React.Component {
     handleConfigAction(action) {
         switch (action) {
             case "clearSession":
-                localStorage.clear();
-                this.setState({contentTables:[], actions:[], screen: "Roll"});
+                this.useConfirm({
+                    heading: "Clear the session",
+                    children: <div>
+                        <p><strong>Warning, this will delete all tables and actions in the current session.</strong></p>
+                        <p>Are you sure you would like to continue?</p>
+                    </div>,
+                    onConfirm: () => {
+                        localStorage.clear();
+                        this.setState({contentTables:[], actions:[], screen: "Roll"});
+                    },
+                    onClose: () => {this.useConfirm()}
+                });
                 break;
             default:
                 break;
@@ -91,9 +103,19 @@ class App extends React.Component {
         }
     }
 
+    useConfirm(props) {
+        this.setState({confirmPop: props});
+    }
+
     render() {
+        let confirm = "";
+        if (this.state.confirmPop) {
+            confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+        }
+
         return (
             <div className="root py-2">
+                {confirm}
                 <Dropdown className="config-button" alignRight onSelect={key => this.handleConfigAction(key)}>
                     <Dropdown.Toggle variant="primary" id="config">
                         <i className="fas fa-cogs"/>
