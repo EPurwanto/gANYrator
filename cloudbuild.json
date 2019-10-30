@@ -6,7 +6,8 @@
     },
     {
       "name": "gcr.io/cloud-builders/npm",
-      "args": ["test"]
+      "args": ["test"],
+      "env": ["CI=true"]
     }
   ]
 }
