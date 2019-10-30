@@ -2,11 +2,11 @@
   "steps": [
     {
       "name": "gcr.io/cloud-builders/npm",
-      "args": "install"
+      "args": ["install"]
     },
     {
       "name": "gcr.io/cloud-builders/npm",
-      "args": "test"
+      "args": ["test"]
     }
   ]
 }
