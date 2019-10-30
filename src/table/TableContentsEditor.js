@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/esm/Form";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
 import ContentsListManager from "../structure/ContentListManager";
 import ContentsEditor from "../structure/ContentsEditor";

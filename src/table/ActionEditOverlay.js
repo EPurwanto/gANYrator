@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import Accordion from "react-bootstrap/esm/Accordion";
-import Button from "react-bootstrap/esm/Button";
-import Modal from "react-bootstrap/esm/Modal";
+import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import ActionContentsEditor from "../action/ActionContentsEditor";
 import AppContext from "../AppContext";
 import AccordionCardEntry from "../structure/AccordionCardEntry";

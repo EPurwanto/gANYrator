@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import Button from "react-bootstrap/esm/Button";
-import Col from "react-bootstrap/esm/Col";
-import Form from "react-bootstrap/esm/Form";
-import Row from "react-bootstrap/esm/Row";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
 import TableContentsEditor from "./TableContentsEditor";
 
 class ScreenEditTable extends Component {

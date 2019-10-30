@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Button from "react-bootstrap/esm/Button";
-import Modal from "react-bootstrap/esm/Modal";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 function ConfirmPopup(props) {
     return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from "react-bootstrap/esm/Form";
+import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
 
 /**

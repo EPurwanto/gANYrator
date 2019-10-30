@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Form from "react-bootstrap/esm/Form";
+import Form from "react-bootstrap/Form";
 import ContentsListManager from "../structure/ContentListManager";
 import ContentsEditor from "../structure/ContentsEditor";
 import TableSelect from "../utility/TableSelect";
