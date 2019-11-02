@@ -20,8 +20,8 @@ const BareActionContentsEditor = (props) => {
         <ContentsEditor
             headings={
                 <React.Fragment>
-                    <th>Table</th>
-                    <th>Field</th>
+                    <th className="w-50">Table</th>
+                    <th className="w-50">Field</th>
                 </React.Fragment>
             }
             content={row => { return (

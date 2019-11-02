@@ -46,8 +46,9 @@ class BareTableContentsEditor extends Component {
                 <ContentsEditor
                     headings={
                         <React.Fragment>
-                            <th>Frequency</th>
-                            <th>Value</th>
+                            <th className="w-50">Frequency</th>
+                            <th className="w-50">Value</th>
+                            <th>Action</th>
                         </React.Fragment>
                     }
                     content={row => {
@@ -66,6 +67,16 @@ class BareTableContentsEditor extends Component {
                                         value={row.element}
                                         onChange={(e) => onRowChange(row.key, row.weight, e.target.value, row.action)}
                                         required/>
+                                </td>
+                                <td>
+                                    <Button
+                                        variant={row.action ? "success" : "primary"}
+                                        className="action-button"
+                                        onClick={() => {
+                                            this.handleSelect(row)
+                                        }}>
+                                        {row.action ? "yes" : "no"}
+                                    </Button>
                                 </td>
                             </React.Fragment>
                         )
@@ -86,19 +97,10 @@ class BareTableContentsEditor extends Component {
                                         value={row.element}
                                         onChange={(e) => onRowChange(row.key, 1, e.target.value)}/>
                                 </td>
+                                <td>
+                                    <div className="action-button"/>
+                                </td>
                             </React.Fragment>
-                        )
-                    }}
-                    buttons={row => {
-                        return (
-                            <Button
-                                variant={row.action ? "success" : "primary"}
-                                className="action-button"
-                                onClick={() => {
-                                    this.handleSelect(row)
-                                }}>
-                                {row.action ? "yes" : "no"}
-                            </Button>
                         )
                     }}
                     {...other}
