@@ -14,6 +14,7 @@ import ScreenRoll from "./roll/ScreenRoll";
 import ConfirmPopup from "./structure/ConfirmPopup";
 import ScreenTables from "./table/ScreenTables";
 import {handleUpdate} from "./utility/Utils";
+import ScreenHelp from "./help/ScreenHelp";
 
 class App extends React.Component {
     constructor(props) {
@@ -101,6 +102,11 @@ class App extends React.Component {
 
             this.setState({actions: actions});
         }
+
+        if (!actionStore && !tableStore) {
+            // First log in
+            this.setState({screen: "Help"})
+        }
     }
 
     useConfirm(props) {
@@ -161,6 +167,9 @@ class App extends React.Component {
                                 <ScreenActions
                                     onActionListChange={this.handleActionsUpdate}
                                     onTableListChange={this.handleTablesUpdate}/>
+                            </Tab>
+                            <Tab eventKey="Help" title="Help">
+                                <ScreenHelp/>
                             </Tab>
                         </Tabs>
                     </AppContext.Provider>
