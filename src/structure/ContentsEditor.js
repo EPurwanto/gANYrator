@@ -19,7 +19,9 @@ const ContentsEditor = (props) => {
                         return (
                             <tr key={row.key}>
                                 {props.placeholder(row)}
-                                <td/>
+                                <td>
+                                    <div className="button-column"/>
+                                </td>
                             </tr>
                         );
                     }
@@ -27,7 +29,6 @@ const ContentsEditor = (props) => {
                         <tr key={row.key}>
                             {props.content(row)}
                             <td>
-                                {props.buttons(row)}
                                 <Button variant="danger" onClick={() => {props.onRowDelete(row.key)}}><i className="fa fa-trash"/></Button>
                             </td>
                         </tr>
@@ -44,13 +45,11 @@ ContentsEditor.propTypes = {
     headings: PropTypes.element.isRequired,
     content: PropTypes.func.isRequired,
     placeholder: PropTypes.func,
-    buttons: PropTypes.func,
     onRowDelete: PropTypes.func.isRequired
 };
 
 ContentsEditor.defaultProps = {
-    placeholder: () => {return ""},
-    buttons: () => {return ""}
+    placeholder: () => {return ""}
 };
 
 
