@@ -1,21 +1,14 @@
 {
   "steps": [
     {
-      "name": "gcr.io/cloud-builders/npm",
-      "args": ["install"]
-    },
-    {
-      "name": "gcr.io/cloud-builders/npm",
-      "args": ["test"],
-      "env": ["CI=true"]
-    },
-    {
-      "name": "gcr.io/cloud-builders/npm",
-      "args": ["run", "build"]
-    },
-    {
       "name": "gcr.io/ganyrator/firebase",
-      "args": [ "deploy", "--token", "$_FIREBASE_TOKEN"]
+      "args": [
+        "deploy",
+        "--project",
+        "ganyrator",
+        "--only",
+        "hosting"
+      ]
     }
   ]
 }
