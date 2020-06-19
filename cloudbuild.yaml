@@ -1,0 +1,10 @@
+steps:
+  - name: gcr.io/cloud-builders/npm
+    args: ['install']
+  - name: gcr.io/cloud-builders/npm
+    args: ['test']
+    env: ['CI=true']
+  - name: gcr.io/cloud-builders/npm
+    args: ['run', 'build']
+  - name: gcr.io/ganyrator-e5852/firebase
+    args: ['deploy', '--project=ganyrator-e5852', '--only=hosting']
