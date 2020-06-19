@@ -103,10 +103,10 @@ class App extends React.Component {
             this.setState({actions: actions});
         }
 
-        if (!actionStore && !tableStore) {
-            // First log in
-            this.setState({screen: "Help"})
-        }
+        // if (!actionStore && !tableStore) {
+        //     // First log in
+        //     this.setState({screen: "Help"})
+        // }
     }
 
     useConfirm(props) {
@@ -168,9 +168,9 @@ class App extends React.Component {
                                     onActionListChange={this.handleActionsUpdate}
                                     onTableListChange={this.handleTablesUpdate}/>
                             </Tab>
-                            <Tab eventKey="Help" title="Help">
-                                <ScreenHelp/>
-                            </Tab>
+                            {/*<Tab eventKey="Help" title="Help">*/}
+                            {/*    <ScreenHelp/>*/}
+                            {/*</Tab>*/}
                         </Tabs>
                     </AppContext.Provider>
                 </Container>

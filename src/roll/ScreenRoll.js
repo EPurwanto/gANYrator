@@ -120,6 +120,16 @@ class ScreenRoll extends Component {
                         </InputGroup>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Col sm="12">
+                        <h3>What's a gANYrator?</h3>
+                    </Col>
+                    <Col sm="12">
+                        <p>gANYrator is a content generation system for tabletop RPG's such as Dungeons and Dragons.</p>
+                        <p>Build tables of content, link them together with actions, and then use them to roll random NPC's, Towns, Loot or more.</p>
+                    </Col>
+                </Row>
             </React.Fragment>
         );
     }
