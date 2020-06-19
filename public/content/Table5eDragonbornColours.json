@@ -1,0 +1,46 @@
+{
+  "name": "5e PHB Dragonborn Subrace",
+  "desc": "D&D 5e Players Handbook Dragonborn sub-races.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Black"
+    },
+    {
+      "weight": 1,
+      "element": "Blue"
+    },
+    {
+      "weight": 1,
+      "element": "Brass"
+    },
+    {
+      "weight": 1,
+      "element": "Bronze"
+    },
+    {
+      "weight": 1,
+      "element": "Copper"
+    },
+    {
+      "weight": 1,
+      "element": "Gold"
+    },
+    {
+      "weight": 1,
+      "element": "Green"
+    },
+    {
+      "weight": 1,
+      "element": "Red"
+    },
+    {
+      "weight": 1,
+      "element": "Silver"
+    },
+    {
+      "weight": 1,
+      "element": "White"
+    }
+  ]
+}

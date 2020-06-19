@@ -14,6 +14,8 @@ import ScreenRoll from "./roll/ScreenRoll";
 import ConfirmPopup from "./structure/ConfirmPopup";
 import ScreenTables from "./table/ScreenTables";
 import {handleUpdate} from "./utility/Utils";
+import {fetchTableFromJson} from "./utility/TableUtils";
+import {fetchActionFromJson} from "./utility/ActionUtils";
 
 class App extends React.Component {
     constructor(props) {
@@ -101,6 +103,17 @@ class App extends React.Component {
 
             this.setState({actions: actions});
         }
+
+        if (!actionStore && !tableStore) {
+            fetchTableFromJson(this, "./content/Table5eDragonbornColours.json");
+            fetchTableFromJson(this, "./content/Table5eDwarfSubraces.json");
+            fetchTableFromJson(this, "./content/Table5eElfSubraces.json");
+            fetchTableFromJson(this, "./content/Table5eGnomeSubraces.json");
+            fetchTableFromJson(this, "./content/Table5eHalflingSubraces.json");
+            fetchTableFromJson(this, "./content/Table5ePhbRace.json");
+            fetchTableFromJson(this, "./content/TableGender.json");
+            fetchActionFromJson(this, "./content/Action5eCharacter.json");
+        }
     }
 
     useConfirm(props) {
@@ -162,6 +175,9 @@ class App extends React.Component {
                                     onActionListChange={this.handleActionsUpdate}
                                     onTableListChange={this.handleTablesUpdate}/>
                             </Tab>
+                            {/*<Tab eventKey="Help" title="Help">*/}
+                            {/*    <ScreenHelp/>*/}
+                            {/*</Tab>*/}
                         </Tabs>
                     </AppContext.Provider>
                 </Container>

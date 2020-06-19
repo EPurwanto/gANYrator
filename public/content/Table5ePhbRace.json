@@ -1,0 +1,82 @@
+{
+  "name": "5e PHB Race",
+  "desc": "D&D 5e Players Handbook Race.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Dragonborn",
+      "action": {
+        "contents": [
+          {
+            "table": "5e PHB Dragonborn Subrace",
+            "field": "Colour"
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": "Dwarf",
+      "action": {
+        "contents": [
+          {
+            "table": "5e PHB Dwarf Subrace",
+            "field": "Subrace"
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": "Elf",
+      "action": {
+        "contents": [
+          {
+            "table": "5e PHB Elf Subrace",
+            "field": "Subrace"
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": "Gnome",
+      "action": {
+        "contents": [
+          {
+            "table": "5e PHB Gnome Subrace",
+            "field": "Subrace"
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": "Half-Elf"
+    },
+    {
+      "weight": 1,
+      "element": "Half-Orc"
+    },
+    {
+      "weight": 1,
+      "element": "Halfling",
+      "action": {
+        "contents": [
+          {
+            "table": "5e PHB Halfling Subrace",
+            "field": "Subrace"
+          }
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": "Human"
+    },
+    {
+      "weight": 1,
+      "element": "Tiefling"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "5e PHB Gnome Subrace",
+  "desc": "D&D 5e Players Handbook Gnome sub-races.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Forest"
+    },
+    {
+      "weight": 1,
+      "element": "Rock"
+    }
+  ]
+}

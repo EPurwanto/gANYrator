@@ -90,6 +90,18 @@ class ScreenRoll extends Component {
             <React.Fragment>
 
                 <Row>
+                    <Col sm="12">
+                        <h3>What's a gANYrator?</h3>
+                    </Col>
+                    <Col sm="12">
+                        <p>gANYrator is a content generation system for tabletop RPG's such as Dungeons and Dragons. Build
+                            tables of content, link them together with actions, and then use them to roll random NPC's,
+                            Towns, Loot or more. You can get started by creating your own tables or playing around with
+                            the default tables.</p>
+                    </Col>
+                </Row>
+
+                <Row>
                     {/* Last rolled field Values */}
                     {
                         Object.entries(this.state.values).map(([key, val]) => {
@@ -120,6 +132,7 @@ class ScreenRoll extends Component {
                         </InputGroup>
                     </Col>
                 </Row>
+
             </React.Fragment>
         );
     }

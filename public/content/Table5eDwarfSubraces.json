@@ -1,0 +1,14 @@
+{
+  "name": "5e PHB Dwarf Subrace",
+  "desc": "D&D 5e Players Handbook Dwarf sub-races.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Hill"
+    },
+    {
+      "weight": 1,
+      "element": "Mountain"
+    }
+  ]
+}
