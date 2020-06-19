@@ -1,4 +1,4 @@
-import {clone} from "./Utils";
+import {clone, fetchFromJson} from "./Utils";
 
 export function findAction(actionName, actions) {
     return actions.find(a=> a.name === actionName);
@@ -94,4 +94,15 @@ export function updateActionRefs(tables, oldAct, newAct) {
     });
 
     return [oldActs, newActs, oldTabs, newTabs]
+}
+
+export function fetchActionFromJson(caller, url) {
+    fetchFromJson(url, (result) => {
+        const actions = caller.state.actions.concat([result]);
+
+        // Update state
+        caller.setState({
+            actions: actions
+        });
+    }, (error) => console.log(error));
 }

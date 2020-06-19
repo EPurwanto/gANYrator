@@ -1,0 +1,16 @@
+
+{
+  "name": "Random D&D 5e Character",
+  "desc": "Creates a random character using D&D 5e races",
+  "group": "Sample",
+  "contents": [
+    {
+      "table": "5e PHB Race",
+      "field": "Race"
+    },
+    {
+      "table": "Gender",
+      "field": "Gender"
+    }
+  ]
+}

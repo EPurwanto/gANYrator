@@ -1,0 +1,14 @@
+{
+  "name": "5e PHB Halfling Subrace",
+  "desc": "D&D 5e Players Handbook Halfling sub-races.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Lightfoot"
+    },
+    {
+      "weight": 1,
+      "element": "Stout"
+    }
+  ]
+}

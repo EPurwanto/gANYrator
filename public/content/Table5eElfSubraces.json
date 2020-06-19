@@ -1,0 +1,18 @@
+{
+  "name": "5e PHB Elf Subrace",
+  "desc": "D&D 5e Players Handbook Elf sub-races.",
+  "contents": [
+    {
+      "weight": 1,
+      "element": "Drow"
+    },
+    {
+      "weight": 1,
+      "element": "High"
+    },
+    {
+      "weight": 1,
+      "element": "Wood"
+    }
+  ]
+}

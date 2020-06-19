@@ -1,5 +1,5 @@
 import {createTableAction} from "./ActionUtils";
-import {clone} from "./Utils";
+import {clone, fetchFromJson} from "./Utils";
 
 export function findTable(name, tables) {
     return tables.find(t=> t.name === name);
@@ -127,4 +127,27 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
     });
 
     return [oldActs, newActs, oldTabs, newTabs]
+}
+
+export function fetchTableFromJson(caller, url) {
+    fetchFromJson(url, (result) => {
+        // Calculate total weight
+        result.totalWeight = 0;
+        result.contents.forEach(row => result.totalWeight += row.weight);
+
+        // Create Auto Action
+        const actions = caller.state.actions.concat([{
+            key:"action_" + result.key,
+            name: result.desc,
+            group: "Table",
+            contents: [{table:result.key}]
+        }]);
+        const tables = caller.state.contentTables.concat([result]);
+
+        // Update state
+        caller.setState({
+            contentTables: tables,
+            actions: actions
+        });
+    }, (error) => console.log(error));
 }
