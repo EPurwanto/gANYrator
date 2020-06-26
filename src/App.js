@@ -135,6 +135,7 @@ class App extends React.Component {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item eventKey="clearSession">Clear Session</Dropdown.Item>
+                        <Dropdown.Item href="https://github.com/EPurwanto/gANYrator">View source on GitHub</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 <Container className="content pb-1">
