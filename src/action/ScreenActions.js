@@ -84,6 +84,7 @@ class ScreenActions extends Component {
         if (this.state.selected === "") {
             const acts = [];
 
+            // Separate out the auto-created actions
             this.context.actions.forEach(a => {
                 if (a.group !== "Table") {
                     acts.push({
@@ -114,6 +115,7 @@ class ScreenActions extends Component {
                 }
             });
 
+            // Add a placeholder for creating new actions
             acts.push({
                 name: "+ Add a new Action",
                 desc: "Create a new custom action",

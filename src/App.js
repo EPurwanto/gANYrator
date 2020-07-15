@@ -21,6 +21,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
             actions: [],
             contentTables: [],
@@ -36,6 +37,7 @@ class App extends React.Component {
         const list = handleUpdate(this.state.actions.slice(), add, remove);
 
         list.sort((a, b) => {
+            // sort list by group then by name
             const group = a.group.localeCompare(b.group);
             if (group === 0) {
                 return a.name.localeCompare(b.name)
@@ -90,6 +92,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        // Load existing session information from local storage
+
         const tableStore = localStorage.getItem("tables");
         if (tableStore) {
             const tables = JSON.parse(tableStore);
@@ -105,6 +109,8 @@ class App extends React.Component {
         }
 
         if (!actionStore && !tableStore) {
+            // Nothing was in local storage, so treat this as a first time opening and load example data
+
             fetchTableFromJson(this, "./content/Table5eDragonbornColours.json");
             fetchTableFromJson(this, "./content/Table5eDwarfSubraces.json");
             fetchTableFromJson(this, "./content/Table5eElfSubraces.json");
@@ -123,6 +129,7 @@ class App extends React.Component {
     render() {
         let confirm = "";
         if (this.state.confirmPop) {
+            // Inject a confirm popup if needed
             confirm = <ConfirmPopup show {...this.state.confirmPop}/>
         }
 
@@ -176,9 +183,6 @@ class App extends React.Component {
                                     onActionListChange={this.handleActionsUpdate}
                                     onTableListChange={this.handleTablesUpdate}/>
                             </Tab>
-                            {/*<Tab eventKey="Help" title="Help">*/}
-                            {/*    <ScreenHelp/>*/}
-                            {/*</Tab>*/}
                         </Tabs>
                     </AppContext.Provider>
                 </Container>

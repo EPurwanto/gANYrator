@@ -137,10 +137,10 @@ export function fetchTableFromJson(caller, url) {
 
         // Create Auto Action
         const actions = caller.state.actions.concat([{
-            key:"action_" + result.key,
+            key:"action_" + result.name,
             name: result.desc,
             group: "Table",
-            contents: [{table:result.key}]
+            contents: [{table:result.name}]
         }]);
         const tables = caller.state.contentTables.concat([result]);
 

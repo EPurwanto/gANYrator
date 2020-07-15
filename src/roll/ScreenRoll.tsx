@@ -9,20 +9,54 @@ import {findAction} from "../utility/ActionUtils"
 import {findTable} from "../utility/TableUtils";
 import ValueDisplay from "./ValueDisplay";
 
-class ScreenRoll extends Component {
-    constructor(props) {
+export interface ActionContent {
+    table: string;
+    field: string;
+}
+
+export interface Action {
+    name: string;
+    desc: string;
+    group: string;
+    contents: ActionContent[];
+}
+
+export interface TableContent {
+    weight: number;
+    element: string;
+    action: Action;
+}
+
+export interface Table {
+    totalWeight?: number;
+    name: string;
+    desc: string;
+    contents: TableContent[];
+}
+
+interface IProps {
+
+}
+
+interface IState {
+    selectedAction?: Action;
+    values: Map<string, string>;
+}
+
+class ScreenRoll extends Component<IProps, IState> {
+    constructor(props: {}) {
         super(props);
 
         this.state = {
             selectedAction: undefined,
-            values: {},
+            values: new Map<string, string>(),
         };
 
         this.handleActionSelect = this.handleActionSelect.bind(this);
         this.performSelectedAction = this.performSelectedAction.bind(this);
     }
 
-    handleActionSelect(action) {
+    handleActionSelect(action: Action) {
         this.setState({selectedAction: findAction(action, this.context.actions)});
     }
 
@@ -36,8 +70,8 @@ class ScreenRoll extends Component {
         }
     }
 
-    performAction(action) {
-        let values = {};
+    performAction(action: Action) {
+        let values: any = {};
 
         action.contents.forEach((act) => {
             const table = findTable(act.table, this.context.contentTables);
@@ -67,7 +101,7 @@ class ScreenRoll extends Component {
         return values;
     }
 
-    rollOn(table) {
+    rollOn(table: Table) {
         if (!table.totalWeight) {
             return;
         }
@@ -127,7 +161,7 @@ class ScreenRoll extends Component {
                                 selected={this.state.selectedAction && this.state.selectedAction.name}
                                 onChange={this.handleActionSelect}/>
                             <InputGroup.Append>
-                                <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
+                                <Button variant="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
                             </InputGroup.Append>
                         </InputGroup>
                     </Col>

@@ -10,13 +10,13 @@ import Form from "react-bootstrap/Form";
  * @returns {*}
  * @constructor
  */
-function ValueDisplay(props) {
+function ValueDisplay(props : {key?:string; label:string; value:number;}) {
     return (
         <Form.Group controlId={props.key}>
             <Form.Label>{props.label}</Form.Label>
             <Form.Control plaintext readOnly value={props.value}/>
         </Form.Group>
-    );
+    )
 }
 
 export default ValueDisplay;
