@@ -27,17 +27,17 @@ class ActionSelect extends Component {
         const groups = groupActions(this.context.actions);
         const optgroups = [];
 
-        groups.forEach(grp => {
+        for (let grp of groups.keys()) {
             optgroups.push(
-                <optgroup label={grp.name} key={grp.name}>
+                <optgroup label={grp} key={grp}>
                     {
-                        grp.list
+                        groups.get(grp)
                             .map((action) => {
                                 return <option value={action.name} key={action.name}>{action.name}</option>;
                             })
                     }
                 </optgroup>)
-        });
+        }
 
         return (
             <FormControl as="select" value={this.props.selected} onChange={this.handleChange}>

@@ -5,34 +5,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import AppContext from "../AppContext";
 import ActionSelect from "../utility/ActionSelect";
-import {findAction} from "../utility/ActionUtils"
-import {findTable} from "../utility/TableUtils";
+import {Action, findAction} from "../utility/ActionUtils"
+import {findTable, Table} from "../utility/TableUtils";
 import ValueDisplay from "./ValueDisplay";
-
-export interface ActionContent {
-    table: string;
-    field: string;
-}
-
-export interface Action {
-    name: string;
-    desc: string;
-    group: string;
-    contents: ActionContent[];
-}
-
-export interface TableContent {
-    weight: number;
-    element: string;
-    action: Action;
-}
-
-export interface Table {
-    totalWeight?: number;
-    name: string;
-    desc: string;
-    contents: TableContent[];
-}
 
 interface IProps {
 
@@ -56,7 +31,7 @@ class ScreenRoll extends Component<IProps, IState> {
         this.performSelectedAction = this.performSelectedAction.bind(this);
     }
 
-    handleActionSelect(action: Action) {
+    handleActionSelect(action: string) {
         this.setState({selectedAction: findAction(action, this.context.actions)});
     }
 
@@ -75,26 +50,33 @@ class ScreenRoll extends Component<IProps, IState> {
 
         action.contents.forEach((act) => {
             const table = findTable(act.table, this.context.contentTables);
-            const row = this.rollOn(table);
 
-            if (!row) {
-                return;
-            }
+            if (table) {
+                const row = this.rollOn(table);
 
-            if (act.hasOwnProperty("field") && act.field) {
-                values[act.field] = row.element;
-            } else {
-                values[table.name] = row.element;
-            }
-
-            if(row.hasOwnProperty("action")) {
-                let childAct = row.action;
-                if (typeof childAct === "string") {
-                    childAct = findAction(childAct, this.context.actions);
+                if (!row) {
+                    return;
                 }
 
-                const results = this.performAction(childAct);
-                values = {...values, ...results};
+                if (act.hasOwnProperty("field") && act.field) {
+                    values[act.field] = row.element;
+                } else {
+                    values[table.name] = row.element;
+                }
+
+                let childAct: Action | undefined;
+                if(row.action) {
+                    childAct = row.action;
+                } else if (row.actionName) {
+                    childAct = findAction(row.actionName, this.context.actions);
+                }
+
+                if (childAct){
+                    const results = this.performAction(childAct);
+                    values = {...values, ...results};
+                }
+            } else {
+                console.log("Unable to find table " + act.table)
             }
         });
 

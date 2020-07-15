@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -14,13 +14,34 @@ import ScreenRoll from "./roll/ScreenRoll";
 import ConfirmPopup from "./structure/ConfirmPopup";
 import ScreenTables from "./table/ScreenTables";
 import {handleUpdate} from "./utility/Utils";
-import {fetchTableFromJson} from "./utility/TableUtils";
-import {fetchActionFromJson} from "./utility/ActionUtils";
+import {fetchTableFromJson, Table} from "./utility/TableUtils";
+import {Action, fetchActionFromJson} from "./utility/ActionUtils";
+import {ReactElementLike} from "prop-types";
 
-class App extends React.Component {
-    constructor(props) {
+interface IProps {
+
+}
+
+interface IState {
+    actions: Action[];
+    contentTables: Table[];
+    screen: string | null;
+    confirmPop?: ConfirmProps;
+}
+
+interface ConfirmProps {
+    show: boolean;
+    heading?: string;
+    children?: ReactElementLike;
+    confirmMessage?: string;
+    cancelMessage?: string;
+    onConfirm: ()=> void;
+    onClose: ()=> void;
+}
+
+class App extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
-
 
         this.state = {
             actions: [],
@@ -33,8 +54,8 @@ class App extends React.Component {
         this.handleTablesUpdate = this.handleTablesUpdate.bind(this);
     }
 
-    handleActionsUpdate(add, remove) {
-        const list = handleUpdate(this.state.actions.slice(), add, remove);
+    handleActionsUpdate(add: Action, remove: Action) {
+        const list: Action[] = handleUpdate(this.state.actions.slice(), add, remove);
 
         list.sort((a, b) => {
             // sort list by group then by name
@@ -54,7 +75,7 @@ class App extends React.Component {
         localStorage.setItem("actions", JSON.stringify(list));
     }
 
-    handleTablesUpdate(add, remove) {
+    handleTablesUpdate(add: Table, remove: Table) {
         const list = handleUpdate(this.state.contentTables.slice(), add, remove);
 
         // Update state
@@ -66,14 +87,15 @@ class App extends React.Component {
         localStorage.setItem("tables", JSON.stringify(list));
     }
 
-    handleScreenChange(screen) {
+    handleScreenChange(screen: string | null) {
         this.setState({screen: screen});
     }
 
-    handleConfigAction(action) {
+    handleConfigAction(action: string | null) {
         switch (action) {
             case "clearSession":
                 this.useConfirm({
+                    show: true,
                     heading: "Clear the session",
                     children: <div>
                         <p><strong>Warning, this will delete all tables and actions in the current session.</strong></p>
@@ -122,15 +144,15 @@ class App extends React.Component {
         }
     }
 
-    useConfirm(props) {
+    useConfirm(props?: ConfirmProps) {
         this.setState({confirmPop: props});
     }
 
     render() {
-        let confirm = "";
+        let confirm : ReactNode;
         if (this.state.confirmPop) {
             // Inject a confirm popup if needed
-            confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+            confirm = <ConfirmPopup {...this.state.confirmPop}/>
         }
 
         return (
@@ -155,13 +177,9 @@ class App extends React.Component {
                     <AppContext.Provider value={
                         {
                             actions: this.state.actions,
-                            addActions: this.handleActionsAdd,
-                            removeActions: this.handleActionsRemove,
                             updateActions: this.handleActionsUpdate,
 
                             contentTables: this.state.contentTables,
-                            addTables: this.handleTablesAdd,
-                            removeTables: this.handleTablesRemove,
                             updateTables: this.handleTablesUpdate
                         }
                     }>

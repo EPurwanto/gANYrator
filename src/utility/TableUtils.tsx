@@ -1,15 +1,33 @@
-import {createTableAction} from "./ActionUtils";
+import {Action, createTableAction} from "./ActionUtils";
 import {clone, fetchFromJson} from "./Utils";
 
-export function findTable(name, tables) {
+export interface Element {
+    name: string;
+    desc: string;
+    group: string;
+}
+
+export interface TableContent {
+    weight: number;
+    element: string;
+    action?: Action;
+    actionName?: string;
+}
+
+export interface Table extends Element {
+    totalWeight: number;
+    contents: TableContent[];
+}
+
+export function findTable(name: string, tables: Table[]) {
     return tables.find(t=> t.name === name);
 }
 
-export function isValidTableName(name, tables) {
+export function isValidTableName(name: string, tables: Element[]) {
     return !tables.some(t => t.name === name);
 }
 
-export function nextValidTableName(actions) {
+export function nextValidTableName(actions: Action[]) {
     let name = "New Table";
     if (isValidTableName(name, actions)) {
         return name;
@@ -23,7 +41,7 @@ export function nextValidTableName(actions) {
     return name + " (" + i + ")";
 }
 
-export function createTable(name="New", desc="", contents=[]) {
+export function createTable(name="New", desc="", contents: TableContent[] = []) {
     return {
         name: name,
         desc: desc,
@@ -32,7 +50,7 @@ export function createTable(name="New", desc="", contents=[]) {
     };
 }
 
-function getTotalWeight(contents) {
+function getTotalWeight(contents: TableContent[]) {
     let w = 0;
     contents.forEach(r => {
         w += r.weight;
@@ -40,12 +58,12 @@ function getTotalWeight(contents) {
     return w;
 }
 
-export function updateTableRefs(actions, tables, oldTab, newTab) {
-    const oldActs = [];
-    const newActs = [];
+export function updateTableRefs(actions: Action[], tables: Table[], oldTab: Table, newTab: Table) {
+    const oldActs: Action[] = [];
+    const newActs: Action[] = [];
 
-    const oldTabs = [oldTab];
-    const newTabs = [];
+    const oldTabs: Table[] = [oldTab];
+    const newTabs: Table[] = [];
 
     if (newTab) {
         newTabs.push(newTab);
@@ -68,7 +86,7 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
             oldActs.push(act);
 
             // clone and update contents
-            const copy = clone(act);
+            const copy : Action = clone(act);
 
             if (newTab) {
                 // Update to new name
@@ -98,7 +116,7 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
             // If Above, clone and update
             oldTabs.push(tab);
 
-            const copy = clone(tab);
+            const copy: Table = clone(tab);
             copy.contents.forEach(                             // Iterate across table rows
                 (tabRow) => {
                     if (typeof tabRow.action === "object") {    // Find those with object actions
@@ -129,8 +147,8 @@ export function updateTableRefs(actions, tables, oldTab, newTab) {
     return [oldActs, newActs, oldTabs, newTabs]
 }
 
-export function fetchTableFromJson(caller, url) {
-    fetchFromJson(url, (result) => {
+export function fetchTableFromJson(caller: any, url: string) {
+    fetchFromJson(url, (result: Table) => {
         // Calculate total weight
         result.totalWeight = 0;
         result.contents.forEach(row => result.totalWeight += row.weight);
@@ -149,5 +167,5 @@ export function fetchTableFromJson(caller, url) {
             contentTables: tables,
             actions: actions
         });
-    }, (error) => console.log(error));
+    }, (error: any) => console.log(error));
 }
