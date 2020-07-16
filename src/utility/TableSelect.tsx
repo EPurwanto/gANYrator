@@ -11,7 +11,14 @@ import AppContext from "../AppContext";
  * @returns {*}
  * @constructor
  */
-function TableSelect(props) {
+
+interface IProps {
+    value: string;
+    onChange: ()=>void;
+    includeEmpty: boolean;
+}
+
+function TableSelect(props: IProps) {
 
     return (
         <AppContext.Consumer>

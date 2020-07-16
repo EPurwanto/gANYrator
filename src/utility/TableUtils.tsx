@@ -86,7 +86,7 @@ export function updateTableRefs(actions: Action[], tables: Table[], oldTab: Tabl
             oldActs.push(act);
 
             // clone and update contents
-            const copy : Action = clone(act);
+            const copy = clone(act);
 
             if (newTab) {
                 // Update to new name
@@ -116,7 +116,7 @@ export function updateTableRefs(actions: Action[], tables: Table[], oldTab: Tabl
             // If Above, clone and update
             oldTabs.push(tab);
 
-            const copy: Table = clone(tab);
+            const copy = clone(tab);
             copy.contents.forEach(                             // Iterate across table rows
                 (tabRow) => {
                     if (typeof tabRow.action === "object") {    // Find those with object actions

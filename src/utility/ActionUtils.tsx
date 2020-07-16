@@ -77,7 +77,7 @@ export function updateActionRefs(tables: Table[], oldAct: Action, newAct: Action
             }
         )) {
             oldTabs.push(tab);
-            const copy : Table = clone(tab);
+            const copy = clone(tab);
 
             // update affected rows
             copy.contents.forEach((row) => {
