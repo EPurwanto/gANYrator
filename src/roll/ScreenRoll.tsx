@@ -8,6 +8,7 @@ import ActionSelect from "../utility/ActionSelect";
 import {Action, findAction} from "../utility/ActionUtils"
 import {findTable, Table} from "../utility/TableUtils";
 import ValueDisplay from "./ValueDisplay";
+import {string} from "prop-types";
 
 interface IProps {
 
@@ -65,10 +66,10 @@ class ScreenRoll extends Component<IProps, IState> {
                 }
 
                 let childAct: Action | undefined;
-                if(row.action) {
+                if(typeof row.action === "string") {
+                    childAct = findAction(row.action, this.context.actions);
+                } else {
                     childAct = row.action;
-                } else if (row.actionName) {
-                    childAct = findAction(row.actionName, this.context.actions);
                 }
 
                 if (childAct){

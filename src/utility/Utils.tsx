@@ -9,7 +9,7 @@ export function fetchFromJson(url: string, successCallback: (response:any)=> voi
         });
 }
 
-export function handleUpdate<T>(list: T[], add: T, remove: T | T[]) {
+export function handleUpdate<T>(list: T[], add?: T, remove?: T | T[]) {
     if (remove) {
         if (Array.isArray(remove)) {
             remove.forEach(item => {

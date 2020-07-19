@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
@@ -7,23 +6,34 @@ import ActionContentsEditor from "../action/ActionContentsEditor";
 import AppContext from "../AppContext";
 import AccordionCardEntry from "../structure/AccordionCardEntry";
 import ActionSelect from "../utility/ActionSelect";
+import {Action, ActionContent} from "../utility/ActionUtils";
 
+interface IProps {
+    show: boolean;
+    action?: string | Action;
+    onSave: (action?: string | Action) => void;
+    onClose: () => void;
+}
 
-class ActionEditOverlay extends Component {
-    constructor(props) {
+interface IState {
+    actStr: string;
+    actObj?: Action;
+}
+
+class ActionEditOverlay extends Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
-        const state = {
+        const state : IState = {
             actStr: "",
             actObj: undefined
         };
 
         const action = this.props.action;
-        const type = this.getActionType(action);
-        if (type === "string") {
+        if (typeof action === "string") {
             state.actStr = action;
-        } else if (type === "object") {
-            state.actObj = action;
+        } else if (action) {
+            state.actObj = action as Action;
         }
 
         this.state = state;
@@ -33,36 +43,39 @@ class ActionEditOverlay extends Component {
         this.handleContentsUpdate = this.handleContentsUpdate.bind(this);
     }
 
-    getActionType(act) {
-        const type = typeof act;
-        if (type === "string" || type === "object") {
-            return type;
-        }
-        return "none"
-    }
-
     handleTypeChange() {
         this.setState({actStr: "", actObj: undefined})
     }
 
-    handleStrChange(str) {
+    handleStrChange(str: string) {
         this.setState({actStr: str})
     }
 
-    handleContentsUpdate(list) {
-        this.setState({actObj: {
-            contents: list
-        }});
+    handleContentsUpdate(list: ActionContent[]) {
+        this.setState({
+            actObj: {
+                name: "",
+                desc: "",
+                group: "",
+                contents: list
+            }
+        });
     }
 
     render() {
+        let state = "none";
+        if (this.state.actStr)
+            state = "string";
+        else if (this.state.actObj)
+            state = "object";
+
         return (
             <Modal show={this.props.show}>
                 <Modal.Header>
                     Action Config
                 </Modal.Header>
                 <Modal.Body>
-                    <Accordion defaultActiveKey={this.getActionType(this.props.action)}>
+                    <Accordion defaultActiveKey={state}>
                         <AccordionCardEntry
                             eventKey="none"
                             heading="None"
@@ -93,7 +106,7 @@ class ActionEditOverlay extends Component {
                     <Button variant="primary" onClick={() => {
                         if (this.state.actStr) {
                             this.props.onSave(this.state.actStr);
-                        } else if (this.state.actObj) {
+                        } else if (this.state.actObj && this.state.actObj.contents.length > 0) {
                             this.props.onSave(this.state.actObj);
                         } else {
                             this.props.onSave();
@@ -111,19 +124,19 @@ class ActionEditOverlay extends Component {
     }
 }
 
-ActionEditOverlay.propTypes = {
-    action: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-    ]),
-    show: PropTypes.bool,
-    onSave: PropTypes.func,
-    onClose: PropTypes.func,
-};
+// ActionEditOverlay.propTypes = {
+//     action: PropTypes.oneOfType([
+//         PropTypes.string,
+//         PropTypes.object
+//     ]),
+//     show: PropTypes.bool,
+//     onSave: PropTypes.func,
+//     onClose: PropTypes.func,
+// };
 
-ActionEditOverlay.defaultProps = {
-    show: true
-};
+// ActionEditOverlay.defaultProps = {
+//     show: true
+// };
 
 ActionEditOverlay.contextType = AppContext;
 

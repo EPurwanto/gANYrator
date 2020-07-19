@@ -27,7 +27,11 @@ const ResponsiveCardDeck = (props) => {
         )
     }
 
-    return rows;
+    return (
+        <React.Fragment>
+            {rows}
+        </React.Fragment>
+    );
 };
 
 export default ResponsiveCardDeck;

@@ -73,7 +73,7 @@ export function updateActionRefs(tables: Table[], oldAct: Action, newAct: Action
     tables.forEach((tab) => {
         if (tab.contents && tab.contents.some(
             (row) => {
-                return row.actionName === oldAct.name;
+                return row.action === oldAct.name;
             }
         )) {
             oldTabs.push(tab);
@@ -81,9 +81,9 @@ export function updateActionRefs(tables: Table[], oldAct: Action, newAct: Action
 
             // update affected rows
             copy.contents.forEach((row) => {
-                if (row.actionName === oldAct.name) {
+                if (row.action === oldAct.name) {
                     if (newAct) {
-                        row.actionName = newAct.name;
+                        row.action = newAct.name;
                     } else {
                         delete row.action;
                     }

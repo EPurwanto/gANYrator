@@ -16,7 +16,7 @@ import {groupActions} from "./ActionUtils";
 interface IProps {
     selected?: string;
     onChange: (selected: string) => void
-    className: string;
+    className?: string;
 }
 
 function handleChange(event: ChangeEvent, callback: (value: string)=> void) {

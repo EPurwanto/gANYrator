@@ -29,7 +29,7 @@ interface IState {
     confirmPop?: ConfirmProps;
 }
 
-interface ConfirmProps {
+export interface ConfirmProps {
     show: boolean;
     heading?: string;
     children?: ReactElementLike;
@@ -54,7 +54,7 @@ class App extends React.Component<IProps, IState> {
         this.handleTablesUpdate = this.handleTablesUpdate.bind(this);
     }
 
-    handleActionsUpdate(add: Action, remove: Action) {
+    handleActionsUpdate(add?: Action, remove?: Action) {
         const list: Action[] = handleUpdate(this.state.actions.slice(), add, remove);
 
         list.sort((a, b) => {
@@ -75,7 +75,7 @@ class App extends React.Component<IProps, IState> {
         localStorage.setItem("actions", JSON.stringify(list));
     }
 
-    handleTablesUpdate(add: Table, remove: Table) {
+    handleTablesUpdate(add?: Table, remove?: Table) {
         const list = handleUpdate(this.state.contentTables.slice(), add, remove);
 
         // Update state
@@ -149,7 +149,7 @@ class App extends React.Component<IProps, IState> {
     }
 
     render() {
-        let confirm : ReactNode;
+        let confirm: ReactNode;
         if (this.state.confirmPop) {
             // Inject a confirm popup if needed
             confirm = <ConfirmPopup {...this.state.confirmPop}/>
@@ -192,9 +192,7 @@ class App extends React.Component<IProps, IState> {
                                 <ScreenRoll/>
                             </Tab>
                             <Tab eventKey="Tables" title="Tables">
-                                <ScreenTables
-                                    onActionListChange={this.handleActionsUpdate}
-                                    onTableListChange={this.handleTablesUpdate}/>
+                                <ScreenTables/>
                             </Tab>
                             <Tab eventKey="Actions" title="Actions">
                                 <ScreenActions

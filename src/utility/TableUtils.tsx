@@ -10,8 +10,7 @@ export interface Element {
 export interface TableContent {
     weight: number;
     element: string;
-    action?: Action;
-    actionName?: string;
+    action?: string | Action;
 }
 
 export interface Table extends Element {
@@ -41,10 +40,11 @@ export function nextValidTableName(actions: Action[]) {
     return name + " (" + i + ")";
 }
 
-export function createTable(name="New", desc="", contents: TableContent[] = []) {
+export function createTable(name="New", desc="", contents: TableContent[] = []): Table {
     return {
         name: name,
         desc: desc,
+        group: "",
         totalWeight: getTotalWeight(contents),
         contents: contents
     };
@@ -58,7 +58,7 @@ function getTotalWeight(contents: TableContent[]) {
     return w;
 }
 
-export function updateTableRefs(actions: Action[], tables: Table[], oldTab: Table, newTab: Table) {
+export function updateTableRefs(actions: Action[], tables: Table[], oldTab: Table, newTab?: Table) {
     const oldActs: Action[] = [];
     const newActs: Action[] = [];
 

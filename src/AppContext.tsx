@@ -2,11 +2,11 @@ import React from 'react'
 import {Action} from "./utility/ActionUtils";
 import {Table} from "./utility/TableUtils";
 
-interface IContext {
+export interface IContext {
     actions: Action[],
-    updateActions: (add: Action, remove: Action) => void;
+    updateActions: (add: Action, remove?: Action) => void;
     contentTables: Table[],
-    updateTables: (add: Table, remove: Table) => void;
+    updateTables: (add: Table, remove?: Table) => void;
 }
 
 const AppContext = React.createContext({
