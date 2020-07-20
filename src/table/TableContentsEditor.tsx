@@ -1,22 +1,36 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, {Component, ReactNode} from 'react';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
 import ContentsListManager from "../structure/ContentListManager";
-import ContentsEditor from "../structure/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
+import {TableContent} from "../utility/TableUtils";
+import {Action} from "../utility/ActionUtils";
+import ContentsEditor from "../structure/ContentsEditor";
 
-function safeNumber(val) {
+type EditRow = TableContent & {key: number};
+
+interface IProps {
+    items: TableContent[];
+    onRowChange: (key: number, weight: number, element?: string, act?: Action | string) => void;
+    onRowDelete: (key: number, weight: number, element?: string, act?: Action | string) => void;
+}
+
+interface IState {
+    selected?: EditRow;
+}
+
+function safeNumber(val: string, def= 1) {
     const i = parseInt(val, 10);
     if (isNaN(i)) {
-        return "";
+        return def;
     }
     return i;
 }
 
-class BareTableContentsEditor extends Component {
-    constructor(props) {
+class BareTableContentsEditor extends Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state  = {
@@ -24,19 +38,20 @@ class BareTableContentsEditor extends Component {
         }
     }
 
-    handleSelect(row) {
+    handleSelect(row?: EditRow) {
         this.setState({selected: row})
     }
 
     render() {
         const {onRowChange, ...other} = this.props;
 
-        let overlay = "";
+        let overlay: ReactNode;
         if (this.state.selected) {
             overlay = <ActionEditOverlay
+                show={true}
                 action={this.state.selected.action}
-                onSave={(act) => {
-                    onRowChange(this.state.selected.key, this.state.selected.weight, this.state.selected.element, act)
+                onSave={(act?: string | Action) => {
+                    onRowChange(this.state.selected!.key, this.state.selected!.weight, this.state.selected!.element, act)
                 }}
                 onClose={() => this.handleSelect(undefined)}/>
         }
@@ -111,26 +126,19 @@ class BareTableContentsEditor extends Component {
     }
 }
 
-BareTableContentsEditor.propTypes = {
-    items: PropTypes.array.isRequired,
-    onRowDelete: PropTypes.func.isRequired
-};
-
 BareTableContentsEditor.contextType = AppContext;
 
-const getNewItem = (weight = "", element = "", act) => {
-    const item =  {
-        weight: weight,
+const getNewItem = (weight = "", element = "", act: Action) => {
+    const item: TableContent =  {
+        weight: safeNumber(weight),
         element: element,
+        action: act
     };
 
-    if (act) {
-        item.action = act;
-    }
     return item;
 };
 
-const TableContentsEditor = ContentsListManager(BareTableContentsEditor, getNewItem);
+const TableContentsEditor : any = ContentsListManager(BareTableContentsEditor, getNewItem);
 
 TableContentsEditor.propTypes = {
     items: PropTypes.array,

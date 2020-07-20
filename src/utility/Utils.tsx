@@ -1,5 +1,6 @@
+export type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-export function fetchFromJson(url, successCallback, errorCallback) {
+export function fetchFromJson(url: string, successCallback: (response:any)=> void, errorCallback: (error:any)=> void) {
     fetch(url)
         .then(response => response.json(), error => errorCallback(error))
         .then(result => {
@@ -9,7 +10,7 @@ export function fetchFromJson(url, successCallback, errorCallback) {
         });
 }
 
-export function handleUpdate(list, add, remove) {
+export function handleUpdate<T>(list: T[], add?: T, remove?: T | T[]) {
     if (remove) {
         if (Array.isArray(remove)) {
             remove.forEach(item => {
@@ -37,6 +38,6 @@ export function handleUpdate(list, add, remove) {
     return list;
 }
 
-export function clone(obj) {
+export function clone<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }

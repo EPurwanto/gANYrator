@@ -1,37 +1,37 @@
 import {clone, fetchFromJson} from "./Utils";
+import {Element, Table} from "./TableUtils";
 
-export function findAction(actionName, actions) {
+export interface ActionContent {
+    table: string;
+    field?: string;
+}
+
+export interface Action extends Element {
+    contents: ActionContent[];
+}
+
+export function findAction(actionName: string, actions: Action[]) {
     return actions.find(a=> a.name === actionName);
 }
 
-export function groupActions(actions) {
-    const actionMap = {};
+export function groupActions(actions: Action[]) {
+    const actionMap = new Map<string, Action[]>();
 
     actions.forEach(act => {
-        if (!actionMap.hasOwnProperty(act.group)) {
-            actionMap[act.group] = [];
+        if (!actionMap.has(act.group)) {
+            actionMap.set(act.group, []);
         }
-        actionMap[act.group].push(act);
+        actionMap.get(act.group)?.push(act);
     });
 
-    const groups = [];
-    for(const prop in actionMap) {
-        if (Object.prototype.hasOwnProperty.call(actionMap, prop)) {
-            groups.push({
-                name: prop,
-                list: actionMap[prop]
-            });
-        }
-    }
-
-    return groups;
+    return actionMap;
 }
 
-export function isValidActionName(name, actions) {
+export function isValidActionName(name: string, actions: Action[]) {
     return !actions.some(a => {return a.name === name});
 }
 
-export function nextValidActionName(actions) {
+export function nextValidActionName(actions: Action[]) {
     let name = "New Action";
     if (isValidActionName(name, actions)) {
         return name;
@@ -46,7 +46,7 @@ export function nextValidActionName(actions) {
 }
 
 
-export function createAction(name="", desc="", group="Ungrouped", contents=[]) {
+export function createAction(name="", desc="", group="Ungrouped", contents: ActionContent[] = []) {
     return {
         name: name,
         desc: desc,
@@ -55,20 +55,13 @@ export function createAction(name="", desc="", group="Ungrouped", contents=[]) {
     }
 }
 
-export function createTableAction(table) {
+export function createTableAction(table: Table) {
     return createAction(table.name, table.desc, "Table", [{table: table.name}]);
 }
 
-export function updateActionRefs(tables, oldAct, newAct) {
-    const oldActs = [oldAct];
-    const newActs = [];
-
-    if (newAct) {
-        newActs.push(newAct);
-    }
-
-    const oldTabs = [];
-    const newTabs = [];
+export function updateActionRefs(tables: Table[], oldAct: Action, newAct?: Action): [Action, undefined | Action, Table[], Table[]] {
+    const oldTabs: Table[] = [];
+    const newTabs: Table[] = [];
 
     tables.forEach((tab) => {
         if (tab.contents && tab.contents.some(
@@ -93,16 +86,16 @@ export function updateActionRefs(tables, oldAct, newAct) {
         }
     });
 
-    return [oldActs, newActs, oldTabs, newTabs]
+    return [oldAct, newAct, oldTabs, newTabs]
 }
 
-export function fetchActionFromJson(caller, url) {
-    fetchFromJson(url, (result) => {
+export function fetchActionFromJson(caller: any, url: string) { // todo this any upsets me
+    fetchFromJson(url, (result: Action) => {
         const actions = caller.state.actions.concat([result]);
 
         // Update state
         caller.setState({
             actions: actions
         });
-    }, (error) => console.log(error));
+    }, (error: any) => console.log(error));
 }

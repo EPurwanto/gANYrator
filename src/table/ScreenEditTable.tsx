@@ -1,14 +1,27 @@
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, {ChangeEvent, Component, FormEvent} from 'react';
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import TableContentsEditor from "./TableContentsEditor";
+import {Table, TableContent} from "../utility/TableUtils";
 
-class ScreenEditTable extends Component {
-    constructor(props, context) {
-        super(props, context);
+interface IProps {
+    table: Table;
+    onSave: (oldTable: Table, name: string, desc: string, contents: TableContent[]) => string | null;
+    onCancel: () => void;
+}
+
+interface IState {
+    name: string;
+    desc: string;
+    contents: TableContent[];
+    saved: boolean;
+}
+
+class ScreenEditTable extends Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             name: props.table.name,
@@ -24,19 +37,21 @@ class ScreenEditTable extends Component {
         this.handleReset = this.handleReset.bind(this);
     }
 
-    handleNameChange(e) {
-        this.setState({name: e.target.value})
+    handleNameChange(e: ChangeEvent) {
+        if (e.currentTarget instanceof HTMLInputElement)
+            this.setState({name: e.currentTarget.value})
     }
 
-    handleDescChange(e) {
-        this.setState({desc: e.target.value})
+    handleDescChange(e: ChangeEvent) {
+        if (e.currentTarget instanceof HTMLInputElement)
+            this.setState({desc: e.currentTarget.value})
     }
 
-    handleContentsUpdate(list) {
+    handleContentsUpdate(list: TableContent[]) {
         this.setState({contents: list});
     }
 
-    handleSubmit(e) {
+    handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (this.props.onSave) {
             const message = this.props.onSave(this.props.table, this.state.name, this.state.desc, this.state.contents);
@@ -68,7 +83,7 @@ class ScreenEditTable extends Component {
                             <Form.Label column={false}>Table Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                maxLength="60"
+                                maxLength={60}
                                 value={this.state.name}
                                 onChange={this.handleNameChange}/>
                         </Form.Group>
@@ -86,7 +101,7 @@ class ScreenEditTable extends Component {
                             <Form.Label column={false}>Table Description</Form.Label>
                             <Form.Control
                                 as="textarea"
-                                maxLength="400"
+                                maxLength={400}
                                 value={this.state.desc}
                                 onChange={this.handleDescChange}/>
                         </Form.Group>
@@ -100,21 +115,21 @@ class ScreenEditTable extends Component {
     }
 }
 
-ScreenEditTable.propTypes = {
-    table: PropTypes.shape({
-        name: PropTypes.string,
-        desc: PropTypes.string,
-        contents: PropTypes.array
-    }),
-    onSave: PropTypes.func
-};
-
-ScreenEditTable.defaultProps = {
-    table: {
-        name: "",
-        desc: "",
-        contents: []
-    }
-};
+// ScreenEditTable.propTypes = {
+//     table: PropTypes.shape({
+//         name: PropTypes.string,
+//         desc: PropTypes.string,
+//         contents: PropTypes.array
+//     }),
+//     onSave: PropTypes.func
+// };
+//
+// ScreenEditTable.defaultProps = {
+//     table: {
+//         name: "",
+//         desc: "",
+//         contents: []
+//     }
+// };
 
 export default ScreenEditTable;

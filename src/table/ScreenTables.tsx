@@ -1,19 +1,37 @@
-import React, {Component} from 'react';
-import AppContext from "../AppContext";
-import ConfirmPopup from "../structure/ConfirmPopup";
-import ContentTableCardDeck from "../structure/ResponsiveCardDeck";
+import React, {Component, ReactNode} from 'react';
+import AppContext, {IContext} from "../AppContext";
+import ConfirmPopup, {ConfirmProps} from "../structure/ConfirmPopup";
+import ResponsiveCardDeck from "../structure/ResponsiveCardDeck";
 import {createTableAction} from "../utility/ActionUtils";
-import {createTable, findTable, isValidTableName, nextValidTableName, updateTableRefs} from "../utility/TableUtils";
+import {
+    createTable,
+    findTable,
+    isValidTableName,
+    nextValidTableName,
+    Table,
+    TableContent,
+    updateTableRefs
+} from "../utility/TableUtils";
 import {clone} from "../utility/Utils";
 import ScreenEditTable from "./ScreenEditTable";
 
-class ScreenTables extends Component {
+interface IProps {
 
-    constructor(props, context) {
-        super(props, context);
+}
+
+interface IState {
+    selected: string;
+    confirmPop?: ConfirmProps;
+    modalShow: boolean;
+}
+
+class ScreenTables extends Component<IProps, IState, IContext> {
+    constructor(props: IProps) {
+        super(props);
         this.state = {
             selected: "",
-            confirmPop: undefined
+            confirmPop: undefined,
+            modalShow: false
         };
 
         this.handleTableCreate = this.handleTableCreate.bind(this);
@@ -22,7 +40,7 @@ class ScreenTables extends Component {
         this.handleModalOpen = this.handleModalOpen.bind(this);
     }
 
-    handleTableSelect(table) {
+    handleTableSelect(table: string) {
         this.setState({selected: table});
     }
 
@@ -36,7 +54,7 @@ class ScreenTables extends Component {
         this.handleTableSelect(tab.name);
     }
 
-    handleTableClone(oldTab) {
+    handleTableClone(oldTab: Table) {
         const copy = clone(oldTab);
 
         copy.name = nextValidTableName(this.context.actions);
@@ -46,7 +64,7 @@ class ScreenTables extends Component {
         this.handleTableSelect(copy.name);
     }
 
-    handleTableSave(oldTable, name, desc, contents) {
+    handleTableSave(oldTable: Table, name: string, desc: string, contents: TableContent[]): string | null {
         if (oldTable.name !== name && !isValidTableName(name, this.context.contentTables)) {
             return "A table with that name already exists";
         }
@@ -62,9 +80,10 @@ class ScreenTables extends Component {
         if (oldTabs.length > 0 || newTabs.length > 0 ) {
             this.context.updateTables(newTabs, oldTabs);
         }
+        return null;
     }
 
-    handleTableDelete(oldTab) {
+    handleTableDelete(oldTab: Table) {
         const [oldActs, newActs, oldTabs, newTabs] = updateTableRefs(this.context.actions, this.context.contentTables, oldTab);
         if (oldActs.length > 0 || newActs.length > 0 ) {
             this.context.updateActions(newActs, oldActs);
@@ -75,7 +94,7 @@ class ScreenTables extends Component {
         }
     }
 
-    useConfirm(props) {
+    useConfirm(props?: ConfirmProps) {
         this.setState({confirmPop: props});
     }
 
@@ -89,7 +108,7 @@ class ScreenTables extends Component {
 
     render() {
         // Copy tables but bind a "handleClick" prop
-        const tables = this.context.contentTables.map(t => {
+        const tables = this.context.contentTables.map((t: Table) => {
             return {
                 name: t.name,
                 desc: t.desc,
@@ -106,6 +125,7 @@ class ScreenTables extends Component {
                     icon: "trash",
                     variant: "danger",
                     onClick: () => {this.useConfirm({
+                        show: true,
                         heading: "Delete " + t.name,
                         children: <p>Are you sure you would like to delete {t.name}?</p>,
                         onConfirm: () => {this.handleTableDelete(t)},
@@ -118,14 +138,15 @@ class ScreenTables extends Component {
 
         // Add a dummy entry for adding new tables, bind it to launch the overlay
         tables.push({
+            links: [],
             name: "+ Add a new Table",
             desc: "Create a new table",
             onClick: this.handleTableCreate
         });
 
-        let confirm = "";
+        let confirm: ReactNode;
         if (this.state.confirmPop) {
-            confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+            confirm = <ConfirmPopup {...this.state.confirmPop}/>
         }
 
         if (this.state.selected === "") {
@@ -133,16 +154,15 @@ class ScreenTables extends Component {
             return (
                 <React.Fragment>
                     {confirm}
-                    <ContentTableCardDeck
-                        items={tables}
-                        rowSize="4"/>
+                    <ResponsiveCardDeck
+                        items={tables}/>
                 </React.Fragment>
             );
         } else {
             // Something selected, show table editor
             return (
                 <ScreenEditTable
-                    table={findTable(this.state.selected, this.context.contentTables)}
+                    table={findTable(this.state.selected, this.context.contentTables)!}
                     onCancel={() => this.handleTableSelect("")}
                     onSave={this.handleTableSave}
                 />

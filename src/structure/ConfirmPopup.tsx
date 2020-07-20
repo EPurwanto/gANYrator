@@ -1,9 +1,19 @@
-import PropTypes from 'prop-types';
+import PropTypes, {ReactElementLike} from 'prop-types';
 import React from 'react';
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function ConfirmPopup(props) {
+export interface ConfirmProps {
+    show: boolean;
+    heading?: string;
+    children?: ReactElementLike;
+    confirmMessage?: string;
+    cancelMessage?: string;
+    onConfirm: ()=> void;
+    onClose: ()=> void;
+}
+
+function ConfirmPopup(props: ConfirmProps) {
     return (
         <Modal show={props.show}>
             <Modal.Header>

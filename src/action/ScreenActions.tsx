@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, ReactNode} from 'react';
 import AppContext from "../AppContext";
-import ConfirmPopup from "../structure/ConfirmPopup";
+import ConfirmPopup, {ConfirmProps} from "../structure/ConfirmPopup";
 import {
+    Action,
+    ActionContent,
     createAction,
     findAction,
     isValidActionName,
@@ -12,10 +14,19 @@ import ResponsiveCardDeck from "../structure/ResponsiveCardDeck";
 import {clone} from "../utility/Utils";
 import ScreenEditAction from "./ScreenEditAction";
 
-class ScreenActions extends Component {
+interface IProps {
 
-    constructor(props, context) {
-        super(props, context);
+}
+
+interface IState {
+    selected: string;
+    confirmPop?: ConfirmProps
+}
+
+class ScreenActions extends Component<IProps, IState> {
+
+    constructor(props: IProps) {
+        super(props);
         this.state = {
             selected: "",
             confirmPop: undefined
@@ -27,7 +38,7 @@ class ScreenActions extends Component {
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    handleSelect(name) {
+    handleSelect(name: string) {
         this.setState({selected: name});
     }
 
@@ -38,7 +49,7 @@ class ScreenActions extends Component {
         this.handleSelect(act.name);
     }
 
-    handleClone(oldAction) {
+    handleClone(oldAction: Action) {
         const copy = clone(oldAction);
 
         copy.name = nextValidActionName(this.context.actions);
@@ -48,16 +59,16 @@ class ScreenActions extends Component {
         this.handleSelect(copy.name);
     }
 
-    handleSave(oldAction, name, desc, group, contents) {
+    handleSave(oldAction: Action, name: string, desc: string, group: string, contents: ActionContent[]) {
         if (oldAction.name !== name && !isValidActionName(name, this.context.actions)) {
             return "An action with that name already exists";
         }
 
         const act = createAction(name, desc, group, contents);
 
-        const [oldActs, newActs, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction, act);
-        if (oldActs.length > 0 || newActs.length > 0 ) {
-            this.context.updateActions(newActs, oldActs);
+        const [oldAct, newAct, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction, act);
+        if (oldAct || newAct) {
+            this.context.updateActions(newAct, oldAct);
         }
 
         if (oldTabs.length > 0 || newTabs.length > 0 ) {
@@ -65,18 +76,16 @@ class ScreenActions extends Component {
         }
     }
 
-    handleDelete(oldAction) {
-        const [oldActs, newActs, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction);
-        if (oldActs.length > 0 || newActs.length > 0 ) {
-            this.context.updateActions(newActs, oldActs);
-        }
+    handleDelete(oldAction: Action) {
+        const [oldAct, newAct, oldTabs, newTabs] = updateActionRefs(this.context.contentTables, oldAction);
+        this.context.updateActions(newAct, oldAct);
 
         if (oldTabs.length > 0 || newTabs.length > 0 ) {
             this.context.updateTables(newTabs, oldTabs);
         }
     }
 
-    useConfirm(props) {
+    useConfirm(props?: ConfirmProps) {
         this.setState({confirmPop: props});
     }
 
@@ -84,7 +93,8 @@ class ScreenActions extends Component {
         if (this.state.selected === "") {
             const acts = [];
 
-            this.context.actions.forEach(a => {
+            // Separate out the auto-created actions
+            this.context.actions.forEach((a: Action) => {
                 if (a.group !== "Table") {
                     acts.push({
                         name: a.name,
@@ -103,6 +113,7 @@ class ScreenActions extends Component {
                                 icon: "trash",
                                 variant: "danger",
                                 onClick: () => {this.useConfirm({
+                                    show: true,
                                     heading: "Delete " + a.name,
                                     children: <p>Are you sure you would like to delete {a.name}?</p>,
                                     onConfirm: () => {this.handleDelete(a)},
@@ -114,15 +125,16 @@ class ScreenActions extends Component {
                 }
             });
 
+            // Add a placeholder for creating new actions
             acts.push({
                 name: "+ Add a new Action",
                 desc: "Create a new custom action",
                 onClick: this.handleCreate
             });
 
-            let confirm = "";
+            let confirm: ReactNode;
             if (this.state.confirmPop) {
-                confirm = <ConfirmPopup show {...this.state.confirmPop}/>
+                confirm = <ConfirmPopup {...this.state.confirmPop}/>
             }
 
             return (
@@ -136,7 +148,7 @@ class ScreenActions extends Component {
 
             return (
                 <ScreenEditAction
-                    action={findAction(this.state.selected, this.context.actions)}
+                    action={findAction(this.state.selected, this.context.actions)!}
                     onSave={this.handleSave}
                     onCancel={() => {this.handleSelect("")}}/>
             )

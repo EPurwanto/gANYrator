@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
-function ScreenHelp(props) {
+function ScreenHelp() {
     return (
         <div>
             <h3>What's a gANYrator?</h3>

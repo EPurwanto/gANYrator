@@ -5,24 +5,34 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import AppContext from "../AppContext";
 import ActionSelect from "../utility/ActionSelect";
-import {findAction} from "../utility/ActionUtils"
-import {findTable} from "../utility/TableUtils";
+import {Action, findAction} from "../utility/ActionUtils"
+import {findTable, Table} from "../utility/TableUtils";
 import ValueDisplay from "./ValueDisplay";
+import {string} from "prop-types";
 
-class ScreenRoll extends Component {
-    constructor(props) {
+interface IProps {
+
+}
+
+interface IState {
+    selectedAction?: Action;
+    values: Map<string, string>;
+}
+
+class ScreenRoll extends Component<IProps, IState> {
+    constructor(props: {}) {
         super(props);
 
         this.state = {
             selectedAction: undefined,
-            values: {},
+            values: new Map<string, string>(),
         };
 
         this.handleActionSelect = this.handleActionSelect.bind(this);
         this.performSelectedAction = this.performSelectedAction.bind(this);
     }
 
-    handleActionSelect(action) {
+    handleActionSelect(action: string) {
         this.setState({selectedAction: findAction(action, this.context.actions)});
     }
 
@@ -36,38 +46,45 @@ class ScreenRoll extends Component {
         }
     }
 
-    performAction(action) {
-        let values = {};
+    performAction(action: Action) {
+        let values: any = {};
 
         action.contents.forEach((act) => {
             const table = findTable(act.table, this.context.contentTables);
-            const row = this.rollOn(table);
 
-            if (!row) {
-                return;
-            }
+            if (table) {
+                const row = this.rollOn(table);
 
-            if (act.hasOwnProperty("field") && act.field) {
-                values[act.field] = row.element;
-            } else {
-                values[table.name] = row.element;
-            }
-
-            if(row.hasOwnProperty("action")) {
-                let childAct = row.action;
-                if (typeof childAct === "string") {
-                    childAct = findAction(childAct, this.context.actions);
+                if (!row) {
+                    return;
                 }
 
-                const results = this.performAction(childAct);
-                values = {...values, ...results};
+                if (act.hasOwnProperty("field") && act.field) {
+                    values[act.field] = row.element;
+                } else {
+                    values[table.name] = row.element;
+                }
+
+                let childAct: Action | undefined;
+                if(typeof row.action === "string") {
+                    childAct = findAction(row.action, this.context.actions);
+                } else {
+                    childAct = row.action;
+                }
+
+                if (childAct){
+                    const results = this.performAction(childAct);
+                    values = {...values, ...results};
+                }
+            } else {
+                console.log("Unable to find table " + act.table)
             }
         });
 
         return values;
     }
 
-    rollOn(table) {
+    rollOn(table: Table) {
         if (!table.totalWeight) {
             return;
         }
@@ -127,7 +144,7 @@ class ScreenRoll extends Component {
                                 selected={this.state.selectedAction && this.state.selectedAction.name}
                                 onChange={this.handleActionSelect}/>
                             <InputGroup.Append>
-                                <Button varient="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
+                                <Button variant="primary" onClick={this.performSelectedAction}>Roll <i className="fa fa-dice"/></Button>
                             </InputGroup.Append>
                         </InputGroup>
                     </Col>

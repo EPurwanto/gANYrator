@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
+import {FormControlElement} from "./Utils";
 
 /**
  * Properties
@@ -11,7 +12,14 @@ import AppContext from "../AppContext";
  * @returns {*}
  * @constructor
  */
-function TableSelect(props) {
+
+interface IProps {
+    value: string;
+    onChange: (e: ChangeEvent<FormControlElement>)=>void;
+    includeEmpty: boolean;
+}
+
+function TableSelect(props: IProps) {
 
     return (
         <AppContext.Consumer>

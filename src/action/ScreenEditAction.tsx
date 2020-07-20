@@ -1,13 +1,24 @@
-import React, {Component} from 'react';
+import React, {ChangeEvent, Component, FormEvent} from 'react';
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import ActionContentsEditor from "./ActionContentsEditor";
+import {Action, ActionContent} from "../utility/ActionUtils";
 
-class ScreenEditAction extends Component {
-    constructor(props, context) {
-        super(props, context);
+interface IProps {
+    action: Action;
+    onSave: (old: Action, name: string, desc: string, group: string, contents: ActionContent[]) => string | undefined;
+    onCancel: () => void;
+}
+
+interface IState extends Action {
+    saved: boolean;
+}
+
+class ScreenEditAction extends Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
 
         let act = this.props.action;
 
@@ -28,23 +39,26 @@ class ScreenEditAction extends Component {
         this.handleReset = this.handleReset.bind(this);
     }
 
-    handleNameChange(e) {
-        this.setState({name: e.target.value})
+    handleNameChange(e: ChangeEvent) {
+        if (e.currentTarget instanceof HTMLInputElement)
+            this.setState({name: e.currentTarget.value})
     }
 
-    handleDescChange(e) {
-        this.setState({desc: e.target.value})
+    handleDescChange(e: ChangeEvent) {
+        if (e.currentTarget instanceof HTMLInputElement)
+            this.setState({desc: e.currentTarget.value})
     }
 
-    handleGroupChange(e) {
-        this.setState({group: e.target.value})
+    handleGroupChange(e: ChangeEvent) {
+        if (e.currentTarget instanceof HTMLInputElement)
+            this.setState({group: e.currentTarget.value})
     }
 
-    handleContentsUpdate(list) {
+    handleContentsUpdate(list: ActionContent[]) {
         this.setState({contents: list});
     }
 
-    handleSubmit(e) {
+    handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (this.props.onSave) {
             const message = this.props.onSave(this.props.action, this.state.name, this.state.desc, this.state.group, this.state.contents);
@@ -76,7 +90,7 @@ class ScreenEditAction extends Component {
                             <Form.Label column={false}>Action Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                maxLength="60"
+                                maxLength={60}
                                 value={this.state.name}
                                 onChange={this.handleNameChange}/>
                         </Form.Group>
@@ -93,7 +107,7 @@ class ScreenEditAction extends Component {
                         <Form.Group controlId="actionGroup">
                             <Form.Label column={false}>Action Group</Form.Label>
                             <Form.Control
-                                maxLength="60"
+                                maxLength={60}
                                 value={this.state.group}
                                 onChange={this.handleGroupChange}/>
                         </Form.Group>
@@ -105,7 +119,7 @@ class ScreenEditAction extends Component {
                             <Form.Label column={false}>Action Description</Form.Label>
                             <Form.Control
                                 as="textarea"
-                                maxLength="400"
+                                maxLength={400}
                                 value={this.state.desc}
                                 onChange={this.handleDescChange}/>
                         </Form.Group>

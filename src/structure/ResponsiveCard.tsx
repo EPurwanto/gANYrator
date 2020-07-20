@@ -12,9 +12,23 @@ import Card from "react-bootstrap/Card";
  * @returns {*}
  * @constructor
  */
-const ResponsiveCard = (props) => {
+interface Link {
+    name: string;
+    icon: string;
+    onClick: () => void;
+}
+
+export interface CardProps {
+    name: string;
+    sub?: string;
+    desc?: string;
+    links?: Link[];
+    onClick?: () => void;
+}
+
+const ResponsiveCard = (props: CardProps) => {
     return (
-        <Card as={props.onClick ? "button" : "div"} className="responsive-card text-left w-100 h-100" onClick={props.onClick ? props.onClick : false}>
+        <Card as={props.onClick ? "button" : "div"} className="responsive-card text-left w-100 h-100" onClick={props.onClick}>
             <Card.Body>
                 <Card.Title>{props.name}</Card.Title>
                 {
@@ -31,13 +45,15 @@ const ResponsiveCard = (props) => {
                             delete link.name;
                             delete link.icon;
 
+
+
                             return (
                                 <Card.Link
                                     as={Button}
                                     key={name}
                                     href="#"
                                     {...link}
-                                    onClick={(e) => {e.stopPropagation(); link.onClick(e)}}>
+                                    onClick={(e: Event) => {e.stopPropagation(); link.onClick()}}>
                                     {name} {icon && <i className={"fa fa-" + icon}/>}
                                 </Card.Link>
                             )

@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import AccordionCollapse from "react-bootstrap/AccordionCollapse";
 import AccordionToggle from "react-bootstrap/AccordionToggle";
 import Card from "react-bootstrap/Card";
 
-const AccordionCardEntry = (props) => {
+interface IProps {
+    heading: string;
+    eventKey: string;
+    onClick: () => void;
+    children: ReactNode;
+}
+
+const AccordionCardEntry = (props: IProps) => {
     return (
         <Card>
             <AccordionToggle

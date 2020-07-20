@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import ContentsListManager from "../structure/ContentListManager";
 import ContentsEditor from "../structure/ContentsEditor";
 import TableSelect from "../utility/TableSelect";
+import {ActionContent} from "../utility/ActionUtils";
 
 /**
  * Properties
@@ -14,8 +15,14 @@ import TableSelect from "../utility/TableSelect";
  * @returns {*}
  * @constructor
  */
-const BareActionContentsEditor = (props) => {
-    const {onRowChange, ...other} = props;
+
+interface IProps {
+    items: ActionContent[];
+    onRowChange: (key: number, table: string, field?: string) => void;
+    onRowDelete: (key: number) => void;
+}
+
+const BareActionContentsEditor = (props: IProps) => {
     return (
         <ContentsEditor
             headings={
@@ -24,28 +31,30 @@ const BareActionContentsEditor = (props) => {
                     <th className="w-50">Field</th>
                 </React.Fragment>
             }
-            content={row => { return (
+            content={(row: any) => { return (
                 <React.Fragment>
                     <td>
                         <TableSelect
                             value={row.table}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
+                            onChange={(e) => {props.onRowChange(row.key, e.target.value, row.field)}}
+                            includeEmpty={true}/>
+
                     </td>
                     <td>
                         <Form.Control
                             value={row.field}
-                            onChange={(e) => {onRowChange(row.key, row.table, e.target.value)}}
+                            onChange={(e) => {props.onRowChange(row.key, row.table, e.target.value)}}
                             placeholder={row.table}/>
                     </td>
                 </React.Fragment>
             )}}
-            placeholder={row => { return (
+            placeholder={(row: any) => { return (
                 <React.Fragment>
                     <td>
                         <TableSelect
                             includeEmpty={true}
                             value={row.table}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
+                            onChange={(e) => {props.onRowChange(row.key, e.target.value, row.field)}}/>
                     </td>
                     <td>
                         <span className="text-muted">
@@ -54,8 +63,8 @@ const BareActionContentsEditor = (props) => {
                     </td>
                 </React.Fragment>
             )}}
-            {...other}
-        />
+            items={props.items}
+            onRowDelete={props.onRowDelete}/>
     );
 };
 
@@ -74,9 +83,9 @@ const getNewItem = (table = "", field = "") => {
 
 const ActionContentsEditor = ContentsListManager(BareActionContentsEditor, getNewItem);
 
-ActionContentsEditor.propTypes = {
-    items: PropTypes.array,
-    onListUpdate: PropTypes.func
-};
+// ActionContentsEditor.propTypes = {
+//     items: PropTypes.array,
+//     onListUpdate: PropTypes.func
+// };
 
 export {ActionContentsEditor as default, BareActionContentsEditor};
