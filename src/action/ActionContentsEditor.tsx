@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import ContentsListManager from "../structure/ContentListManager";
 import ContentsEditor from "../structure/ContentsEditor";
 import TableSelect from "../utility/TableSelect";
+import {ActionContent} from "../utility/ActionUtils";
 
 /**
  * Properties
@@ -14,7 +15,15 @@ import TableSelect from "../utility/TableSelect";
  * @returns {*}
  * @constructor
  */
-const BareActionContentsEditor = (props) => {
+
+interface IProps {
+    items: ActionContent[];
+    onRowChange: (key: number, table: string, field?: string) => void;
+    onRowDelete: (key: number, table: string, field?: string) => void;
+}
+
+
+const BareActionContentsEditor = (props: IProps) => {
     const {onRowChange, ...other} = props;
     return (
         <ContentsEditor
@@ -29,7 +38,9 @@ const BareActionContentsEditor = (props) => {
                     <td>
                         <TableSelect
                             value={row.table}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
+                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}
+                            includeEmpty={true}/>
+
                     </td>
                     <td>
                         <Form.Control
@@ -74,9 +85,9 @@ const getNewItem = (table = "", field = "") => {
 
 const ActionContentsEditor = ContentsListManager(BareActionContentsEditor, getNewItem);
 
-ActionContentsEditor.propTypes = {
-    items: PropTypes.array,
-    onListUpdate: PropTypes.func
-};
+// ActionContentsEditor.propTypes = {
+//     items: PropTypes.array,
+//     onListUpdate: PropTypes.func
+// };
 
 export {ActionContentsEditor as default, BareActionContentsEditor};

@@ -4,17 +4,17 @@ import {Table} from "./utility/TableUtils";
 
 export interface IContext {
     actions: Action[],
-    updateActions: (add: Action, remove?: Action) => void;
+    updateActions: (add?: Action, remove?: Action) => void;
     contentTables: Table[],
-    updateTables: (add: Table, remove?: Table) => void;
+    updateTables: (add?: Table, remove?: Table) => void;
 }
 
 const AppContext = React.createContext({
     actions: [],
-    updateActions: (add: Action, remove: Action) => {},
+    updateActions: (add?: Action, remove?: Action) => {},
 
     contentTables: [],
-    updateTables: (add: Table, remove: Table) => {}
+    updateTables: (add?: Table, remove?: Table) => {}
 } as IContext);
 
 export default AppContext;

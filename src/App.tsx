@@ -195,9 +195,7 @@ class App extends React.Component<IProps, IState> {
                                 <ScreenTables/>
                             </Tab>
                             <Tab eventKey="Actions" title="Actions">
-                                <ScreenActions
-                                    onActionListChange={this.handleActionsUpdate}
-                                    onTableListChange={this.handleTablesUpdate}/>
+                                <ScreenActions/>
                             </Tab>
                         </Tabs>
                     </AppContext.Provider>

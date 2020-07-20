@@ -59,14 +59,7 @@ export function createTableAction(table: Table) {
     return createAction(table.name, table.desc, "Table", [{table: table.name}]);
 }
 
-export function updateActionRefs(tables: Table[], oldAct: Action, newAct: Action) {
-    const oldActs = [oldAct];
-    const newActs = [];
-
-    if (newAct) {
-        newActs.push(newAct);
-    }
-
+export function updateActionRefs(tables: Table[], oldAct: Action, newAct?: Action): [Action, undefined | Action, Table[], Table[]] {
     const oldTabs: Table[] = [];
     const newTabs: Table[] = [];
 
@@ -93,7 +86,7 @@ export function updateActionRefs(tables: Table[], oldAct: Action, newAct: Action
         }
     });
 
-    return [oldActs, newActs, oldTabs, newTabs]
+    return [oldAct, newAct, oldTabs, newTabs]
 }
 
 export function fetchActionFromJson(caller: any, url: string) { // todo this any upsets me

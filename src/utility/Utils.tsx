@@ -1,3 +1,4 @@
+export type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 export function fetchFromJson(url: string, successCallback: (response:any)=> void, errorCallback: (error:any)=> void) {
     fetch(url)

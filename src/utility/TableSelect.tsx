@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
+import {FormControlElement} from "./Utils";
 
 /**
  * Properties
@@ -14,7 +15,7 @@ import AppContext from "../AppContext";
 
 interface IProps {
     value: string;
-    onChange: ()=>void;
+    onChange: (e: ChangeEvent<FormControlElement>)=>void;
     includeEmpty: boolean;
 }
 
