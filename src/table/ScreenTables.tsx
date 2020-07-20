@@ -1,6 +1,6 @@
 import React, {Component, ReactNode} from 'react';
 import AppContext, {IContext} from "../AppContext";
-import ConfirmPopup from "../structure/ConfirmPopup";
+import ConfirmPopup, {ConfirmProps} from "../structure/ConfirmPopup";
 import ResponsiveCardDeck from "../structure/ResponsiveCardDeck";
 import {createTableAction} from "../utility/ActionUtils";
 import {
@@ -14,7 +14,6 @@ import {
 } from "../utility/TableUtils";
 import {clone} from "../utility/Utils";
 import ScreenEditTable from "./ScreenEditTable";
-import {ConfirmProps} from "../App";
 
 interface IProps {
 
@@ -156,8 +155,7 @@ class ScreenTables extends Component<IProps, IState, IContext> {
                 <React.Fragment>
                     {confirm}
                     <ResponsiveCardDeck
-                        items={tables}
-                        rowSize="4"/>
+                        items={tables}/>
                 </React.Fragment>
             );
         } else {

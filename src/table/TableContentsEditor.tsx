@@ -4,10 +4,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AppContext from "../AppContext";
 import ContentsListManager from "../structure/ContentListManager";
-import ContentsEditor from "../structure/ContentsEditor";
 import ActionEditOverlay from "./ActionEditOverlay";
 import {TableContent} from "../utility/TableUtils";
 import {Action} from "../utility/ActionUtils";
+import ContentsEditor from "../structure/ContentsEditor";
 
 type EditRow = TableContent & {key: number};
 

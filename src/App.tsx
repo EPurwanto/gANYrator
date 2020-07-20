@@ -11,12 +11,11 @@ import ScreenActions from "./action/ScreenActions";
 import './App.css';
 import AppContext from './AppContext'
 import ScreenRoll from "./roll/ScreenRoll";
-import ConfirmPopup from "./structure/ConfirmPopup";
+import ConfirmPopup, {ConfirmProps} from "./structure/ConfirmPopup";
 import ScreenTables from "./table/ScreenTables";
 import {handleUpdate} from "./utility/Utils";
 import {fetchTableFromJson, Table} from "./utility/TableUtils";
 import {Action, fetchActionFromJson} from "./utility/ActionUtils";
-import {ReactElementLike} from "prop-types";
 
 interface IProps {
 
@@ -27,16 +26,6 @@ interface IState {
     contentTables: Table[];
     screen: string | null;
     confirmPop?: ConfirmProps;
-}
-
-export interface ConfirmProps {
-    show: boolean;
-    heading?: string;
-    children?: ReactElementLike;
-    confirmMessage?: string;
-    cancelMessage?: string;
-    onConfirm: ()=> void;
-    onClose: ()=> void;
 }
 
 class App extends React.Component<IProps, IState> {

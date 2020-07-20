@@ -1,11 +1,14 @@
 import React from 'react';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import ResponsiveCard from "./ResponsiveCard";
+import ResponsiveCard, {CardProps} from "./ResponsiveCard";
 
+interface IProps {
+    items: CardProps[]
+}
 
 const wide = 4;
-const ResponsiveCardDeck = (props) => {
+function ResponsiveCardDeck(props: IProps) {
     const items = props.items.slice();
     const rows = [];
 
@@ -32,6 +35,6 @@ const ResponsiveCardDeck = (props) => {
             {rows}
         </React.Fragment>
     );
-};
+}
 
 export default ResponsiveCardDeck;

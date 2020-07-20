@@ -19,12 +19,10 @@ import {ActionContent} from "../utility/ActionUtils";
 interface IProps {
     items: ActionContent[];
     onRowChange: (key: number, table: string, field?: string) => void;
-    onRowDelete: (key: number, table: string, field?: string) => void;
+    onRowDelete: (key: number) => void;
 }
 
-
 const BareActionContentsEditor = (props: IProps) => {
-    const {onRowChange, ...other} = props;
     return (
         <ContentsEditor
             headings={
@@ -33,30 +31,30 @@ const BareActionContentsEditor = (props: IProps) => {
                     <th className="w-50">Field</th>
                 </React.Fragment>
             }
-            content={row => { return (
+            content={(row: any) => { return (
                 <React.Fragment>
                     <td>
                         <TableSelect
                             value={row.table}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}
+                            onChange={(e) => {props.onRowChange(row.key, e.target.value, row.field)}}
                             includeEmpty={true}/>
 
                     </td>
                     <td>
                         <Form.Control
                             value={row.field}
-                            onChange={(e) => {onRowChange(row.key, row.table, e.target.value)}}
+                            onChange={(e) => {props.onRowChange(row.key, row.table, e.target.value)}}
                             placeholder={row.table}/>
                     </td>
                 </React.Fragment>
             )}}
-            placeholder={row => { return (
+            placeholder={(row: any) => { return (
                 <React.Fragment>
                     <td>
                         <TableSelect
                             includeEmpty={true}
                             value={row.table}
-                            onChange={(e) => {onRowChange(row.key, e.target.value, row.field)}}/>
+                            onChange={(e) => {props.onRowChange(row.key, e.target.value, row.field)}}/>
                     </td>
                     <td>
                         <span className="text-muted">
@@ -65,8 +63,8 @@ const BareActionContentsEditor = (props: IProps) => {
                     </td>
                 </React.Fragment>
             )}}
-            {...other}
-        />
+            items={props.items}
+            onRowDelete={props.onRowDelete}/>
     );
 };
 

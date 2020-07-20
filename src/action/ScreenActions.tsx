@@ -1,8 +1,9 @@
 import React, {Component, ReactNode} from 'react';
 import AppContext from "../AppContext";
-import ConfirmPopup from "../structure/ConfirmPopup";
+import ConfirmPopup, {ConfirmProps} from "../structure/ConfirmPopup";
 import {
-    Action, ActionContent,
+    Action,
+    ActionContent,
     createAction,
     findAction,
     isValidActionName,
@@ -12,7 +13,6 @@ import {
 import ResponsiveCardDeck from "../structure/ResponsiveCardDeck";
 import {clone} from "../utility/Utils";
 import ScreenEditAction from "./ScreenEditAction";
-import {ConfirmProps} from "../App";
 
 interface IProps {
 
